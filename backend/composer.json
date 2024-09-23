@@ -1,0 +1,13 @@
+{
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jakub Perdoch",
+            "email": "perdochjakub@gmail.com"
+        }
+    ],
+    "require": {
+        "firebase/php-jwt": "^6.10"
+    }
+}
