@@ -69,20 +69,19 @@
 				</div>
 			</div>
 		</div>
+		<Toast />
 	</div>
 </template>
 
 <script setup lang="ts">
 	import { useAuthStore } from '#imports';
-	import passwordInput from '~/components/UI/passwordInput.vue';
 	import { useToast } from 'primevue/usetoast';
-
 	import Button from 'primevue/button';
+	import { useRouter } from '#imports';
 
-	const toast = useToast();
 	const { logUserIn } = useAuthStore();
-	const emailError = ref(false);
-
+	const toast = useToast();
+	const router = useRouter();
 	const user = ref({
 		username: '',
 		password: '',
@@ -91,9 +90,17 @@
 	const inputValidation = () => {
 		if (!user.value.password || user.value.password === '') {
 			toast.add({
-				severity: 'warn',
-				summary: 'Warn Message',
-				detail: 'Message Content',
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Heslo je povinné',
+				life: 3000,
+			});
+			return false;
+		} else if (!user.value.username || user.value.username === '') {
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Meno používateľa je povinné',
 				life: 3000,
 			});
 			return false;
@@ -104,7 +111,6 @@
 
 	const login = async () => {
 		try {
-			console.log('user', user.value);
 			if (!inputValidation()) {
 				return;
 			}
@@ -112,26 +118,29 @@
 			const data = await logUserIn(user.value);
 
 			if (data.authenticated) {
-				navigateTo('/');
+				setTimeout(() => {
+					router.push('/');
+				}, 1000);
+
 				toast.add({
 					severity: 'success',
-					summary: 'Success Message',
-					detail: 'Message Content',
+					summary: 'Úspešné prihlásenie',
+					detail: 'Vitajte späť',
 					life: 3000,
 				});
 			} else {
 				toast.add({
-					severity: 'warn',
-					summary: 'Warn Message',
-					detail: 'Message Content',
+					severity: 'error',
+					summary: 'Nastala chyba',
+					detail: 'Nesprávne meno alebo heslo',
 					life: 3000,
 				});
 			}
 		} catch (e) {
 			toast.add({
-				severity: 'warn',
-				summary: 'Warn Message',
-				detail: 'Message Content',
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Nastala chyba pri prihlásení',
 				life: 3000,
 			});
 			console.error(e);
