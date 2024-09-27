@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import users from '@/utils/users.json';
+import users from '@/utils/data/users.json';
 
 interface UserPayloadInterface {
 	id: number;

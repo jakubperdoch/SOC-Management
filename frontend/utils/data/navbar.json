@@ -1,0 +1,19 @@
+[
+	{
+		"title": "Landing",
+		"route": "/"
+	},
+	{
+		"title": "Login",
+		"route": "/login"
+	},
+	{
+		"title": "Register",
+		"route": "/register"
+	},
+	{
+		"title": "Dashboard",
+		"route": "/dashboard",
+		"role": ["ROLE_ADMIN", "ROLE_STUDENT", "ROLE_TEACHER"]
+	}
+]
