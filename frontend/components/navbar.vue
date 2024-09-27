@@ -8,14 +8,14 @@
 			<Button
 				outlined
 				severity="secondary"
-				class="navbar-toggler"
+				class="navbar-toggler !tw-text-white hover:!tw-text-black"
 				data-bs-toggle="offcanvas"
 				data-bs-target="#offcanvasNavbar"
 				aria-controls="offcanvasNavbar">
 				<i class="pi pi-bars"></i>
 			</Button>
 			<div
-				class="offcanvas offcanvas-start"
+				class="offcanvas offcanvas-start !tw-w-64"
 				tabindex="-1"
 				id="offcanvasNavbar"
 				aria-labelledby="offcanvasNavbarLabel">
@@ -36,7 +36,7 @@
 							v-for="(navItem, itemIndex) in props.data"
 							:key="itemIndex">
 							<a
-								class="nav-link !tw-text-white !tw-font-extralight tw-font-sans"
+								class="nav-link min-[991px]:!tw-text-white hover:!tw-text-[#7031f7] !tw-font-extralight tw-font-sans"
 								aria-current="page"
 								href="javascript:void(0);"
 								>{{ navItem.title }}</a
