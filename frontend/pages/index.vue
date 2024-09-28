@@ -1,5 +1,4 @@
 <template>
-	<navbar :data="navigationData" />
 	<div class="landing-page-wrapper">
 		<!-- Main Section -->
 		<div class="main-content landing-main tw-h-max px-0 !tw-bg-[#845adfb3]">
@@ -108,8 +107,13 @@
 </template>
 
 <script setup lang="ts">
-	import navbar from '~/components/navbar.vue';
-	import navigationData from '@/utils/data/navbar.json';
+	import auth from '~/middleware/auth';
+
+	definePageMeta({
+		title: 'EduManage',
+		description: 'EduManage - správa školských prác',
+		layout: 'default',
+	});
 
 	const teamMembers = ref([
 		{

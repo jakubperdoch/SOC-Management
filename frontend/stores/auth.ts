@@ -7,18 +7,22 @@ interface UserPayloadInterface {
 	password: string;
 	email: string;
 	token: string;
+	role: string;
 }
 
 export const useAuthStore = defineStore('auth', {
 	state: () => ({
 		authenticated: false,
 		loading: false,
+		user: {
+			username: '',
+			role: '',
+		},
 	}),
 
 	actions: {
 		async logUserIn({ username, password }: Partial<UserPayloadInterface>) {
 			const config = useRuntimeConfig();
-			const baseUrl = config.public.API_BASE_URL;
 
 			const data = users.find(
 				(user) => user.username === username && user.password === password
@@ -29,7 +33,11 @@ export const useAuthStore = defineStore('auth', {
 				const token = useCookie('token');
 				token.value = generateToken;
 				this.authenticated = true;
-				return { authenticated: this.authenticated };
+				this.user = {
+					username: data.username,
+					role: data.role,
+				};
+				return { authenticated: this.authenticated, user: this.user };
 			} else {
 				const token = useCookie('token');
 				this.authenticated = false;

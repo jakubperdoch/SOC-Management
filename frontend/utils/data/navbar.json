@@ -5,11 +5,11 @@
 	},
 	{
 		"title": "Login",
-		"route": "/login"
+		"route": "auth/login"
 	},
 	{
 		"title": "Register",
-		"route": "/register"
+		"route": "auth/register"
 	},
 	{
 		"title": "Dashboard",

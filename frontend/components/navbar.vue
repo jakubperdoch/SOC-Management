@@ -33,12 +33,17 @@
 					<ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
 						<li
 							class="nav-item"
-							v-for="(navItem, itemIndex) in props.data"
+							v-for="(navItem, itemIndex) in filteredData"
 							:key="itemIndex">
 							<a
-								class="nav-link min-[991px]:!tw-text-white hover:!tw-text-[#7031f7] !tw-font-extralight tw-font-sans"
+								class="nav-link hover:!tw-text-[#7031f7] !tw-font-extralight tw-font-sans"
+								:class="[
+									route.path == navItem.route
+										? '!tw-text-[#7031f7]'
+										: 'min-[991px]:!tw-text-white',
+								]"
 								aria-current="page"
-								href="javascript:void(0);"
+								:href="navItem.route"
 								>{{ navItem.title }}</a
 							>
 						</li>
@@ -52,15 +57,38 @@
 <script setup lang="ts">
 	import Sidebar from 'primevue/sidebar';
 	import { useRoute } from '#app';
+	import { useAuthStore } from '#imports';
+
+	const authStore = useAuthStore();
+	const route = useRoute();
 
 	interface Sidebar {
 		title: string;
 		route: string;
+		role: string;
 	}
-
-	const route = useRoute();
 
 	const props = defineProps<{
 		data: Sidebar[];
 	}>();
+
+	const filteredData = props.data.filter((item) => {
+		const token = useCookie('token').value;
+
+		if (!item.role) {
+			if (
+				token &&
+				(item.route === 'auth/login' || item.route === 'auth/register')
+			) {
+				return false;
+			}
+			return true;
+		}
+
+		if (token && item.route.startsWith('auth')) {
+			return false;
+		}
+
+		return item.role.includes(authStore.user.role);
+	});
 </script>

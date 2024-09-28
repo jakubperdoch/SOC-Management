@@ -78,8 +78,17 @@
 	import { useToast } from 'primevue/usetoast';
 	import Button from 'primevue/button';
 	import { useRouter } from '#imports';
+	import auth from '~/middleware/auth';
+
+	definePageMeta({
+		title: 'EduManage',
+		description: 'EduManage - správa školských prác',
+		middleware: [auth],
+		layout: 'custom',
+	});
 
 	const { logUserIn } = useAuthStore();
+
 	const toast = useToast();
 	const router = useRouter();
 	const user = ref({
