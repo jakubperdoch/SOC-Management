@@ -13,6 +13,15 @@
 		"password": "spruko1234",
 		"email": "perdochjakub@gmail.com",
 		"role": "ROLE_STUDENT",
+		"selectedProject": 1,
+		"token": ""
+	},
+	{
+		"id": 3,
+		"username": "stefanlobotka",
+		"password": "spruko1234",
+		"email": "perdochjakub@gmail.com",
+		"role": "ROLE_STUDENT",
 		"token": ""
 	},
 	{

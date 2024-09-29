@@ -15748,6 +15748,11 @@ html[data-nav-layout=vertical] .main-menu {
   background-color: rgb(var(--success-rgb));
 }
 
+.crm-deals-status li.danger:before {
+  background-color: rgb(var(--danger-rgb));
+}
+
+
 [dir=rtl] #earnings .apexcharts-yaxis-title {
   transform: translateX(-5.3125rem);
 }
