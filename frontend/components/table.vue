@@ -17,12 +17,6 @@
 			]">
 			<template #header>
 				<div class="flex justify-between">
-					<Button
-						type="button"
-						icon="pi pi-filter-slash"
-						label="Clear"
-						outlined
-						@click="clearFilter()" />
 					<IconField>
 						<InputIcon>
 							<i class="pi pi-search" />
@@ -68,82 +62,6 @@
 						<span>{{ data.country.name }}</span>
 					</div>
 				</template>
-				<template #filter="{ filterModel }">
-					<InputText
-						v-model="filterModel.value"
-						type="text"
-						placeholder="Search by country" />
-				</template>
-			</Column>
-			<Column
-				header="Agent"
-				sortable
-				sortField="representative.name"
-				filterField="representative"
-				:showFilterMatchModes="false"
-				:filterMenuStyle="{ width: '14rem' }"
-				style="min-width: 14rem">
-				<template #body="{ data }">
-					<div class="flex items-center gap-2">
-						<img
-							:alt="data.representative.name"
-							:src="`https://primefaces.org/cdn/primevue/images/avatar/${data.representative.image}`"
-							style="width: 32px" />
-						<span>{{ data.representative.name }}</span>
-					</div>
-				</template>
-				<template #filter="{ filterModel }">
-					<MultiSelect
-						v-model="filterModel.value"
-						:options="representatives"
-						optionLabel="name"
-						placeholder="Any">
-						<template #option="slotProps">
-							<div class="flex items-center gap-2">
-								<img
-									:alt="slotProps.option.name"
-									:src="`https://primefaces.org/cdn/primevue/images/avatar/${slotProps.option.image}`"
-									style="width: 32px" />
-								<span>{{ slotProps.option.name }}</span>
-							</div>
-						</template>
-					</MultiSelect>
-				</template>
-			</Column>
-			<Column
-				field="date"
-				header="Date"
-				sortable
-				filterField="date"
-				dataType="date"
-				style="min-width: 10rem">
-				<template #body="{ data }">
-					{{ formatDate(data.date) }}
-				</template>
-				<template #filter="{ filterModel }">
-					<DatePicker
-						v-model="filterModel.value"
-						dateFormat="mm/dd/yy"
-						placeholder="mm/dd/yyyy" />
-				</template>
-			</Column>
-			<Column
-				field="balance"
-				header="Balance"
-				sortable
-				filterField="balance"
-				dataType="numeric"
-				style="min-width: 10rem">
-				<template #body="{ data }">
-					{{ formatCurrency(data.balance) }}
-				</template>
-				<template #filter="{ filterModel }">
-					<InputNumber
-						v-model="filterModel.value"
-						mode="currency"
-						currency="USD"
-						locale="en-US" />
-				</template>
 			</Column>
 			<Column
 				header="Status"
@@ -171,29 +89,6 @@
 				</template>
 			</Column>
 			<Column
-				field="activity"
-				header="Activity"
-				sortable
-				:showFilterMatchModes="false"
-				style="min-width: 12rem">
-				<template #body="{ data }">
-					<ProgressBar
-						:value="data.activity"
-						:showValue="false"
-						style="height: 6px"></ProgressBar>
-				</template>
-				<template #filter="{ filterModel }">
-					<Slider
-						v-model="filterModel.value"
-						range
-						class="m-4"></Slider>
-					<div class="flex items-center justify-between px-2">
-						<span>{{ filterModel.value ? filterModel.value[0] : 0 }}</span>
-						<span>{{ filterModel.value ? filterModel.value[1] : 100 }}</span>
-					</div>
-				</template>
-			</Column>
-			<Column
 				headerStyle="width: 5rem; text-align: center"
 				bodyStyle="text-align: center; overflow: visible">
 				<template #body>
@@ -208,8 +103,6 @@
 </template>
 
 <script setup>
-
-
 	const selectedCustomers = ref();
 
 	const statuses = ref([

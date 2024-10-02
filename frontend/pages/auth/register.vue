@@ -5,14 +5,15 @@
 			<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
 				<div class="card custom-card">
 					<div class="card-body p-5">
-						<p class="h5 fw-semibold mb-2 text-center">Prihlásenie</p>
+						<p class="h5 fw-semibold mb-2 text-center">Registrácia</p>
 						<p class="mb-4 text-muted op-7 fw-normal text-center">
-							Vitajte späť, prihláste sa do svojho účtu.
+							Vitajte, zaregistrujte sa do svojho účtu.
 						</p>
+
 						<div class="row gy-3">
 							<div class="col-xl-12">
 								<label
-									for="signin-password"
+									for="email"
 									class="form-label text-default d-block">
 									Meno používateľa
 								</label>
@@ -21,10 +22,28 @@
 									<InputText
 										id="username"
 										v-model="user.username"
-										type="email"
+										type="text"
 										fluid />
 								</IconField>
 							</div>
+
+							<div class="col-xl-12">
+								<label
+									for="email"
+									class="form-label text-default d-block">
+									Email
+								</label>
+								<IconField class="w-100">
+									<InputIcon class="pi pi-envelope" />
+									<InputText
+										id="email"
+										v-model="user.email"
+										type="email"
+										@blur="validateEmail"
+										fluid />
+								</IconField>
+							</div>
+
 							<div class="col-xl-12 mb-2">
 								<label
 									for="signin-password"
@@ -51,17 +70,17 @@
 								<Button
 									@click="login"
 									class="btn btn-lg btn-primary">
-									Prihlásiť sa
+									Registrovať sa
 								</Button>
 							</div>
 						</div>
 						<div class="text-center">
 							<p class="fs-12 text-muted mt-3">
-								Nemáte účet?
+								Už máte účet?
 								<NuxtLink
-									to="/auth/register"
+									to="/auth/login"
 									class="text-primary">
-									Zaregistrovať sa
+									Prihláste sa
 								</NuxtLink>
 							</p>
 						</div>
@@ -83,21 +102,41 @@
 	definePageMeta({
 		title: 'EduManage',
 		description: 'EduManage - správa školských prác',
-		middleware: [auth],
 		layout: 'custom',
 	});
 
+	const emailError = ref(false);
 	const { logUserIn } = useAuthStore();
 
 	const toast = useToast();
 	const router = useRouter();
 	const user = ref({
 		username: '',
+		email: '',
 		password: '',
 	});
 
+	const validateEmail = () => {
+		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!regex.test(user.value.email)) {
+			emailError.value = true;
+		} else {
+			emailError.value = false;
+		}
+	};
+
 	const inputValidation = () => {
-		if (!user.value.password || user.value.password === '') {
+		validateEmail();
+
+		if (emailError.value) {
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Nesprávny formát emailu',
+				life: 3000,
+			});
+			return false;
+		} else if (!user.value.password || user.value.password === '') {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
