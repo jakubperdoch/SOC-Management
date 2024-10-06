@@ -1,66 +1,38 @@
 <template>
-	<div class="card">
+	<div class="card custom-card tw-col-span-3">
 		<DataTable
-			v-model:filters="filters"
-			v-model:selection="selectedCustomers"
-			:value="customers"
+			:value="props.cells"
 			paginator
+			removableSort
 			:rows="10"
-			dataKey="id"
-			filterDisplay="menu"
-			:globalFilterFields="[
-				'name',
-				'country.name',
-				'representative.name',
-				'balance',
-				'status',
-			]">
-			<template #header>
-				<div class="flex justify-between">
-					<IconField>
-						<InputIcon>
-							<i class="pi pi-search" />
-						</InputIcon>
-						<InputText
-							v-model="filters['global'].value"
-							placeholder="Keyword Search" />
-					</IconField>
-				</div>
-			</template>
+			dataKey="id">
 			<template #empty> No customers found. </template>
-			<Column
-				selectionMode="multiple"
-				headerStyle="width: 3rem"></Column>
+
 			<Column
 				field="name"
-				header="Name"
+				header="Názov"
 				sortable
 				style="min-width: 14rem">
 				<template #body="{ data }">
 					{{ data.name }}
 				</template>
-				<template #filter="{ filterModel }">
-					<InputText
-						v-model="filterModel.value"
-						type="text"
-						placeholder="Search by name" />
+			</Column>
+			<Column
+				field="subject"
+				header="Odbor"
+				sortable
+				style="min-width: 14rem">
+				<template #body="{ data }">
+					<span>{{ data.subject }}</span>
 				</template>
 			</Column>
 			<Column
-				header="Country"
+				field="student"
+				header="Študent"
 				sortable
-				sortField="country.name"
-				filterField="country.name"
 				style="min-width: 14rem">
 				<template #body="{ data }">
-					<div class="flex items-center gap-2">
-						<img
-							alt="flag"
-							src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"
-							:class="`flag flag-${data.country.code}`"
-							style="width: 24px" />
-						<span>{{ data.country.name }}</span>
-					</div>
+					<span>{{ data.student }}</span>
 				</template>
 			</Column>
 			<Column
@@ -74,62 +46,80 @@
 						:value="data.status"
 						:severity="getSeverity(data.status)" />
 				</template>
-				<template #filter="{ filterModel }">
-					<Select
-						v-model="filterModel.value"
-						:options="statuses"
-						placeholder="Select One"
-						showClear>
-						<template #option="slotProps">
-							<Tag
-								:value="slotProps.option"
-								:severity="getSeverity(slotProps.option)" />
-						</template>
-					</Select>
-				</template>
 			</Column>
 			<Column
+				header="Akcie"
 				headerStyle="width: 5rem; text-align: center"
 				bodyStyle="text-align: center; overflow: visible">
 				<template #body>
-					<Button
-						type="button"
-						icon="pi pi-cog"
-						rounded />
+					<div class="tw-flex tw-gap-2">
+						<Button
+							type="button"
+							icon="pi pi-search"
+							size="small"
+							rounded />
+						<Button
+							type="button"
+							icon="pi pi-pencil"
+							size="small"
+							rounded />
+						<Button
+							type="button"
+							icon="pi pi-trash"
+							size="small"
+							rounded />
+					</div>
 				</template>
 			</Column>
 		</DataTable>
 	</div>
 </template>
 
-<script setup>
-	const selectedCustomers = ref();
+<script setup lang="ts">
+	interface Cell {
+		id: Number;
+		name: String;
+		teacher: String;
+		subject: String;
+		description: String;
+		status: String;
+	}
 
-	const statuses = ref([
-		'unqualified',
-		'qualified',
-		'new',
-		'negotiation',
-		'renewal',
-		'proposal',
-	]);
+	const props = defineProps<{
+		cells: Cell[];
+	}>();
 
-	const getSeverity = (status) => {
+	const getSeverity = (status: any) => {
 		switch (status) {
-			case 'unqualified':
+			case 'Zabraná':
 				return 'danger';
 
-			case 'qualified':
+			case 'Voľná':
 				return 'success';
 
-			case 'new':
-				return 'info';
-
-			case 'negotiation':
+			case 'Čakajúca':
 				return 'warn';
-
-			case 'renewal':
-				return null;
 		}
 	};
 </script>
+
+<style scoped>
+	::v-deep .p-datatable-table > thead > tr:first-of-type > th:first-of-type {
+		border-radius: 0.5rem 0 0 0 !important;
+	}
+
+	/* Top Right Would be: */
+	::v-deep .p-datatable-table > thead > tr:first-of-type > th:last-of-type {
+		border-radius: 0 0.5rem 0 0 !important;
+	}
+
+	/* Bottom Left Would Be: */
+	::v-deep .p-datatable-table > tbody > tr:last-of-type > td:first-of-type {
+		border-radius: 0 0 0 0.5rem !important;
+	}
+
+	/* Bottom Right Would Be: */
+	::v-deep .p-datatable-table > tbody > tr:last-of-type > td:last-of-type {
+		border-radius: 0 0 0.5rem 0 !important;
+	}
+</style>
