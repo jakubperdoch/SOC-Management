@@ -1,7 +1,15 @@
 <template>
-	<div class="card custom-card tw-col-start-4 tw-col-span-1">
+	<div class="card custom-card tw-col-start-4 tw-col-span-1 !tw-font-sans">
 		<div class="card-header justify-content-between">
 			<div class="card-title">{{ props.data.title }}</div>
+			<button
+				@click="() => router.push('/dashboard/details')"
+				class="btn btn-sm btn-primary btn-wave waves-light !tw-flex !tw-items-center !tw-justify-center">
+				<i
+					class="pi pi-plus fw-semibold align-middle me-1"
+					style="font-size: 0.5rem"></i>
+				Nový projekt
+			</button>
 		</div>
 		<div class="card-body">
 			<div class="d-flex align-items-center mb-3">
@@ -64,6 +72,8 @@
 </template>
 
 <script setup lang="ts">
+	import { useRouter } from '#app';
+
 	interface Stat {
 		title: string;
 		overallNumber: number;
@@ -72,6 +82,7 @@
 		takenStatus: number;
 	}
 
+	const router = useRouter();
 	const props = defineProps<{
 		data: Stat;
 	}>();

@@ -1,13 +1,13 @@
 <template>
-	<div class="card custom-card tw-col-span-3">
+	<div class="card custom-card tw-col-span-3 !tw-font-sans !tw-rounded-2xl">
 		<DataTable
 			:value="props.cells"
 			paginator
 			removableSort
 			:rows="10"
+			:table-class="'!tw-rounded-lg'"
 			dataKey="id">
 			<template #empty> No customers found. </template>
-
 			<Column
 				field="name"
 				header="Názov"
@@ -39,7 +39,6 @@
 				header="Status"
 				field="status"
 				sortable
-				:filterMenuStyle="{ width: '14rem' }"
 				style="min-width: 12rem">
 				<template #body="{ data }">
 					<Tag
