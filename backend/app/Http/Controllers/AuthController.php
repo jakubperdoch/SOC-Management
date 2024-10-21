@@ -33,7 +33,7 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'User registered successfully!',
+            'message' => 'Úspešne ste registrovaný',
             'user' => $user,
         ], 201);
     }
@@ -55,15 +55,16 @@ class AuthController extends Controller
         if ($user && $credentials['password'] === $user->password) {
             // If the credentials are correct, return user data and a success message
             return response()->json([
-                'message' => 'Login successful',
+                'message' => 'Úspešne ste boli prihlásený!',
                 'user' => [
                     'name' => $user->name,
+                    'surname' => $user->surname,
                     'email' => $user->email,
                 ],
             ], 200);
         } else {
             // If the credentials are incorrect, return an error message
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => 'Nesprávne prihlasovacie údaje!'], 401);
         }
     }
 

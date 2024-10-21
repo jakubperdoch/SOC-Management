@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -32,4 +33,5 @@ Route::get('/test-db', function () {
     }
 });
 
+route::post('/project', [ProjectController::class, 'getProject']);
 
