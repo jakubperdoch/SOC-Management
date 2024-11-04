@@ -35,3 +35,7 @@ Route::get('/test-db', function () {
 
 route::post('/project', [ProjectController::class, 'getProject']);
 
+route::post('/project-create', [ProjectController::class, 'createProject']);
+
+route::post('/project-update', [ProjectController::class, 'updateProject']);
+

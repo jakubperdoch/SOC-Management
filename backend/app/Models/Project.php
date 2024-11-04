@@ -9,6 +9,8 @@ class Project extends Model
 {
     use HasFactory;
 
+    protected $table = 'Projects';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,5 +24,6 @@ class Project extends Model
         'teacher',
     ];
 
-    protected $table = 'Projects';
+
+    public $timestamps = true;
 }
