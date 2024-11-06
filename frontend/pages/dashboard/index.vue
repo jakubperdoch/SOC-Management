@@ -1,10 +1,10 @@
 <template>
 	<section
 		class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
-		<section v-if="authStore.user.role == 'ROLE_TEACHER'"></section>
+		<section v-if="authStore.user.value?.role == 'ROLE_TEACHER'"></section>
 		<stats :data="statsData" />
 
-		<section v-if="authStore.user.role == 'ROLE_STUDENT'">
+		<section v-if="authStore.user.value?.role == 'ROLE_STUDENT'">
 			<card :cards="ProjectData" />
 		</section>
 
@@ -16,9 +16,9 @@
 	import stats from '~/components/stats.vue';
 	import card from '~/components/card.vue';
 	import auth from '~/middleware/auth';
-	import { useAuthStore } from '#imports';
+	import useAuth from '~/composable/useAuth';
 
-	const authStore = useAuthStore();
+	const authStore = useAuth();
 
 	const teacherName = 'Jozef Mrkvička';
 

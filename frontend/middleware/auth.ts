@@ -1,19 +1,13 @@
+import useAuth from '~/composable/useAuth';
+
 export default defineNuxtRouteMiddleware((to) => {
-	const { authenticated } = storeToRefs(useAuthStore()); 
-	
-	const token = useCookie('token'); 
-	if (token.value) {
+	const { status } = useAuth();
 
-		authenticated.value = true; 
-	}
-
-
-	if (token.value && to?.name === 'auth-login') {
+	if (status.value === 'authenticated' && to?.name === 'auth-login') {
 		return navigateTo('/');
 	}
 
-
-	if (!token.value && to?.name !== 'auth-login') {
+	if (status.value === 'unauthenticated' && to?.name !== 'auth-login') {
 		return navigateTo('/auth/login');
 	}
 });

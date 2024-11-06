@@ -57,9 +57,9 @@
 <script setup lang="ts">
 	import Sidebar from 'primevue/sidebar';
 	import { useRoute } from '#app';
-	import { useAuthStore } from '#imports';
+	import useAuth from '~/composable/useAuth';
 
-	const authStore = useAuthStore();
+	const authStore = useAuth();
 	const route = useRoute();
 
 	interface Sidebar {
@@ -89,6 +89,8 @@
 			return false;
 		}
 
-		return item.role.includes(authStore.user.role);
+		return (
+			authStore.user.value?.role && item.role.includes(authStore.user.value.role)
+		);
 	});
 </script>
