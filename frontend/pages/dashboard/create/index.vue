@@ -22,15 +22,6 @@
 		{ name: 'John Smith', code: 'js' },
 	]);
 
-	const selectedTags = ref();
-	const tagOptions = ref([
-		{ name: 'Research', code: 're' },
-		{ name: 'Design', code: 'des' },
-		{ name: 'Development', code: 'dev' },
-		{ name: 'Marketing', code: 'mark' },
-		{ name: 'Sales', code: 'sales' },
-	]);
-
 	const selectedSubject = ref();
 	const subjectOptions = ref([
 		{ name: 'Web Development', code: 'wd' },
@@ -53,11 +44,7 @@
 				<div class="card-body">
 					<div class="row gy-3">
 						<div class="col-xl-4">
-							<label
-								for="input-label"
-								class="form-label"
-								>Project Name :</label
-							>
+							<label for="input-label" class="form-label">Project Name :</label>
 							<input
 								type="text"
 								class="form-control"
@@ -65,11 +52,7 @@
 								placeholder="Enter Project Name" />
 						</div>
 						<div class="col-xl-4">
-							<label
-								for="input-label"
-								class="form-label"
-								>Project Name :</label
-							>
+							<label for="input-label" class="form-label">Project Name :</label>
 							<input
 								type="text"
 								class="form-control"
@@ -77,11 +60,7 @@
 								placeholder="Enter Project Name" />
 						</div>
 						<div class="col-xl-4">
-							<label
-								for="input-label11"
-								class="form-label"
-								>Project Manager :</label
-							>
+							<label for="input-label11" class="form-label">Project Manager :</label>
 							<input
 								type="text"
 								class="form-control"
@@ -91,9 +70,7 @@
 
 						<div class="col-xl-12">
 							<label class="form-label">Project Description :</label>
-							<Editor
-								v-model="content"
-								editorStyle="height: 320px" />
+							<Editor v-model="content" editorStyle="height: 320px" />
 						</div>
 						<div class="tw-grid md:tw-grid-cols-2 tw-gap-7">
 							<div>
@@ -140,20 +117,6 @@
 									placeholder="Vyberte predmet"
 									:selection-limit="1"
 									:maxSelectedLabels="1"
-									class="w-full md:w-80" />
-							</div>
-							<div class="col-xl-6">
-								<label class="form-label">Tags</label>
-
-								<MultiSelect
-									v-model="selectedTags"
-									display="chip"
-									:options="tagOptions"
-									optionLabel="name"
-									filter
-									placeholder="Vyberte tagy"
-									:selection-limit="5"
-									:maxSelectedLabels="5"
 									class="w-full md:w-80" />
 							</div>
 						</div>

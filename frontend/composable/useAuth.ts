@@ -3,6 +3,8 @@
  */
 
 type User = {
+	name: string | null;
+	surname: string | null;
 	email: string | null;
 	role: string | null;
 };
@@ -30,11 +32,10 @@ function useAuth() {
 				},
 			});
 
-			const { token: userToken, ...user } = response;
+			const { user } = response;
 
 			updateUser(user);
-
-			token.value = userToken;
+			generateToken();
 
 			return Promise.resolve(response);
 		} catch (error) {
@@ -69,12 +70,40 @@ function useAuth() {
 		}
 	};
 
+	/**
+	 * Generate random token
+	 */
+	const generateToken = async () => {
+		token.value = `Bearer ${Math.random().toString(36).substring(2)}`;
+	};
+
+	/**
+	 * Fetch user data
+	 * @returns {Promise<void>}
+	 */
+
+	const getUser = async () => {
+		if (!token.value) {
+			return;
+		}
+
+		try {
+			const response = await apiFetch('/user');
+			updateUser(response.user);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			return Promise.resolve();
+		}
+	};
+
 	return {
 		user,
 		status,
 		login,
 		logout,
 		updateUser,
+		getUser,
 	};
 }
 

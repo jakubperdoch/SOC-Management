@@ -2,9 +2,7 @@
 	<nav
 		class="navbar navbar-expand-lg !tw-rounded-none !tw-bg-[#845adfb3] !tw-py-0 tw-fixed">
 		<div class="container-fluid tw-flex tw-items-center tw-justify-center">
-			<img
-				src="../public/images/logo.png"
-				class="navbar-brand tw-w-16" />
+			<img src="../public/images/logo.png" class="navbar-brand tw-w-16" />
 			<Button
 				outlined
 				severity="secondary"
@@ -20,9 +18,7 @@
 				id="offcanvasNavbar"
 				aria-labelledby="offcanvasNavbarLabel">
 				<div class="offcanvas-header !tw-items-start">
-					<img
-						src="../public/images/logo.png"
-						class="navbar-brand tw-w-24" />
+					<img src="../public/images/logo.png" class="navbar-brand tw-w-24" />
 					<button
 						type="button"
 						class="btn-close mt-1"
@@ -71,6 +67,14 @@
 	const props = defineProps<{
 		data: Sidebar[];
 	}>();
+
+	watch(
+		() => authStore.user.value,
+		() => {
+			console.log(authStore.user.value);
+		},
+		{ immediate: true }
+	);
 
 	const filteredData = props.data.filter((item) => {
 		const token = useCookie('token').value;

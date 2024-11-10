@@ -1,21 +1,27 @@
 <template>
 	<section
 		class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
-		<section v-if="authStore.user.value?.role == 'ROLE_TEACHER'"></section>
-		<stats :data="statsData" />
-
-		<section v-if="authStore.user.value?.role == 'ROLE_STUDENT'">
-			<card :cards="ProjectData" />
+		<section v-if="authStore.user.value?.role == 'ROLE_TEACHER'">
+			<Stats :data="statsData" />
+			<ProjectTable :cells="ProjectData" />
 		</section>
 
-		<!-- <section v-if="authStore.user.role == 'ROLE_ADMIN'"></section> -->
+		<UserTable />
+
+		<section v-if="authStore.user.value?.role == 'ROLE_STUDENT'">
+			<Card :cards="ProjectData" />
+		</section>
+
+		<section v-if="authStore.user.value?.role == 'ROLE_ADMIN'">
+			<Stats :data="statsData" />
+		</section>
 	</section>
 </template>
 <script setup lang="ts">
 	import ProjectData from '~/utils/data/projects.json';
-	import projectTable from '~/components/table.vue';
-	import stats from '~/components/stats.vue';
-	import card from '~/components/card.vue';
+	import ProjectTable from '~/components/table.vue';
+	import Stats from '~/components/stats.vue';
+	import Card from '~/components/card.vue';
 	import auth from '~/middleware/auth';
 	import useAuth from '~/composable/useAuth';
 
