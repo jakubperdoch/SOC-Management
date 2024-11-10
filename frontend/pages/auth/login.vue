@@ -14,13 +14,13 @@
 								<label
 									for="signin-password"
 									class="form-label text-default d-block">
-									Meno používateľa
+									Email
 								</label>
 								<IconField class="w-100">
 									<InputIcon class="pi pi-user" />
 									<InputText
 										id="username"
-										v-model="user.username"
+										v-model="user.email"
 										type="email"
 										fluid />
 								</IconField>
@@ -49,7 +49,7 @@
 							</div>
 							<div class="col-xl-12 d-grid mt-2">
 								<Button
-									@click="login"
+									@click="loginUserIn"
 									class="btn btn-lg btn-primary">
 									Prihlásiť sa
 								</Button>
@@ -74,11 +74,12 @@
 </template>
 
 <script setup lang="ts">
-	import { useAuthStore } from '#imports';
+	import useAuth from '~/composable/useAuth';
 	import { useToast } from 'primevue/usetoast';
 	import Button from 'primevue/button';
 	import { useRouter } from '#imports';
 	import auth from '~/middleware/auth';
+	import { useMutation } from '@tanstack/vue-query';
 
 	definePageMeta({
 		title: 'EduManage',
@@ -87,12 +88,12 @@
 		layout: 'custom',
 	});
 
-	const { logUserIn } = useAuthStore();
+	const { login } = useAuth();
 
 	const toast = useToast();
 	const router = useRouter();
 	const user = ref({
-		username: '',
+		email: '',
 		password: '',
 	});
 
@@ -105,11 +106,11 @@
 				life: 3000,
 			});
 			return false;
-		} else if (!user.value.username || user.value.username === '') {
+		} else if (!user.value.email || user.value.email === '') {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
-				detail: 'Meno používateľa je povinné',
+				detail: 'Email je povinny',
 				life: 3000,
 			});
 			return false;
@@ -118,41 +119,37 @@
 		}
 	};
 
-	const login = async () => {
-		try {
-			if (!inputValidation()) {
-				return;
-			}
+	const {
+		mutate: loginMutation,
+		status: claimStatus,
+		error,
+	} = useMutation({
+		mutationFn: () => login(user.value.email, user.value.password),
+		onSuccess: () => {
+			setTimeout(() => {
+				router.push('/');
+			}, 1000);
 
-			const data = await logUserIn(user.value);
-
-			if (data.authenticated) {
-				setTimeout(() => {
-					router.push('/');
-				}, 1000);
-
-				toast.add({
-					severity: 'success',
-					summary: 'Úspešné prihlásenie',
-					detail: 'Vitajte späť',
-					life: 3000,
-				});
-			} else {
-				toast.add({
-					severity: 'error',
-					summary: 'Nastala chyba',
-					detail: 'Nesprávne meno alebo heslo',
-					life: 3000,
-				});
-			}
-		} catch (e) {
+			toast.add({
+				severity: 'success',
+				summary: 'Úspešné prihlásenie',
+				detail: 'Vitajte späť',
+				life: 3000,
+			});
+		},
+		onError: () => {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
-				detail: 'Nastala chyba pri prihlásení',
+				detail: 'Nesprávne meno alebo heslo',
 				life: 3000,
 			});
-			console.error(e);
+		},
+	});
+
+	const loginUserIn = () => {
+		if (inputValidation()) {
+			loginMutation();
 		}
 	};
 
