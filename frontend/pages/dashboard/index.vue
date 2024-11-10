@@ -13,6 +13,7 @@
 </template>
 <script setup lang="ts">
 	import ProjectData from '~/utils/data/projects.json';
+	import projectTable from '~/components/table.vue';
 	import stats from '~/components/stats.vue';
 	import card from '~/components/card.vue';
 	import auth from '~/middleware/auth';
@@ -36,7 +37,7 @@
 				(project) => project.status === 'Čakajúca'
 			).length,
 			takenStatus: projectsByTeacher.filter(
-				(project) => project.status === 'Zabránená'
+				(project) => project.status === 'Zabraná'
 			).length,
 		};
 	});

@@ -3,6 +3,7 @@
 		"id": 1,
 		"name": "Slnečné hodiny",
 		"teacher": "Jozef Mrkvička",
+		"student": "Ján Novák",
 		"subject": "Elektrotechnika",
 		"description": "Vytvorte slnečné hodiny, ktoré budú zobrazovať aktuálny čas. Hodiny musia byť presné a odolné voči poveternostným podmienkam.",
 		"status": "Voľná"
@@ -11,6 +12,7 @@
 		"id": 2,
 		"name": "Bazar",
 		"teacher": "Jan Hruška",
+		"student": "Jozef Hatala",
 		"subject": "Informačné technológie",
 		"description": "Vytvorte webovú stránku, ktorá bude slúžiť na predaj a výmenu tovaru. Stránka musí byť prehľadná a jednoduchá na používanie.",
 		"status": "Voľná"
@@ -19,6 +21,7 @@
 		"id": 3,
 		"name": "E-shop",
 		"teacher": "Jozef Mrkvička",
+		"student": "Ján Novák",
 		"subject": "Informačné technológie",
 		"description": "Vytvorte e-shop, ktorý bude slúžiť na predaj tovaru. E-shop musí byť prehľadný a jednoduchý na používanie.",
 		"status": "Voľná"
@@ -27,6 +30,7 @@
 		"id": 4,
 		"name": "Slnečné hodiny 2",
 		"teacher": "Jozef Mrkvička",
+		"student": "Ján Novák",
 		"subject": "Elektrotechnika",
 		"description": "Vytvorte slnečné hodiny, ktoré budú zobrazovať aktuálny čas. Hodiny musia byť presné a odolné voči poveternostným podmienkam.",
 		"status": "Čakajúca"
@@ -35,6 +39,7 @@
 		"id": 5,
 		"name": "Bazar 2",
 		"teacher": "Jan Hruška",
+		"student": "Jozef Hatala",
 		"subject": "Informačné technológie",
 		"description": "Vytvorte webovú stránku, ktorá bude slúžiť na predaj a výmenu tovaru. Stránka musí byť prehľadná a jednoduchá na používanie.",
 		"status": "Čakajúca"
@@ -43,16 +48,18 @@
 		"id": 6,
 		"name": "E-shop 2",
 		"teacher": "Jozef Mrkvička",
+		"student": "Ján Novák",
 		"subject": "Informačné technológie",
-    "description": "Vytvorte e-shop, ktorý bude slúžiť na predaj tovaru. E-shop musí byť prehľadný a jednoduchý na používanie.",
+		"description": "Vytvorte e-shop, ktorý bude slúžiť na predaj tovaru. E-shop musí byť prehľadný a jednoduchý na používanie.",
 		"status": "Čakajúca"
 	},
 	{
 		"id": 7,
 		"name": "Jadrová elektráreň",
 		"teacher": "Jozef Mrkvička",
+		"student": "Ján Novák",
 		"subject": "Elektrotechnika",
-    "description": "Vytvorte jadrovú elektráreň, ktorá bude zabezpečovať elektrickú energiu pre celé mesto. Elektráreň musí byť bezpečná a spoľahlivá.",
-		"status": "Zabránená"
+		"description": "Vytvorte jadrovú elektráreň, ktorá bude zabezpečovať elektrickú energiu pre celé mesto. Elektráreň musí byť bezpečná a spoľahlivá.",
+		"status": "Zabraná"
 	}
 ]

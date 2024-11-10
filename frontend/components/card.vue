@@ -1,9 +1,11 @@
 <template>
 	<div
-		class="card custom-card tw-transition-transform tw-duration-500 hover:-tw-translate-y-4 hover:tw-cursor-pointer"
+		class="card custom-card !tw-font-sans tw-transition-transform tw-duration-500 hover:-tw-translate-y-4 hover:tw-cursor-pointer"
 		v-for="(card, cardIndex) in cards"
 		:key="cardIndex">
-		<div class="card-body">
+		<div
+			class="card-body"
+			@click="() => onRoute(card)">
 			<div class="d-flex align-items-center mb-3">
 				<div>
 					<p class="mb-0 fw-semibold fs-14 text-primary">{{ card.name }}</p>
@@ -29,6 +31,7 @@
 
 <script setup lang="ts">
 	import Card from 'primevue/card';
+	import { useRouter } from '#app';
 
 	interface Card {
 		id: Number;
@@ -39,9 +42,14 @@
 		status: String;
 	}
 
+	const router = useRouter();
 	const props = defineProps<{
 		cards: Card[];
 	}>();
+
+	const onRoute = (card: Card) => {
+		router.push(`/dashboard/details/${card.id}`);
+	};
 
 	const getSeverity = (status: any) => {
 		switch (status) {

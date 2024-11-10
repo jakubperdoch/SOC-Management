@@ -5,26 +5,45 @@
 			<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
 				<div class="card custom-card">
 					<div class="card-body p-5">
-						<p class="h5 fw-semibold mb-2 text-center">Prihlásenie</p>
+						<p class="h5 fw-semibold mb-2 text-center">Registrácia</p>
 						<p class="mb-4 text-muted op-7 fw-normal text-center">
-							Vitajte späť, prihláste sa do svojho účtu.
+							Vitajte, zaregistrujte sa do svojho účtu.
 						</p>
+
 						<div class="row gy-3">
 							<div class="col-xl-12">
 								<label
-									for="signin-password"
+									for="email"
 									class="form-label text-default d-block">
-									Email
+									Meno používateľa
 								</label>
 								<IconField class="w-100">
 									<InputIcon class="pi pi-user" />
 									<InputText
 										id="username"
-										v-model="user.email"
-										type="email"
+										v-model="user.username"
+										type="text"
 										fluid />
 								</IconField>
 							</div>
+
+							<div class="col-xl-12">
+								<label
+									for="email"
+									class="form-label text-default d-block">
+									Email
+								</label>
+								<IconField class="w-100">
+									<InputIcon class="pi pi-envelope" />
+									<InputText
+										id="email"
+										v-model="user.email"
+										type="email"
+										@blur="validateEmail"
+										fluid />
+								</IconField>
+							</div>
+
 							<div class="col-xl-12 mb-2">
 								<label
 									for="signin-password"
@@ -49,19 +68,19 @@
 							</div>
 							<div class="col-xl-12 d-grid mt-2">
 								<Button
-									@click="loginUserIn"
+									@click="login"
 									class="btn btn-lg btn-primary">
-									Prihlásiť sa
+									Registrovať sa
 								</Button>
 							</div>
 						</div>
 						<div class="text-center">
 							<p class="fs-12 text-muted mt-3">
-								Nemáte účet?
+								Už máte účet?
 								<NuxtLink
-									to="/auth/register"
+									to="/auth/login"
 									class="text-primary">
-									Zaregistrovať sa
+									Prihláste sa
 								</NuxtLink>
 							</p>
 						</div>
@@ -74,31 +93,50 @@
 </template>
 
 <script setup lang="ts">
-	import useAuth from '~/composable/useAuth';
+	import { useAuthStore } from '#imports';
 	import { useToast } from 'primevue/usetoast';
 	import Button from 'primevue/button';
 	import { useRouter } from '#imports';
 	import auth from '~/middleware/auth';
-	import { useMutation } from '@tanstack/vue-query';
 
 	definePageMeta({
 		title: 'EduManage',
 		description: 'EduManage - správa školských prác',
-		middleware: [auth],
 		layout: 'custom',
 	});
 
-	const { login } = useAuth();
+	const emailError = ref(false);
+	const { logUserIn } = useAuthStore();
 
 	const toast = useToast();
 	const router = useRouter();
 	const user = ref({
+		username: '',
 		email: '',
 		password: '',
 	});
 
+	const validateEmail = () => {
+		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!regex.test(user.value.email)) {
+			emailError.value = true;
+		} else {
+			emailError.value = false;
+		}
+	};
+
 	const inputValidation = () => {
-		if (!user.value.password || user.value.password === '') {
+		validateEmail();
+
+		if (emailError.value) {
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Nesprávny formát emailu',
+				life: 3000,
+			});
+			return false;
+		} else if (!user.value.password || user.value.password === '') {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
@@ -106,11 +144,11 @@
 				life: 3000,
 			});
 			return false;
-		} else if (!user.value.email || user.value.email === '') {
+		} else if (!user.value.username || user.value.username === '') {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
-				detail: 'Email je povinny',
+				detail: 'Meno používateľa je povinné',
 				life: 3000,
 			});
 			return false;
@@ -119,37 +157,41 @@
 		}
 	};
 
-	const {
-		mutate: loginMutation,
-		status: claimStatus,
-		error,
-	} = useMutation({
-		mutationFn: () => login(user.value.email, user.value.password),
-		onSuccess: () => {
-			setTimeout(() => {
-				router.push('/');
-			}, 1000);
+	const login = async () => {
+		try {
+			if (!inputValidation()) {
+				return;
+			}
 
-			toast.add({
-				severity: 'success',
-				summary: 'Úspešné prihlásenie',
-				detail: 'Vitajte späť',
-				life: 3000,
-			});
-		},
-		onError: () => {
+			const data = await logUserIn(user.value);
+
+			if (data.authenticated) {
+				setTimeout(() => {
+					router.push('/');
+				}, 1000);
+
+				toast.add({
+					severity: 'success',
+					summary: 'Úspešné prihlásenie',
+					detail: 'Vitajte späť',
+					life: 3000,
+				});
+			} else {
+				toast.add({
+					severity: 'error',
+					summary: 'Nastala chyba',
+					detail: 'Nesprávne meno alebo heslo',
+					life: 3000,
+				});
+			}
+		} catch (e) {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
-				detail: 'Nesprávne meno alebo heslo',
+				detail: 'Nastala chyba pri prihlásení',
 				life: 3000,
 			});
-		},
-	});
-
-	const loginUserIn = () => {
-		if (inputValidation()) {
-			loginMutation();
+			console.error(e);
 		}
 	};
 
