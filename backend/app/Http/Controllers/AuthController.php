@@ -18,18 +18,19 @@ class AuthController extends Controller
             'surname' => 'required|string|max:255', // Added validation for surname
             'email' => 'required|string|email|max:255|unique:accounts',
             'password' => 'required|string|min:8',
+            'role' => 'required|string|in:student,teacher,admin',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        // Create the user in the accounts table
         $user = User::create([
             'name' => $request->name,
-            'surname' => $request->surname, // Ensure this is included in the insert
+            'surname' => $request->surname,
             'email' => $request->email,
-            'password' => $request->password, // Plain text password (since you chose not to hash)
+            'password' => $request->password,
+            'role' => $request->role,
         ]);
 
         return response()->json([
@@ -66,6 +67,34 @@ class AuthController extends Controller
             // If the credentials are incorrect, return an error message
             return response()->json(['message' => 'Nesprávne prihlasovacie údaje!'], 401);
         }
+    }
+
+    public function update(Request $request)
+    {
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255', // Added validation for surname
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        // Update the user in the accounts table
+        $user = User::where('email', $request->email)->first();
+        $user->name = $request->name;
+        $user->surname = $request->surname; // Ensure this is included in the update
+        $user->email = $request->email;
+        $user->password = $request->password; // Plain text password (since you chose not to hash)
+        $user->save();
+
+        return response()->json([
+            'message' => 'Úspešne ste aktualizovali svoje prihlasovacie údaje',
+            'user' => $user,
+        ], 200);
     }
 
 }
