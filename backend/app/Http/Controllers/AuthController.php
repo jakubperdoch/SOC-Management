@@ -58,6 +58,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Úspešne ste boli prihlásený!',
                 'user' => [
+                    'id' => $user->id,
                     'name' => $user->name,
                     'surname' => $user->surname,
                     'email' => $user->email,
