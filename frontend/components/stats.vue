@@ -1,5 +1,6 @@
 <template>
-	<div class="card custom-card tw-col-start-4 tw-col-span-1 !tw-font-sans">
+	<div
+		class="card custom-card tw-col-start-4 tw-col-span-1 !tw-font-sans !tw-mb-0">
 		<div class="card-header justify-content-between">
 			<div class="card-title">{{ props.data.title }}</div>
 			<button

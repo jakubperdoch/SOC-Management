@@ -1,18 +1,22 @@
 <template>
-	<section
-		class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
-		<section v-if="authStore.user.value?.role == 'ROLE_TEACHER'">
+	<section class="">
+		<section
+			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8"
+			v-if="authStore.user.value?.role == 'ROLE_TEACHER'">
 			<Stats :data="statsData" />
 			<ProjectTable :cells="ProjectData" />
 		</section>
 
-		<UserTable />
-
-		<section v-if="authStore.user.value?.role == 'ROLE_STUDENT'">
+		<section
+			v-if="authStore.user.value?.role == 'ROLE_STUDENT'"
+			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
 			<Card :cards="ProjectData" />
 		</section>
 
-		<section v-if="authStore.user.value?.role == 'ROLE_ADMIN'">
+		<section
+			v-if="authStore.user.value?.role == 'ROLE_ADMIN'"
+			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
+			<UserTable />
 			<Stats :data="statsData" />
 		</section>
 	</section>

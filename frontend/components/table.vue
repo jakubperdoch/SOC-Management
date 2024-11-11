@@ -1,5 +1,6 @@
 <template>
-	<div class="card custom-card tw-col-span-3 !tw-font-sans !tw-rounded-2xl">
+	<div
+		class="card custom-card tw-col-span-3 !tw-font-sans tw-row-start-1 !tw-rounded-2xl !tw-mb-0">
 		<DataTable
 			:value="props.cells"
 			paginator
@@ -8,42 +9,24 @@
 			:table-class="'!tw-rounded-lg'"
 			dataKey="id">
 			<template #empty> No customers found. </template>
-			<Column
-				field="name"
-				header="Názov"
-				sortable
-				style="min-width: 14rem">
+			<Column field="name" header="Názov" sortable style="min-width: 14rem">
 				<template #body="{ data }">
 					{{ data.name }}
 				</template>
 			</Column>
-			<Column
-				field="subject"
-				header="Odbor"
-				sortable
-				style="min-width: 14rem">
+			<Column field="subject" header="Odbor" sortable style="min-width: 14rem">
 				<template #body="{ data }">
 					<span>{{ data.subject }}</span>
 				</template>
 			</Column>
-			<Column
-				field="student"
-				header="Študent"
-				sortable
-				style="min-width: 14rem">
+			<Column field="student" header="Študent" sortable style="min-width: 14rem">
 				<template #body="{ data }">
 					<span>{{ data.student }}</span>
 				</template>
 			</Column>
-			<Column
-				header="Status"
-				field="status"
-				sortable
-				style="min-width: 12rem">
+			<Column header="Status" field="status" sortable style="min-width: 12rem">
 				<template #body="{ data }">
-					<Tag
-						:value="data.status"
-						:severity="getSeverity(data.status)" />
+					<Tag :value="data.status" :severity="getSeverity(data.status)" />
 				</template>
 			</Column>
 			<Column
@@ -52,21 +35,9 @@
 				bodyStyle="text-align: center; overflow: visible">
 				<template #body>
 					<div class="tw-flex tw-gap-2">
-						<Button
-							type="button"
-							icon="pi pi-search"
-							size="small"
-							rounded />
-						<Button
-							type="button"
-							icon="pi pi-pencil"
-							size="small"
-							rounded />
-						<Button
-							type="button"
-							icon="pi pi-trash"
-							size="small"
-							rounded />
+						<Button type="button" icon="pi pi-search" size="small" rounded />
+						<Button type="button" icon="pi pi-pencil" size="small" rounded />
+						<Button type="button" icon="pi pi-trash" size="small" rounded />
 					</div>
 				</template>
 			</Column>

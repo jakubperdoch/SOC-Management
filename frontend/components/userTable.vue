@@ -1,6 +1,5 @@
 <template>
 	<div class="tw-grid tw-grid-cols-4 tw-gap-4 tw-col-span-3 !tw-font-sans">
-		<h2 class="tw-col-span-4">Učitelia</h2>
 		<UserCard v-for="i in 8" :delete-user-dialog="deleteUserDialog" />
 	</div>
 	<Toast />
