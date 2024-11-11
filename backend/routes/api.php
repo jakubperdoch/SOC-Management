@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StudentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,11 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::post('/login', [AuthController::class, 'login']);
-
-Route::post('/register', [AuthController::class, 'register']);
-
 Route::get('/test-db', function () {
     try {
         DB::connection()->getPdo();
@@ -33,9 +30,35 @@ Route::get('/test-db', function () {
     }
 });
 
-route::post('/project', [ProjectController::class, 'getProject']);
 
-route::post('/project-create', [ProjectController::class, 'createProject']);
 
-route::post('/project-update', [ProjectController::class, 'updateProject']);
+Route::post('/login', [AuthController::class, 'login']); //done
+
+Route::post('/register', [AuthController::class, 'register']); //done
+
+Route::put('/login-update', [AuthController::class, 'updateLogin']);
+
+Route::put('/login-delete', [AuthController::class, 'deleteLogin']);
+
+
+route::post('/project-info', [ProjectController::class, 'getProject']); //admin-done teacher-done  student-done  
+
+route::post('/project-create', [ProjectController::class, 'createProject']); //done
+
+route::put('/project-update', [ProjectController::class, 'updateProject']);
+
+route::put('/project-delete', [ProjectController::class, 'deleteProject']);
+
+
+route::post('/student-info', [StudentController::class, 'getStudent']);
+
+
+route::post('/teacher', [TeacherController::class, 'getTeacher']);
+
+route::post('/teacher-create', [TeacherController::class, 'createTeacher']);
+
+route::put('/teacher-update', [TeacherController::class, 'updateTeacher']);
+
+route::put('/teacher-delete', [TeacherController::class, 'deleteTeacher']);
+
 
