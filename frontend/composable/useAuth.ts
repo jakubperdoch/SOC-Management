@@ -3,6 +3,7 @@
  */
 
 type User = {
+	id: number;
 	name: string | null;
 	surname: string | null;
 	email: string | null;
@@ -74,7 +75,7 @@ function useAuth() {
 	 * Generate random token
 	 */
 	const generateToken = async () => {
-		token.value = `Bearer ${Math.random().toString(36).substring(2)}`;
+		token.value = `Bearer ${Math.random().toString(36).substring(2)}/${user.value?.id}`;
 	};
 
 	/**
