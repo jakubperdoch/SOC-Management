@@ -14,10 +14,10 @@
 		</section>
 
 		<section
-			v-if="authStore.user.value?.role == 'ROLE_ADMIN'"
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
-			<UserTable />
 			<Stats :data="statsData" />
+			<ProjectTable :cells="ProjectData" />
+			<UserTable />
 		</section>
 	</section>
 </template>
