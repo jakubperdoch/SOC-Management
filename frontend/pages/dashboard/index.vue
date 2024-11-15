@@ -2,13 +2,13 @@
 	<section class="">
 		<section
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8"
-			v-if="authStore.user.value?.role == 'ROLE_TEACHER'">
+			v-if="authStore.user.value?.role == 'teacher'">
 			<Stats :data="statsData" />
 			<ProjectTable :cells="ProjectData" />
 		</section>
 
 		<section
-			v-if="authStore.user.value?.role == 'ROLE_STUDENT'"
+			v-if="authStore.user.value?.role == 'student'"
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
 			<Card :cards="ProjectData" />
 		</section>

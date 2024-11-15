@@ -51,50 +51,48 @@
 </template>
 
 <script setup lang="ts">
-	import Sidebar from 'primevue/sidebar';
 	import { useRoute } from '#app';
-	import useAuth from '~/composable/useAuth';
 
-	const authStore = useAuth();
 	const route = useRoute();
+	const token = useCookie('token');
 
-	interface Sidebar {
+	interface SidebarItem {
 		title: string;
 		route: string;
-		role: string;
+		role?: string[] | null;
 	}
 
 	const props = defineProps<{
-		data: Sidebar[];
+		data: SidebarItem[];
+		userData: any;
 	}>();
 
+	const userRole = ref(props.userData?.user?.role || null);
+
 	watch(
-		() => authStore.user.value,
-		() => {
-			console.log(authStore.user.value);
-		},
-		{ immediate: true }
+		() => props.userData,
+		(newUserData) => {
+			userRole.value = newUserData?.user?.role || null;
+		}
 	);
 
-	const filteredData = props.data.filter((item) => {
-		const token = useCookie('token').value;
+	const filteredData = computed(() =>
+		props.data.filter((item) => {
+			if (!item.role) {
+				if (
+					token.value &&
+					(item.route === '/auth/login' || item.route === '/auth/register')
+				) {
+					return false;
+				}
+				return true;
+			}
 
-		if (!item.role) {
-			if (
-				token &&
-				(item.route === 'auth/login' || item.route === 'auth/register')
-			) {
+			if (token.value && item.route.startsWith('auth')) {
 				return false;
 			}
-			return true;
-		}
 
-		if (token && item.route.startsWith('auth')) {
-			return false;
-		}
-
-		return (
-			authStore.user.value?.role && item.role.includes(authStore.user.value.role)
-		);
-	});
+			return item.role.includes(userRole.value);
+		})
+	);
 </script>

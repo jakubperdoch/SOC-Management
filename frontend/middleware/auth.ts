@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware((to) => {
 		return navigateTo('/');
 	}
 
-	if (tokenCookie.value === 'unauthenticated' && to?.name !== 'auth-login') {
+	if (!tokenCookie.value && to?.name !== 'auth-login') {
 		return navigateTo('/auth/login');
 	}
 });

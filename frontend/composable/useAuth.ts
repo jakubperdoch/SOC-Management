@@ -74,8 +74,26 @@ function useAuth() {
 	/**
 	 * Generate random token
 	 */
-	const generateToken = async () => {
-		token.value = `Bearer ${Math.random().toString(36).substring(2)}/${user.value?.id}`;
+	/**
+	 * Generate random token with user.id included
+	 */
+	const generateToken = () => {
+		if (!user.value) return;
+		// Create a unique token including the user ID
+		const randomString = Math.random().toString(36).substring(2);
+		token.value = `Bearer ${randomString}_${user.value.id}`;
+	};
+
+	/**
+	 * Get user ID from token
+	 * @returns {number | null}
+	 */
+
+	const getUserIdFromToken = () => {
+		if (!token.value) return null;
+
+		const parts = token.value.split('_');
+		return parts.length > 1 ? parseInt(parts[1], 10) : null;
 	};
 
 	/**
@@ -89,7 +107,7 @@ function useAuth() {
 		}
 
 		try {
-			const response = await apiFetch('/user');
+			const response = await apiFetch('/student-info');
 			updateUser(response.user);
 		} catch (error) {
 			console.error(error);
@@ -105,6 +123,7 @@ function useAuth() {
 		logout,
 		updateUser,
 		getUser,
+		getUserIdFromToken,
 	};
 }
 
