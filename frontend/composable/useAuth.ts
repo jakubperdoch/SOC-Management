@@ -107,12 +107,20 @@ function useAuth() {
 		}
 
 		try {
-			const response = await apiFetch('/student-info');
-			updateUser(response.user);
+			const response = await apiFetch('/student-info', {
+				method: 'POST',
+				body: {
+					id: getUserIdFromToken(),
+				},
+			});
+
+			const { user } = response;
+			updateUser(user);
+
+			return Promise.resolve(response);
 		} catch (error) {
 			console.error(error);
-		} finally {
-			return Promise.resolve();
+			return Promise.reject(error);
 		}
 	};
 

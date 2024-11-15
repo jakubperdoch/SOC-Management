@@ -1,11 +1,14 @@
-export default defineNuxtRouteMiddleware((to) => {
-	const tokenCookie = useCookie('token');
+import useAuth from '~/composable/useAuth';
 
-	if (tokenCookie.value && to?.name === 'auth-login') {
+export default defineNuxtRouteMiddleware((to) => {
+	const { getUserIdFromToken } = useAuth();
+	const userId = computed(() => getUserIdFromToken() || null);
+
+	if (userId.value && userId && to?.name === 'auth-login') {
 		return navigateTo('/');
 	}
 
-	if (!tokenCookie.value && to?.name !== 'auth-login') {
+	if (!userId.value && to?.name !== 'auth-login') {
 		return navigateTo('/auth/login');
 	}
 });

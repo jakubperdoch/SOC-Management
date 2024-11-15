@@ -2,18 +2,19 @@
 	<section class="">
 		<section
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8"
-			v-if="authStore.user.value?.role == 'teacher'">
+			v-if="user?.role == 'teacher'">
 			<Stats :data="statsData" />
 			<ProjectTable :cells="ProjectData" />
 		</section>
 
 		<section
-			v-if="authStore.user.value?.role == 'student'"
+			v-if="user?.role == 'student'"
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
 			<Card :cards="ProjectData" />
 		</section>
 
 		<section
+			v-if="user?.role == 'admin'"
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
 			<Stats :data="statsData" />
 			<ProjectTable :cells="ProjectData" />
@@ -29,7 +30,15 @@
 	import auth from '~/middleware/auth';
 	import useAuth from '~/composable/useAuth';
 
-	const authStore = useAuth();
+	const { getUser, user } = useAuth();
+
+	onMounted(async () => {
+		try {
+			await getUser();
+		} catch (err) {
+			console.log(err);
+		}
+	});
 
 	const teacherName = 'Jozef Mrkvička';
 
