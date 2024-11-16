@@ -1,103 +1,178 @@
 <script lang="ts" setup>
 	import auth from '@/middleware/auth';
-
 	import Editor from 'primevue/editor';
+	import { useMutation } from '@tanstack/vue-query';
+	import { useToast } from '#imports';
+	import Toast from 'primevue/toast';
+	import useAuth from '~/composable/useAuth';
+
+	import subjectOptions from '@/utils/data/subjectOptions.json';
+	import statusOptions from '@/utils/data/statusOptions.json';
+	import type { Project } from '~/interfaces/project';
 
 	definePageMeta({
 		layout: 'default',
 		middleware: [auth],
 	});
 
-	const selectedStatus = ref();
-	const statusOptions = ref([
-		{ name: 'Open', code: 'op' },
-		{ name: 'Closed', code: 'cl' },
-		{ name: 'In Progress', code: 'ip' },
-	]);
+	const { getUserIdFromToken } = useAuth();
 
-	const selectedStudent = ref();
+	const userId = getUserIdFromToken();
+	const toast = useToast();
+	const router = useRouter();
+
+	onMounted(() => {
+		project.value.teacherId = userId;
+	});
+
+	const project = ref<Project>({
+		name: '',
+		description: '',
+		status: '',
+		studentId: null,
+		teacherId: null,
+		odbor: '',
+	});
+
 	const studentOptions = ref([
-		{ name: 'John Doe', code: 'jd' },
-		{ name: 'Jane Doe', code: 'jane' },
-		{ name: 'John Smith', code: 'js' },
+		{ name: 'John Doe', code: 1 },
+		{ name: 'Jane Doe', code: 2 },
+		{ name: 'John Smith', code: 3 },
 	]);
 
-	const selectedSubject = ref();
-	const subjectOptions = ref([
-		{ name: 'Web Development', code: 'wd' },
-		{ name: 'Mobile Development', code: 'md' },
-		{ name: 'UI/UX', code: 'ui' },
-		{ name: 'Testing', code: 'test' },
-		{ name: 'Marketing', code: 'mark' },
-	]);
+	const { mutate: createProject } = useMutation({
+		mutationFn: (data: Project) =>
+			apiFetch('/project-create', {
+				method: 'POST',
+				body: data,
+			}),
+		onSuccess: () => {
+			setTimeout(() => {
+				router.push('/');
+			}, 1000);
 
-	const content = ref('');
+			toast.add({
+				severity: 'success',
+				summary: 'Projekt bol úspešne vytvorený',
+				life: 3000,
+			});
+		},
+	});
+
+	const inputValidation = () => {
+		if (!project.value.name || project.value.name === '') {
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Názov projektu je povinný',
+				life: 3000,
+			});
+			return false;
+		} else if (!project.value.description || project.value.description === '') {
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Popis projektu je povinný',
+				life: 3000,
+			});
+			return false;
+		} else if (!project.value.status || project.value.status === '') {
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Stav projektu je povinný',
+				life: 3000,
+			});
+			return false;
+		} else if (!project.value.studentId) {
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Študent je povinný',
+				life: 3000,
+			});
+			return false;
+		} else if (!project.value.odbor || project.value.odbor === '') {
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Zameranie projektu je povinné',
+				life: 3000,
+			});
+			return false;
+		} else {
+			return true;
+		}
+	};
+
+	const createNewProject = () => {
+		if (inputValidation()) {
+			createProject({
+				name: project.value.name,
+				description: project.value.description,
+				status: project.value?.status?.[0],
+				studentId: project.value?.studentId?.[0],
+				teacherId: project.value.teacherId,
+				odbor: project.value?.odbor?.[0],
+			});
+		}
+	};
 </script>
 
 <template>
-	<div class="row tw-p-9">
+	<div class="row tw-p-9 !tw-font-sans">
 		<div class="col-xl-12">
 			<div class="card custom-card">
 				<div class="card-header">
-					<div class="card-title">Create Project</div>
+					<div class="card-title">Vytvoriť nový projekt</div>
 				</div>
 				<div class="card-body">
 					<div class="row gy-3">
 						<div class="col-xl-4">
-							<label for="input-label" class="form-label">Project Name :</label>
-							<input
+							<label for="input-label" class="form-label"> Názov projektu : </label>
+							<InputText
 								type="text"
+								v-model="project.name"
 								class="form-control"
 								id="input-label"
-								placeholder="Enter Project Name" />
-						</div>
-						<div class="col-xl-4">
-							<label for="input-label" class="form-label">Project Name :</label>
-							<input
-								type="text"
-								class="form-control"
-								id="input-label"
-								placeholder="Enter Project Name" />
-						</div>
-						<div class="col-xl-4">
-							<label for="input-label11" class="form-label">Project Manager :</label>
-							<input
-								type="text"
-								class="form-control"
-								id="input-label11"
-								placeholder="Project Manager Name" />
+								placeholder="Zadajte názov projektu" />
 						</div>
 
 						<div class="col-xl-12">
-							<label class="form-label">Project Description :</label>
-							<Editor v-model="content" editorStyle="height: 320px" />
+							<label class="form-label"> Popis projektu : </label>
+							<Editor
+								v-model="project.description"
+								editorStyle="height: 320px"
+								placeholder="Zadajte popis projektu" />
 						</div>
 						<div class="tw-grid md:tw-grid-cols-2 tw-gap-7">
 							<div>
-								<label class="form-label">Status :</label>
+								<label class="form-label"> Stav projektu :</label>
 
 								<MultiSelect
-									v-model="selectedStatus"
+									v-model="project.status"
 									display="chip"
 									fluid
 									:options="statusOptions"
 									optionLabel="name"
+									option-value="value"
 									filter
-									placeholder="Vyberte status"
+									placeholder="Vyberte aktuálny stav projektu"
 									:selection-limit="1"
 									:maxSelectedLabels="1"
 									class="w-full md:w-80" />
 							</div>
 
 							<div>
-								<label class="form-label">Assigned To</label>
+								<label class="form-label"> Študent :</label>
 
 								<MultiSelect
-									v-model="selectedStudent"
+									v-model="project.studentId"
 									display="chip"
 									fluid
 									:options="studentOptions"
 									optionLabel="name"
+									option-value="code"
 									filter
 									placeholder="Vyberte študenta"
 									:selection-limit="1"
@@ -105,16 +180,18 @@
 									class="w-full md:w-80" />
 							</div>
 
-							<div class="col-xl-6">
-								<label class="form-label"> Subject </label>
+							<div>
+								<label class="form-label"> Zameranie projektu : </label>
 
 								<MultiSelect
-									v-model="selectedSubject"
+									v-model="project.odbor"
 									display="chip"
 									:options="subjectOptions"
 									optionLabel="name"
+									option-value="value"
+									fluid
 									filter
-									placeholder="Vyberte predmet"
+									placeholder="Vyberte zamernie projektu"
 									:selection-limit="1"
 									:maxSelectedLabels="1"
 									class="w-full md:w-80" />
@@ -123,13 +200,15 @@
 					</div>
 				</div>
 				<div class="card-footer">
-					<button class="btn btn-primary-light btn-wave ms-auto float-end">
-						Create Project
+					<button
+						class="btn btn-primary-light btn-wave ms-auto float-end"
+						@click="createNewProject">
+						Vytvoriť projekt
 					</button>
 				</div>
 			</div>
 		</div>
 	</div>
-</template>
 
-<style scoped></style>
+	<Toast />
+</template>

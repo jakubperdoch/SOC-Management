@@ -14,27 +14,6 @@
 					ensure seamless navigation, easy readability, and a cohesive visual
 					identity.
 				</p>
-				<div class="fs-15 fw-semibold mb-2">Key tasks :</div>
-				<div class="mb-3">
-					<ul class="task-details-key-tasks mb-0">
-						<li>
-							Conducting a comprehensive analysis of the existing website design.
-						</li>
-						<li>
-							Collaborating with the UI/UX team to develop wireframes and mockups.
-						</li>
-						<li>Iteratively refining the design based on feedback.</li>
-						<li>
-							Implementing the finalized design changes using HTML, CSS, and
-							JavaScript.
-						</li>
-						<li>Testing the website across different devices and browsers.</li>
-						<li>
-							Conducting a final review to ensure all design elements are consistent
-							and visually appealing.
-						</li>
-					</ul>
-				</div>
 				<div class="fs-15 fw-semibold mb-2">Skills :</div>
 				<div>
 					<span class="badge bg-light text-default me-2">UI/Ux</span>
