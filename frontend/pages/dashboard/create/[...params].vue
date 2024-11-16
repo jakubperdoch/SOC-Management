@@ -13,6 +13,7 @@
 	definePageMeta({
 		layout: 'default',
 		middleware: [auth],
+		roles: ['teacher', 'admin'],
 	});
 
 	const { getUserIdFromToken } = useAuth();

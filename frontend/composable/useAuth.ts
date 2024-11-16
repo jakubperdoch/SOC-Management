@@ -66,6 +66,7 @@ function useAuth() {
 		} finally {
 			token.value = null;
 			user.value = null;
+			navigateTo('/');
 
 			return Promise.resolve();
 		}

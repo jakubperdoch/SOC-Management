@@ -1,11 +1,9 @@
 <template>
 	<div
-		class="card custom-card !tw-font-sans tw-transition-transform tw-duration-500 hover:-tw-translate-y-4 hover:tw-cursor-pointer"
+		class="card custom-card !tw-font-sans tw-transition-transform tw-duration-500 hover:-tw-translate-y-4 hover:tw-cursor-pointer !tw-mb-0"
 		v-for="(card, cardIndex) in cards"
 		:key="cardIndex">
-		<div
-			class="card-body"
-			@click="() => onRoute(card)">
+		<div class="card-body" @click="() => onRoute(card)">
 			<div class="d-flex align-items-center mb-3">
 				<div>
 					<p class="mb-0 fw-semibold fs-14 text-primary">{{ card.name }}</p>
@@ -20,9 +18,7 @@
 			</div>
 			<div class="d-flex align-items-center justify-content-between">
 				<div class="float-end fs-12 fw-semibold text-muted text-end">
-					<Tag
-						:value="card.status"
-						:severity="getSeverity(card.status)" />
+					<Tag :value="card.status" :severity="getSeverity(card.status)" />
 				</div>
 			</div>
 		</div>

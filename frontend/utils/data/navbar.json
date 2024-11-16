@@ -15,5 +15,10 @@
 		"title": "Dashboard",
 		"route": "/dashboard",
 		"role": ["admin", "student", "teacher"]
+	},
+	{
+		"title": "Profile",
+		"route": "/profile",
+		"role": ["admin", "student", "teacher"]
 	}
 ]
