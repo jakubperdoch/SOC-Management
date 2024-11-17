@@ -27,4 +27,10 @@ class UserController extends Controller
             ],
         ], 200);
     }
+
+    public function getUsers(Request $request)
+    {
+        $users = User::where('role', $request->role)->get();
+        return response()->json($users, 200);
+    }
 }

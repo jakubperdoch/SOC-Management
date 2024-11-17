@@ -51,6 +51,49 @@ class TeacherController extends Controller
         ], 201);
     }
 
+    public function updateTeacher(Request $request)
+    {
+        $teacher = User::where('id', $request->id)->first();
+        if (!$teacher) {
+            return response()->json([
+                'message' => 'Teacher not found.'
+            ], 404);
+        }
+
+        $teacher->name = $request->name;
+        $teacher->surname = $request->surname;
+        $teacher->email = $request->email;
+        $teacher->password = $request->password;
+        $teacher->save();
+
+        return response()->json([
+            'message' => 'Teacher updated',
+            'teacher' => [
+                'id' => $teacher->id,
+                'name' => $teacher->name,
+                'surname' => $teacher->surname,
+                'email' => $teacher->email,
+                'role' => $teacher->role,
+            ],
+        ], 200);
+    }
+
+    public function deleteTeacher(Request $request)
+    {
+        $teacher = User::where('id', $request->id)->first();
+        if (!$teacher) {
+            return response()->json([
+                'message' => 'Teacher not found.'
+            ], 404);
+        }
+
+        $teacher->delete();
+
+        return response()->json([
+            'message' => 'Teacher deleted'
+        ], 200);
+    }
+
     public function getProjectInfo(Request $request)
     {
         // Find the teacher by their ID

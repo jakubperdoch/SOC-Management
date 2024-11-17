@@ -49,12 +49,24 @@ class StudentController extends Controller
                 'teacher' => $teacherName
             ]);
         } else {
-            // If no project is assigned, get all projects without a student assigned
-            $unassignedProjects = Project::where('status', "free")->get();
+
+            $projects = Project::all();
+
+            $projectsWithDetails = $projects->map(function ($project) {
+                // Fetch the student and teacher for each project
+                $student = User::where('id', $project->student_id)->first();
+                $teacher = User::where('id', $project->teacher_id)->first();
+
+                return [
+                    'project_details' => $project,
+                    'student' => $student ? $student->name . ' ' . $student->surname : null,
+                    'teacher' => $teacher ? $teacher->name . ' ' . $teacher->surname : null,
+                ];
+            });
 
             return response()->json([
                 'message' => 'No project assigned to this student. Here are the unassigned projects.',
-                'projects' => $unassignedProjects
+                'projects' => $projectsWithDetails,
             ]);
         }
 
