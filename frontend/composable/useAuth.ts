@@ -72,6 +72,33 @@ function useAuth() {
 		}
 	};
 
+	const register = async (
+		name: string,
+		surname: string,
+		email: string,
+		password: string,
+		role: string
+	) => {
+		try {
+			const response = await apiFetch('/register', {
+				method: 'POST',
+				body: {
+					name,
+					surname,
+					email,
+					password,
+					role
+				},
+			});
+
+			navigateTo('/auth/login');
+
+			return Promise.resolve(response);
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	};
+
 	/**
 	 * Generate random token
 	 */
@@ -132,6 +159,7 @@ function useAuth() {
 		logout,
 		updateUser,
 		getUser,
+		register,
 		getUserIdFromToken,
 	};
 }

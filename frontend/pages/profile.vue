@@ -16,7 +16,7 @@
 
 <template>
 	<div class="row tw-p-9 !tw-font-sans">
-		<div class="col-xxl-4 col-xl-12">
+		<div>
 			<div class="card custom-card overflow-hidden">
 				<div class="card-body p-0">
 					<div
