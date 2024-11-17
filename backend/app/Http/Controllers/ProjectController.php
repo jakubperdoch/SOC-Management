@@ -4,13 +4,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Project;
+use App\Models\User;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
 
 class ProjectController extends Controller
 {
-    //
+
+    public function getSingleProject(Request $request)
+    {
+        //connection to database from table projects 
+        $project = Project::where('id', $request->id)->first();
+
+
+        if (!$project) {
+            return response()->json([
+                'message' => 'Project neexistuje',
+            ], 404);
+        }
+
+
+        return response()->json([
+            'message' => 'Project existuje',
+            'project' => [
+                'id' => $project->id,
+                'title' => $project->title,
+                'description' => $project->description,
+                'status' => $project->status,
+                'student' => $project->student_id,
+                'teacher' => $project->teacher_id,
+                'odbor' => $project->odbor,
+            ],
+        ], 200);
+    }
+
     public function getProject(Request $request, TeacherController $TeacherController, StudentController $StudentController, AdminController $AdminController)
     {
         //connection to database from table projects 
