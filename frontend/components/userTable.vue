@@ -1,24 +1,34 @@
 <template>
-	<div class="tw-grid tw-grid-cols-4 tw-gap-4 tw-col-span-3 !tw-font-sans">
-		<UserCard
-			v-for="(user, index) in users"
-			@isDeleteDialogVisible="deleteUserDialog"
-			:key="index"
-			:index
-			:user />
+	<div class="tw-flex tw-flex-col tw-w-max !tw-font-sans">
+		<div class="tw-flex tw-items-center tw-justify-between tw-mb-5">
+			<span class="tw-font-bold tw-text-xl">Učitelia</span>
+
+			<Button
+				label="Pridať učiteľa"
+				size="small"
+				icon="pi pi-plus"
+				@click="isModalVisible = !isModalVisible" />
+		</div>
+		<div class="tw-grid tw-grid-cols-5 tw-gap-4 tw-col-span-3 tw-w-fit">
+			<UserCard
+				v-for="(user, index) in users"
+				@isDeleteDialogVisible="deleteUserDialog"
+				:key="index"
+				:index
+				:user />
+		</div>
 	</div>
 	<Toast />
+	<DialogAdd v-model:isModalVisible="isModalVisible" @refetch="emitHandler" />
 </template>
 
 <script setup lang="ts">
 	import { useMutation } from '@tanstack/vue-query';
 	import type { User } from '~/interfaces/user';
-	import ConfirmDialog from 'primevue/confirmdialog';
-	import { get } from 'http';
 
 	const confirm = useConfirm();
 	const toast = useToast();
-
+	const isModalVisible = ref(false);
 	const users = ref<User[]>([]);
 
 	const { mutate: getUsers } = useMutation({
@@ -38,7 +48,7 @@
 	});
 
 	const { mutate: deleteUser } = useMutation({
-		mutationFn: (id) =>
+		mutationFn: (id: any) =>
 			apiFetch('/login/delete', {
 				method: 'DELETE',
 				body: {
@@ -64,6 +74,8 @@
 		getUsers();
 	});
 
+	const emitHandler = () => [getUsers()];
+
 	const deleteUserDialog = (id: number | null, index: number) => {
 		confirm.require({
 			message: 'Vážne chcete zmazať tohto učiteľa ?',
@@ -77,6 +89,9 @@
 			acceptProps: {
 				label: 'Zmazať',
 				severity: 'danger',
+			},
+			accept: () => {
+				deleteUser(id);
 			},
 		});
 	};

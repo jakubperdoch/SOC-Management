@@ -22,7 +22,7 @@
 										všetky zadania a školské práce s maximálnou efektivitou.
 									</div>
 									<NuxtLink
-										to="/"
+										to="/auth/register"
 										class="m-1 btn btn-primary !tw-font-sans !tw-font-light">
 										Začni svoje dobrodrúžstvo
 										<i class="pi pi-graduation-cap ms-2 align-middle"></i>
@@ -30,7 +30,7 @@
 								</div>
 							</div>
 							<div
-								class="col-xxl-5 col-xl-5 col-lg-5 col-md-4 tw-flex tw-items-end md:tw-items-center">
+								class="col-xxl-5 col-xl-5 col-lg-5 col-md-4 tw-flex tw-items-end md:tw-items-center tw-justify-end">
 								<div class="text-end landing-main-image landing-heading-img">
 									<img
 										src="../public/images/landing--image.png"
@@ -114,7 +114,7 @@
 			descritpion: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
 			image: 'https://github.com/jakubperdoch.png',
 			linkedin: 'https://www.linkedin.com/in/jakub-per%C4%8Foch/',
-			github: '',
+			github: 'https://github.com/jakubperdoch',
 		},
 		{
 			name: 'Kristian Válek',
@@ -122,6 +122,7 @@
 			descritpion: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
 			image: 'https://github.com/Los-Kaleros.png',
 			linkedin: 'https://www.linkedin.com/in/jakub-per%C4%8Foch/',
+			github: 'https://github.com/Los-Kaleros',
 		},
 	]);
 </script>
