@@ -55,17 +55,18 @@ class ProjectController extends Controller
     public function updateProject(Request $request)
     {
         //connection to database from table projects 
-        $project = Project::where('title', $request->name)->first();
+        $project = Project::where('id', $request->id)->first();
         if (!$project) {
             return response()->json([
                 'message' => 'Project neexistuje',
             ], 404);
         }
 
+        $project->title = $request->title;
         $project->description = $request->description;
         $project->status = $request->status;
-        $project->student = $request->student;
-        $project->teacher = $request->teacher;
+        $project->student_id = $request->student_id;
+        $project->teacher_id = $request->teacher_id;
         $project->odbor = $request->odbor;
         $project->save();
 
@@ -76,8 +77,8 @@ class ProjectController extends Controller
                 'name' => $project->title,
                 'description' => $project->description,
                 'status' => $project->status,
-                'student' => $project->student,
-                'teacher' => $project->teacher,
+                'student' => $project->student_id,
+                'teacher' => $project->teacher_id,
                 'odbor' => $project->odbor,
             ],
         ], 200);
