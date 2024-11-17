@@ -24,6 +24,7 @@
 
 	onMounted(() => {
 		project.value.teacher = userId;
+
 		getStudents();
 		if (route.params?.params?.[0]) {
 			getProject();
@@ -48,11 +49,11 @@
 			apiFetch('/project/create', {
 				method: 'POST',
 				body: {
-					title: data.title,
+					title: data.name,
 					description: data.description,
 					status: data.status[0],
-					student_id: data.student_id[0],
-					teacher_id: data.teacher_id,
+					student_id: data.student[0] ? data.student[0] : '',
+					teacher_id: data.teacher,
 					odbor: data.odbor[0],
 				},
 			}),
@@ -67,6 +68,17 @@
 				life: 3000,
 			});
 		},
+
+		onError: (err) => {
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Nepodarilo sa vytvoriť projekt',
+				life: 3000,
+			});
+
+			console.log(err);
+		},
 	});
 
 	const { mutate: updateProject } = useMutation({
@@ -75,11 +87,11 @@
 				method: 'PUT',
 				body: {
 					id: data.id,
-					title: data.title,
+					title: data.name,
 					description: data.description,
 					status: data.status[0],
-					student_id: data.student_id[0],
-					teacher_id: data.teacher_id,
+					student_id: data.student[0],
+					teacher_id: data.teacher,
 					odbor: data.odbor[0],
 				},
 			}),
@@ -173,7 +185,7 @@
 			});
 			return false;
 		}
-		if (!project.value.student) {
+		if (!project.value.student && route.params?.params?.[0]) {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
@@ -196,20 +208,11 @@
 
 	const createNewProject = () => {
 		if (inputValidation()) {
-			const data = {
-				id: project.value.id,
-				title: project.value.name,
-				description: project.value.description,
-				status: project.value.status,
-				student_id: project.value.student,
-				teacher_id: project.value.teacher,
-				odbor: project.value.odbor,
-			};
-
 			if (!route.params?.params?.[0]) {
-				createProject(data);
+				createProject(project.value);
+				console.log(project.value);
 			} else {
-				updateProject(data);
+				updateProject(project.value);
 			}
 		}
 	};

@@ -121,19 +121,13 @@
 
 	const getDetails = (id: number) => {
 		navigateTo({
-			path: `/dashboard/create/${id}`,
-			query: {
-				edit: 'false',
-			},
+			path: `/dashboard/details/${id}`,
 		});
 	};
 
 	const getEdit = (id: number) => {
 		navigateTo({
 			path: `/dashboard/create/${id}`,
-			query: {
-				edit: 'true',
-			},
 		});
 	};
 

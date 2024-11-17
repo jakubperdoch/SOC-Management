@@ -4,7 +4,7 @@
 		<div class="card-header justify-content-between">
 			<div class="card-title">{{ props.data.title }}</div>
 			<button
-				@click="() => router.push('/dashboard/details')"
+				@click="() => router.push('/dashboard/create')"
 				class="btn btn-sm btn-primary btn-wave waves-light !tw-flex !tw-items-center !tw-justify-center">
 				<i
 					class="pi pi-plus fw-semibold align-middle me-1"

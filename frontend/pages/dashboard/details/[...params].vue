@@ -5,50 +5,92 @@
 				<div class="card-title">Detaily projektu</div>
 			</div>
 			<div class="card-body">
-				<h5 class="fw-semibold mb-4 task-title">Ynex new angular project.</h5>
-				<div class="fs-15 fw-semibold mb-2">Project Description :</div>
+				<h5 class="fw-semibold mb-4 task-title">{{ project.title }}</h5>
+				<div class="fs-15 fw-semibold mb-2">Popis Projektu :</div>
 				<p class="text-muted task-description">
-					The current website design needs a refresh to improve user experience and
-					enhance visual appeal. The goal is to create a modern and responsive design
-					that aligns with the latest web design trends. The updated design should
-					ensure seamless navigation, easy readability, and a cohesive visual
-					identity.
+					{{ project.description }}
 				</p>
-				<div class="fs-15 fw-semibold mb-2">Skills :</div>
-				<div>
-					<span class="badge bg-light text-default me-2">UI/Ux</span>
-					<span class="badge bg-light text-default me-2">JavaScript</span>
-					<span class="badge bg-light text-default me-2">Responsive Design</span>
-					<span class="badge bg-light text-default me-2">Web Accessibility</span>
-					<span class="badge bg-light text-default me-2">Front-End Build Tools</span>
-					<span class="badge bg-light text-default me-2">RESTful APIs</span>
-					<span class="badge bg-light text-default me-2">Performance Testing</span>
-					<span class="badge bg-light text-default me-2">Angular</span>
-					<span class="badge bg-light text-default">Vue.js</span>
-				</div>
 			</div>
 			<div class="card-footer">
 				<div
 					class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
 					<div>
-						<span class="d-block text-muted fs-12">Project Manager</span>
+						<span class="d-block text-muted fs-12"> Priradený učiteľ </span>
 						<div class="d-flex align-items-center">
-							<span class="d-block fs-14 fw-semibold">S.K.Jacob</span>
+							<span class="d-block fs-14 fw-semibold">{{ project.teacher }}</span>
 						</div>
 					</div>
 					<div>
-						<span class="d-block text-muted fs-12">Assigned To</span>
-						<span class="d-block fs-14 fw-semibold"> Simon </span>
+						<span class="d-block text-muted fs-12"> Priradený študent </span>
+						<span class="d-block fs-14 fw-semibold">{{ project.student }} </span>
 					</div>
 					<div>
 						<span class="d-block text-muted fs-12">Status</span>
-						<span class="d-block"
-							><span class="badge bg-primary-transparent"> Čakajúca </span></span
-						>
+						<Tag
+							class="!tw-capitalize !tw-text-xs"
+							:value="getSeverity(project.status)?.label"
+							:severity="getSeverity(project.status)?.value" />
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+	import { useMutation } from '@tanstack/vue-query';
+
+	const route = useRoute();
+
+	const project = ref({
+		title: '',
+		description: '',
+		status: '',
+		student: null,
+		teacher: null,
+		odbor: '',
+	});
+
+	const { mutate: getProjectDetails } = useMutation({
+		mutationKey: ['getDetails'],
+		mutationFn: () =>
+			apiFetch('/project', {
+				method: 'POST',
+				body: {
+					id: route.params?.params[0],
+				},
+			}),
+		onSuccess: (data) => {
+			project.value = data.project;
+			console.log(project.value);
+		},
+		onError: (error) => {
+			navigateTo('/dashboard');
+		},
+	});
+
+	onMounted(() => {
+		getProjectDetails();
+	});
+
+	const getSeverity = (status: any) => {
+		switch (status) {
+			case 'taken':
+				return {
+					value: 'danger',
+					label: 'Zabraná',
+				};
+
+			case 'free':
+				return {
+					value: 'success',
+					label: 'Voľná',
+				};
+
+			case 'waiting':
+				return {
+					value: 'info',
+					label: 'Čakájúca',
+				};
+		}
+	};
+</script>

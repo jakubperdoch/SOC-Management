@@ -21,7 +21,7 @@
 			<UserTable />
 		</section>
 	</section>
-	
+
 	<section v-else>
 		<Loader />
 	</section>
@@ -57,7 +57,7 @@
 			apiFetch('/project/info', {
 				method: 'POST',
 				body: {
-					id: 4,
+					id: getUserIdFromToken(),
 					role: user.value?.role,
 				},
 			}),
