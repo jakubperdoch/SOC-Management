@@ -97,14 +97,12 @@
 		}
 	};
 
-	const getDetails=()=>{
+	const getDetails = () => {
 		navigateTo({
 			path: '/project/create',
-			query:{
-				
-			}
-		})
-	}
+			query: {},
+		});
+	};
 </script>
 
 <style scoped>
