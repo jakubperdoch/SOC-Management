@@ -30,13 +30,23 @@ class StudentController extends Controller
 
     public function getProjectInfo(Request $request)
     {
+
         $studentProject = Project::where('student_id', $request->id)->first();
+
+        $student = User::where('id', $request->id)->first();
+
+        $teacher = $studentProject ? User::where('id', $studentProject->teacher_id)->first() : null;
+
+        $studentName = $student ? $student->name . ' ' . $student->surname : null;
+        $teacherName = $teacher ? $teacher->name . ' ' . $teacher->surname : null;
 
         if ($studentProject) {
             // If the student has a project, return it as a JSON response
             return response()->json([
                 'message' => 'Student already has a project.',
-                'project' => $studentProject
+                'project_details' => $studentProject,
+                'student' => $studentName,
+                'teacher' => $teacherName
             ]);
         } else {
             // If no project is assigned, get all projects without a student assigned
