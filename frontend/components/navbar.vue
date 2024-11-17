@@ -70,29 +70,39 @@
 	const userRole = ref(props.userData?.user?.role || null);
 
 	watch(
+		() => token.value,
+		(newToken) => {
+			if (!newToken) {
+				userRole.value = null;
+			}
+		}
+	);
+
+	watch(
 		() => props.userData,
 		(newUserData) => {
 			userRole.value = newUserData?.user?.role || null;
 		}
 	);
 
-	const filteredData = computed(() =>
-		props.data.filter((item) => {
-			if (!item.role) {
-				if (
-					token.value &&
-					(item.route === '/auth/login' || item.route === '/auth/register')
-				) {
-					return false;
-				}
-				return true;
-			}
+	const filteredData = computed(() => {
+		if (!token.value) {
+			return props.data.filter(
+				(item) =>
+					item.route === '/auth/login' ||
+					item.route === '/auth/register' ||
+					item.route === '/'
+			);
+		}
 
-			if (token.value && item.route.startsWith('auth')) {
+		return props.data.filter((item) => {
+			if (item.route === '/auth/login' || item.route === '/auth/register') {
 				return false;
 			}
-
+			if (!item.role) {
+				return true;
+			}
 			return item.role.includes(userRole.value);
-		})
-	);
+		});
+	});
 </script>
