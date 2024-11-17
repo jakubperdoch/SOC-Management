@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 	import auth from '@/middleware/auth';
 	import Editor from 'primevue/editor';
-	import { useMutation } from '@tanstack/vue-query';
+	import { useMutation, useQuery } from '@tanstack/vue-query';
 	import { useToast } from '#imports';
 	import Toast from 'primevue/toast';
 	import useAuth from '~/composable/useAuth';
@@ -21,9 +21,14 @@
 	const userId = getUserIdFromToken();
 	const toast = useToast();
 	const router = useRouter();
+	const route = useRoute();
 
 	onMounted(() => {
 		project.value.teacherId = userId;
+
+		if (route.params?.id) {
+			getProject();
+		}
 	});
 
 	const project = ref<Project>({
@@ -43,7 +48,7 @@
 
 	const { mutate: createProject } = useMutation({
 		mutationFn: (data: Project) =>
-			apiFetch('/project-create', {
+			apiFetch('/project/create', {
 				method: 'POST',
 				body: data,
 			}),
@@ -55,6 +60,48 @@
 			toast.add({
 				severity: 'success',
 				summary: 'Projekt bol úspešne vytvorený',
+				life: 3000,
+			});
+		},
+	});
+
+	const { mutate: updateProject } = useMutation({
+		mutationFn: (data: Project) =>
+			apiFetch('/project/update', {
+				method: 'PUT',
+				body: data,
+			}),
+		onSuccess: () => {
+			setTimeout(() => {
+				router.push('/');
+			}, 1000);
+
+			toast.add({
+				severity: 'success',
+				summary: 'Projekt bol úspešne upravený',
+				life: 3000,
+			});
+		},
+	});
+
+	const { mutate: getProject } = useMutation({
+		mutationFn: () =>
+			apiFetch('/project/info', {
+				method: 'POST',
+				body: { id: 1 },
+			}),
+		onSuccess: (data) => {
+			project.value = data;
+		},
+		onError: () => {
+			setTimeout(() => {
+				router.push('/');
+			}, 1000);
+
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Nepodarilo sa načítať projekt',
 				life: 3000,
 			});
 		},
@@ -107,8 +154,18 @@
 	};
 
 	const createNewProject = () => {
-		if (inputValidation()) {
+		if (inputValidation() && !route.params?.params?.[0]) {
 			createProject({
+				name: project.value.name,
+				description: project.value.description,
+				status: project.value?.status?.[0],
+				studentId: project.value?.studentId?.[0],
+				teacherId: project.value.teacherId,
+				odbor: project.value?.odbor?.[0],
+			});
+		} else if (inputValidation() && route.params?.params?.[0]) {
+			updateProject({
+				id: route.params?.params?.[0],
 				name: project.value.name,
 				description: project.value.description,
 				status: project.value?.status?.[0],
@@ -118,6 +175,23 @@
 			});
 		}
 	};
+
+	const content = computed(() => {
+		const content = {
+			title: '',
+			button: '',
+		};
+
+		if (route.params?.params?.[0]) {
+			content.title = 'Upraviť projekt';
+			content.button = 'Upraviť projekt';
+		} else {
+			content.title = 'Vytvoriť nový projekt';
+			content.button = 'Vytvoriť projekt';
+		}
+
+		return content;
+	});
 </script>
 
 <template>
@@ -125,7 +199,7 @@
 		<div class="col-xl-12">
 			<div class="card custom-card">
 				<div class="card-header">
-					<div class="card-title">Vytvoriť nový projekt</div>
+					<div class="card-title">{{ content.title }}</div>
 				</div>
 				<div class="card-body">
 					<div class="row gy-3">
@@ -204,7 +278,7 @@
 					<button
 						class="btn btn-primary-light btn-wave ms-auto float-end"
 						@click="createNewProject">
-						Vytvoriť projekt
+						{{ content.button }}
 					</button>
 				</div>
 			</div>

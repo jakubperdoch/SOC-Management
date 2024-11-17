@@ -42,14 +42,14 @@
 				<template #body="{ data }">
 					<div class="tw-flex tw-gap-2">
 						<Button
-							@click="getDetails"
+							@click="getDetails(data.id)"
 							type="button"
 							severity="info"
 							icon="pi pi-search"
 							size="small"
 							rounded />
 						<Button
-							@click="getEdit"
+							@click="getEdit(data.id)"
 							type="button"
 							icon="pi pi-pencil"
 							size="small"
@@ -114,18 +114,18 @@
 		}
 	};
 
-	const getDetails = () => {
+	const getDetails = (id: number) => {
 		navigateTo({
-			path: 'dashboard/create',
+			path: `/dashboard/create/${id}`,
 			query: {
 				edit: 'false',
 			},
 		});
 	};
 
-	const getEdit = () => {
+	const getEdit = (id: number) => {
 		navigateTo({
-			path: 'dashboard/create',
+			path: `/dashboard/create/${id}`,
 			query: {
 				edit: 'true',
 			},

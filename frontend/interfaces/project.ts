@@ -1,4 +1,5 @@
 export interface Project {
+	id?: string | null;
 	name: string;
 	description: string;
 	odbor: string;
