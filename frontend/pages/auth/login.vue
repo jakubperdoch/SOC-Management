@@ -79,7 +79,7 @@
 	});
 
 	onMounted(() => {
-		user.value.email = route.query.email as string;
+		user.value.email = route.query.email;
 	});
 
 	const { login } = useAuth();

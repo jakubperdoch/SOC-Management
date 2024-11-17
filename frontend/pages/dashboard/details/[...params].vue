@@ -5,7 +5,7 @@
 				<div class="card-title">Detaily projektu</div>
 
 				<Button
-					v-if="user?.role === 'student' && project.status === 'free'"
+					v-if="user?.role === 'student' && project.project.status === 'free'"
 					@click="assignToProject()"
 					label="Priradiť sa"
 					icon="pi pi-user-plus"
@@ -13,10 +13,10 @@
 					class="p-button-success"></Button>
 			</div>
 			<div class="card-body">
-				<h5 class="fw-semibold mb-4 task-title">{{ project.title }}</h5>
+				<h5 class="fw-semibold mb-4 task-title">{{ project.project.title }}</h5>
 				<div class="fs-15 fw-semibold mb-2">Popis Projektu :</div>
 				<p class="text-muted task-description">
-					{{ project.description }}
+					{{ stripHtmlTags(project.project.description) }}
 				</p>
 			</div>
 			<div class="card-footer">
@@ -36,8 +36,8 @@
 						<span class="d-block text-muted fs-12">Status</span>
 						<Tag
 							class="!tw-capitalize !tw-text-xs"
-							:value="getSeverity(project.status)?.label"
-							:severity="getSeverity(project.status)?.value" />
+							:value="getSeverity(project.project.status)?.label"
+							:severity="getSeverity(project.project.status)?.value" />
 					</div>
 				</div>
 			</div>
@@ -55,16 +55,22 @@
 	const route = useRoute();
 	const toast = useToast();
 	const confirm = useConfirm();
+	const stripHtmlTags = (html: any) => html.replace(/<[^>]+>/g, '');
+
 	const { getUserIdFromToken, getUser, user } = useAuth();
 
 	const project = ref({
-		id: null,
-		title: '',
-		description: '',
-		status: '',
-		student: null,
-		teacher: null,
-		odbor: '',
+		project: {
+			id: null,
+			title: '',
+			description: '',
+			status: '',
+			student: null,
+			teacher: null,
+			odbor: '',
+		},
+		student: '',
+		teacher: '',
 	});
 
 	const { mutate: getProjectDetails } = useMutation({
@@ -77,7 +83,7 @@
 				},
 			}),
 		onSuccess: (data) => {
-			project.value = data.project;
+			project.value = data;
 		},
 		onError: (error) => {
 			navigateTo('/dashboard');
@@ -89,13 +95,13 @@
 			apiFetch('/project/update', {
 				method: 'PUT',
 				body: {
-					id: project.value.id,
+					id: project.value.project.id,
 					student_id: getUserIdFromToken(),
 					teacher_id: project.value.teacher,
 					status: 'waiting',
-					title: project.value.title,
-					description: project.value.description,
-					odbor: project.value.odbor,
+					title: project.value.project.title,
+					description: project.value.project.description,
+					odbor: project.value.project.odbor,
 				},
 			}),
 	});

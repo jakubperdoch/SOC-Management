@@ -7,24 +7,24 @@
 			<div class="d-flex align-items-center mb-3">
 				<div>
 					<p class="mb-0 fw-semibold fs-14 text-primary">
-						{{ card.title }}
+						{{ card.project_details.title }}
 					</p>
 					<p class="mb-0 fs-10 fw-semibold text-muted">
-						{{ card.teacher_id }}
+						{{ card.teacher }}
 					</p>
 				</div>
 			</div>
 			<div class="mb-3">
 				<span
 					class="text-muted tw-line-clamp-3 tw-overflow-hidden tw-text-ellipsis">
-					{{ card.description }}
+					{{ stripHtmlTags(card.project_details.description) }}
 				</span>
 			</div>
 			<div class="d-flex align-items-center justify-content-between">
 				<div class="float-end fs-12 fw-semibold text-muted text-end">
 					<Tag
-						:value="getSeverity(card.status)?.label"
-						:severity="getSeverity(card.status)?.value" />
+						:value="getSeverity(card.project_details.status)?.label"
+						:severity="getSeverity(card.project_details.status)?.value" />
 				</div>
 			</div>
 		</div>
@@ -36,21 +36,27 @@
 	import { useRouter } from '#app';
 
 	interface Card {
-		id: Number;
-		title: String;
-		teacher_id: String;
-		subject: String;
-		description: String;
-		status: String;
+		project_details: {
+			id: '';
+			title: '';
+			description: '';
+			status: '';
+			student: null;
+			teacher: null;
+			odbor: '';
+		};
+		student: '';
+		teacher: '';
 	}
 
 	const router = useRouter();
+	const stripHtmlTags = (html: any) => html.replace(/<[^>]+>/g, '');
 	const props = defineProps<{
 		cards: Card[];
 	}>();
 
 	const onRoute = (card: Card) => {
-		router.push(`/dashboard/details/${card.id}`);
+		router.push(`/dashboard/details/${card.project_details.id}`);
 	};
 
 	const getSeverity = (status: any) => {

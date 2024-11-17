@@ -5,10 +5,10 @@
 				<div class="card-title">Detaily projektu</div>
 			</div>
 			<div class="card-body">
-				<h5 class="fw-semibold mb-4 task-title">{{ project.title }}</h5>
+				<h5 class="fw-semibold mb-4 task-title">{{ project.project.title }}</h5>
 				<div class="fs-15 fw-semibold mb-2">Popis Projektu :</div>
 				<p class="text-muted task-description">
-					{{ project.description }}
+					{{ project.project.description }}
 				</p>
 			</div>
 			<div class="card-footer">
@@ -28,8 +28,8 @@
 						<span class="d-block text-muted fs-12">Status</span>
 						<Tag
 							class="!tw-capitalize !tw-text-xs"
-							:value="getSeverity(project.status)?.label"
-							:severity="getSeverity(project.status)?.value" />
+							:value="getSeverity(project.project.status)?.label"
+							:severity="getSeverity(project.project.status)?.value" />
 					</div>
 				</div>
 			</div>
@@ -44,12 +44,16 @@
 	}>();
 
 	const project = ref({
-		title: '',
-		description: '',
-		status: '',
-		student: null,
-		teacher: null,
-		odbor: '',
+		project: {
+			title: '',
+			description: '',
+			status: '',
+			student: null,
+			teacher: null,
+			odbor: '',
+		},
+		student: '',
+		teacher: '',
 	});
 
 	const { mutate: getProjectDetails } = useMutation({
@@ -62,7 +66,7 @@
 				},
 			}),
 		onSuccess: (data) => {
-			project.value = data.project;
+			project.value = data;
 		},
 		onError: (error) => {
 			navigateTo('/');
