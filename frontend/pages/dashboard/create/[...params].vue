@@ -210,7 +210,6 @@
 		if (inputValidation()) {
 			if (!route.params?.params?.[0]) {
 				createProject(project.value);
-				console.log(project.value);
 			} else {
 				updateProject(project.value);
 			}
