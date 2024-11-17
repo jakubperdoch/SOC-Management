@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,7 +31,7 @@ Route::get('/test-db', function () {
     }
 });
 
-
+Route::post('/users', [UserController::class, 'getUsers']); //done
 
 Route::post('/login', [AuthController::class, 'login']); //done
 
