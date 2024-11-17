@@ -111,7 +111,7 @@ class AuthController extends Controller
         }
 
         // Update the user in the accounts table
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('id', $request->id)->first();
         $user->email = $request->email;
         $user->password = $request->password; // Plain text password (since you chose not to hash)
         $user->save();
