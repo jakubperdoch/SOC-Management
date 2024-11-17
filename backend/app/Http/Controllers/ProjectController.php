@@ -14,15 +14,25 @@ class ProjectController extends Controller
 
     public function getSingleProject(Request $request)
     {
-        //connection to database from table projects 
+        // Fetch the project from the database
         $project = Project::where('id', $request->id)->first();
 
-
+        // Check if the project exists
         if (!$project) {
             return response()->json([
-                'message' => 'Project neexistuje',
+                'message' => 'Project neexistuje', // Project does not exist
             ], 404);
         }
+
+        // Fetch the associated student and teacher
+        $student = User::where('id', $project->student_id)->first();
+        $teacher = User::where('id', $project->teacher_id)->first();
+
+        // Prepare student and teacher names
+        $studentName = $student ? $student->name . ' ' . $student->surname : null;
+        $teacherName = $teacher ? $teacher->name . ' ' . $teacher->surname : null;
+
+
 
 
         return response()->json([
@@ -36,6 +46,8 @@ class ProjectController extends Controller
                 'teacher' => $project->teacher_id,
                 'odbor' => $project->odbor,
             ],
+            'student' => $studentName,
+            'teacher' => $teacherName
         ], 200);
     }
 
