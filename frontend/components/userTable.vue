@@ -1,14 +1,42 @@
 <template>
 	<div class="tw-grid tw-grid-cols-4 tw-gap-4 tw-col-span-3 !tw-font-sans">
-		<UserCard v-for="i in 8" :delete-user-dialog="deleteUserDialog" />
+		<UserCard
+			v-for="user in users"
+			:delete-user-dialog="deleteUserDialog"
+			:user />
 	</div>
 	<Toast />
 	<ConfirmDialog></ConfirmDialog>
 </template>
 
 <script setup lang="ts">
+	import { useMutation } from '@tanstack/vue-query';
+	import type { User } from '~/interfaces/user';
+
 	const confirm = useConfirm();
 	const toast = useToast();
+
+	const users = ref<User[]>([]);
+
+	const { mutate: getUsers } = useMutation({
+		mutationFn: () =>
+			apiFetch('/users', {
+				method: 'POST',
+				body: {
+					role: 'teacher',
+				},
+			}),
+		onSuccess: (data) => {
+			users.value = data || [];
+		},
+		onError: (error) => {
+			console.log(error);
+		},
+	});
+
+	onMounted(() => {
+		getUsers();
+	});
 
 	const deleteUserDialog = (id: number) => {
 		confirm.require({

@@ -51,7 +51,11 @@
 				</template>
 			</Column>
 
-			<Column header="Status" field="status" sortable style="min-width: 12rem">
+			<Column
+				header="Status"
+				field="project_details.status"
+				sortable
+				style="min-width: 12rem">
 				<template #body="{ data }">
 					<Tag
 						class="!tw-capitalize"
