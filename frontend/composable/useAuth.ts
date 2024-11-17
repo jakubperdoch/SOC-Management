@@ -57,19 +57,11 @@ function useAuth() {
 	 * @returns {Promise<void>}
 	 */
 	const logout = async () => {
-		try {
-			await apiFetch('/logout', {
-				method: 'POST',
-			});
-		} catch (error) {
-			console.error(error);
-		} finally {
-			token.value = null;
-			user.value = null;
-			navigateTo('/');
+		token.value = null;
+		user.value = null;
+		navigateTo('/');
 
-			return Promise.resolve();
-		}
+		return Promise.resolve();
 	};
 
 	const register = async (

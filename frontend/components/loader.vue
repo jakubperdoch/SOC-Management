@@ -26,7 +26,7 @@
 			loader.value = true;
 			setTimeout(() => {
 				loader.value = false;
-			}, 3000);
+			}, 3500);
 		},
 		{ deep: true }
 	);

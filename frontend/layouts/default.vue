@@ -29,6 +29,8 @@
 	});
 
 	onMounted(() => {
-		mutateUser();
+		if (getUserIdFromToken()) {
+			mutateUser();
+		}
 	});
 </script>

@@ -8,9 +8,20 @@
 		</section>
 
 		<section
-			v-if="user?.role == 'student'"
+			v-if="
+				user?.role == 'student' &&
+				ProjectData.message !== 'Student already has a project.'
+			"
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
 			<Card :cards="ProjectData.projects" />
+		</section>
+
+		<section
+			v-if="
+				user?.role == 'student' &&
+				ProjectData.message === 'Student already has a project.'
+			">
+			<Details :project-id="ProjectData.project_details?.id" />
 		</section>
 
 		<section
@@ -46,7 +57,6 @@
 	});
 
 	const ProjectData = ref();
-	const teacherName = `${user.value?.name} ${user.value?.surname}`;
 
 	const {
 		mutate: getProjects,
@@ -89,5 +99,6 @@
 	definePageMeta({
 		layout: 'default',
 		middleware: [auth],
+		roles: ['student', 'teacher', 'admin'],
 	});
 </script>

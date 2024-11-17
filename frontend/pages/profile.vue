@@ -32,7 +32,6 @@
 									{{ user?.name }} {{ user?.surname }}
 								</h6>
 								<button class="btn btn-light btn-wave" @click="logout">
-									<i class="ri-add-line me-1 align-middle"></i>
 									Odhlásiť sa
 								</button>
 							</div>
@@ -42,20 +41,6 @@
 							<p class="mb-0 text-muted text-fixed-white op-7 text-capitalize">
 								{{ user?.role }}
 							</p>
-							<div class="d-flex mb-0" v-if="user?.role === 'teacher'">
-								<div class="me-4">
-									<p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">113</p>
-									<p class="mb-0 fs-11 op-5 text-fixed-white">Projects</p>
-								</div>
-								<div class="me-4">
-									<p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">12.2k</p>
-									<p class="mb-0 fs-11 op-5 text-fixed-white">Followers</p>
-								</div>
-								<div class="me-4">
-									<p class="fw-bold fs-20 text-fixed-white text-shadow mb-0">128</p>
-									<p class="mb-0 fs-11 op-5 text-fixed-white">Following</p>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
