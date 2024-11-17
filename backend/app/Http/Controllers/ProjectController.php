@@ -58,11 +58,11 @@ class ProjectController extends Controller
     {
         //connection to database from table projects 
         $project = new Project();
-        $project->title = $request->name;
+        $project->title = $request->title;
         $project->description = $request->description;
         $project->status = $request->status;
-        $project->student = $request->student;
-        $project->teacher = $request->teacher;
+        $project->student_id = $request->student_id;
+        $project->teacher_id = $request->teacher_id;
         $project->odbor = $request->odbor;
         $project->save();
 
@@ -73,8 +73,8 @@ class ProjectController extends Controller
                 'name' => $project->title,
                 'description' => $project->description,
                 'status' => $project->status,
-                'student' => $project->student,
-                'teacher' => $project->teacher,
+                'student' => $project->student_id,
+                'teacher' => $project->teacher_id,
                 'odbor' => $project->odbor,
             ],
         ], 201);
