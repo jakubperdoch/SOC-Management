@@ -35,16 +35,19 @@ class ProjectController extends Controller
         $project->status = $request->status;
         $project->student = $request->student;
         $project->teacher = $request->teacher;
+        $project->odbor = $request->odbor;
         $project->save();
 
         return response()->json([
             'message' => 'Project created',
             'project' => [
+                'id' => $project->id,
                 'name' => $project->title,
                 'description' => $project->description,
                 'status' => $project->status,
                 'student' => $project->student,
                 'teacher' => $project->teacher,
+                'odbor' => $project->odbor,
             ],
         ], 201);
     }
@@ -63,16 +66,19 @@ class ProjectController extends Controller
         $project->status = $request->status;
         $project->student = $request->student;
         $project->teacher = $request->teacher;
+        $project->odbor = $request->odbor;
         $project->save();
 
         return response()->json([
             'message' => 'Project updated',
             'project' => [
+                'id' => $project->id,
                 'name' => $project->title,
                 'description' => $project->description,
                 'status' => $project->status,
                 'student' => $project->student,
                 'teacher' => $project->teacher,
+                'odbor' => $project->odbor,
             ],
         ], 200);
     }
@@ -80,7 +86,7 @@ class ProjectController extends Controller
     public function deleteProject(Request $request)
     {
         //connection to database from table projects 
-        $project = Project::where('title', $request->name)->first();
+        $project = Project::where('id', $request->id)->first();
         if (!$project) {
             return response()->json([
                 'message' => 'Project neexistuje',
