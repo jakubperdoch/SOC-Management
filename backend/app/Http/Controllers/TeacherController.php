@@ -53,7 +53,7 @@ class TeacherController extends Controller
 
     public function getProjectInfo(Request $request)
     {
-        $project = Project::where('teacher', $request->id)->get();
+        $project = Project::where('teacher_id', $request->id)->get();
         return response()->json($project, 200);
     }
 }
