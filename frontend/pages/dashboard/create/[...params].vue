@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 	import auth from '@/middleware/auth';
 	import Editor from 'primevue/editor';
-	import { useMutation, useQuery } from '@tanstack/vue-query';
+	import { useMutation } from '@tanstack/vue-query';
 	import { useToast } from '#imports';
 	import Toast from 'primevue/toast';
 	import useAuth from '~/composable/useAuth';
-
 	import subjectOptions from '@/utils/data/subjectOptions.json';
 	import statusOptions from '@/utils/data/statusOptions.json';
 	import type { Project } from '~/interfaces/project';
@@ -24,8 +23,8 @@
 	const route = useRoute();
 
 	onMounted(() => {
-		project.value.teacher_id = userId;
-
+		project.value.teacher = userId;
+		getStudents();
 		if (route.params?.params?.[0]) {
 			getProject();
 			project.value.id = Number(route.params?.params?.[0]);
@@ -37,16 +36,12 @@
 		name: '',
 		description: '',
 		status: '',
-		student_id: null,
-		teacher_id: null,
+		student: null,
+		teacher: null,
 		odbor: '',
 	});
 
-	const studentOptions = ref([
-		{ name: 'John Doe', code: 1 },
-		{ name: 'Jane Doe', code: 2 },
-		{ name: 'John Smith', code: 3 },
-	]);
+	const studentOptions = ref([]);
 
 	const { mutate: createProject } = useMutation({
 		mutationFn: (data: Project) =>
@@ -88,19 +83,23 @@
 
 	const { mutate: getProject } = useMutation({
 		mutationFn: () =>
-			apiFetch('/project/info', {
+			apiFetch('/project', {
 				method: 'POST',
-				body: { id: 1 },
+				body: { id: Number(route.params?.params?.[0]) },
 			}),
 		onSuccess: (data) => {
-			console.log(data);
-			project.value = data;
+			project.value = {
+				id: data.project.id,
+				name: data.project.title,
+				description: data.project.description,
+				status: [data.project.status],
+				student: Number(data.project.student),
+				teacher: Number(data.project.teacher),
+				odbor: [data.project.odbor],
+			};
+			console.log(project.value);
 		},
 		onError: () => {
-			setTimeout(() => {
-				router.push('/');
-			}, 1000);
-
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
@@ -110,8 +109,29 @@
 		},
 	});
 
+	const { mutate: getStudents } = useMutation({
+		mutationFn: () =>
+			apiFetch('/users', {
+				method: 'POST',
+				body: {
+					role: 'student',
+				},
+			}),
+		onSuccess: (data) => {
+			studentOptions.value = data.students;
+		},
+		onError: () => {
+			toast.add({
+				severity: 'error',
+				summary: 'Nastala chyba',
+				detail: 'Nepodarilo sa načítať študentov',
+				life: 3000,
+			});
+		},
+	});
+
 	const inputValidation = () => {
-		if (!project.value.name || project.value.name === '') {
+		if (!project.value.name) {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
@@ -119,7 +139,8 @@
 				life: 3000,
 			});
 			return false;
-		} else if (!project.value.description || project.value.description === '') {
+		}
+		if (!project.value.description) {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
@@ -127,7 +148,8 @@
 				life: 3000,
 			});
 			return false;
-		} else if (!project.value.status || project.value.status === '') {
+		}
+		if (!project.value.status) {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
@@ -135,7 +157,8 @@
 				life: 3000,
 			});
 			return false;
-		} else if (!project.value.student_id) {
+		}
+		if (!project.value.student) {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
@@ -143,7 +166,8 @@
 				life: 3000,
 			});
 			return false;
-		} else if (!project.value.odbor || project.value.odbor === '') {
+		}
+		if (!project.value.odbor) {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
@@ -151,31 +175,27 @@
 				life: 3000,
 			});
 			return false;
-		} else {
-			return true;
 		}
+		return true;
 	};
 
 	const createNewProject = () => {
-		if (inputValidation() && !route.params?.params?.[0]) {
-			createProject({
+		if (inputValidation()) {
+			const data = {
+				id: project.value.id,
 				name: project.value.name,
 				description: project.value.description,
-				status: project.value?.status?.[0],
-				student_id: project.value?.student_id?.[0],
-				teacher_id: project.value.teacher_id,
-				odbor: project.value?.odbor?.[0],
-			});
-		} else if (inputValidation() && route.params?.params?.[0]) {
-			updateProject({
-				id: Number(route.params?.params?.[0]),
-				name: project.value.name,
-				description: project.value.description,
-				status: project.value?.status?.[0],
-				student_id: project.value?.student_id?.[0],
-				teacher_id: project.value.teacher_id,
-				odbor: project.value?.odbor?.[0],
-			});
+				status: project.value.status,
+				student: project.value.student,
+				teacher: project.value.teacher,
+				odbor: project.value.odbor,
+			};
+
+			if (!route.params?.params?.[0]) {
+				createProject(data);
+			} else {
+				updateProject(data);
+			}
 		}
 	};
 
@@ -211,17 +231,14 @@
 							<InputText
 								type="text"
 								v-model="project.name"
-								class="form-control"
+								class="form-control !tw-text-sm"
 								id="input-label"
 								placeholder="Zadajte názov projektu" />
 						</div>
 
 						<div class="col-xl-12">
 							<label class="form-label"> Popis projektu : </label>
-							<Editor
-								v-model="project.description"
-								editorStyle="height: 320px"
-								placeholder="Zadajte popis projektu" />
+							<Editor v-model="project.description" editorStyle="height: 320px" />
 						</div>
 						<div class="tw-grid md:tw-grid-cols-2 tw-gap-7">
 							<div>
@@ -245,7 +262,7 @@
 								<label class="form-label"> Študent :</label>
 
 								<MultiSelect
-									v-model="project.student_id"
+									v-model="project.student"
 									display="chip"
 									fluid
 									:options="studentOptions"

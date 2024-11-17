@@ -42,14 +42,14 @@
 				<template #body="{ data }">
 					<div class="tw-flex tw-gap-2">
 						<Button
-							@click="getDetails(data.id)"
+							@click="getDetails(data.project_details.id)"
 							type="button"
 							severity="info"
 							icon="pi pi-search"
 							size="small"
 							rounded />
 						<Button
-							@click="getEdit(data.id)"
+							@click="getEdit(data.project_details.id)"
 							type="button"
 							icon="pi pi-pencil"
 							size="small"
