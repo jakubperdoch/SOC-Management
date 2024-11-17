@@ -55,13 +55,13 @@
 						<div class="fs-12 text-muted">{{ data.openStatus }}</div>
 					</div>
 				</li>
-				<li class="warning">
+				<li class="info">
 					<div class="d-flex align-items-center justify-content-between">
 						<div>Čakajuče projekty</div>
 						<div class="fs-12 text-muted">{{ data.waitingStatus }}</div>
 					</div>
 				</li>
-				<li class="danger">
+				<li class="warning">
 					<div class="d-flex align-items-center justify-content-between">
 						<div>Zabrané projekty</div>
 						<div class="fs-12 text-muted">{{ data.takenStatus }}</div>

@@ -6,19 +6,25 @@
 		<div class="card-body" @click="() => onRoute(card)">
 			<div class="d-flex align-items-center mb-3">
 				<div>
-					<p class="mb-0 fw-semibold fs-14 text-primary">{{ card.name }}</p>
-					<p class="mb-0 fs-10 fw-semibold text-muted">{{ card.teacher }}</p>
+					<p class="mb-0 fw-semibold fs-14 text-primary">
+						{{ card.project_details.name }}
+					</p>
+					<p class="mb-0 fs-10 fw-semibold text-muted">
+						{{ card.project_details.teacher }}
+					</p>
 				</div>
 			</div>
 			<div class="mb-3">
 				<span
 					class="text-muted tw-line-clamp-3 tw-overflow-hidden tw-text-ellipsis">
-					{{ card.description }}
+					{{ card.project_details.description }}
 				</span>
 			</div>
 			<div class="d-flex align-items-center justify-content-between">
 				<div class="float-end fs-12 fw-semibold text-muted text-end">
-					<Tag :value="card.status" :severity="getSeverity(card.status)" />
+					<Tag
+						:value="card.project_details.status"
+						:severity="getSeverity(card.project_details.status)?.value" />
 				</div>
 			</div>
 		</div>
@@ -30,12 +36,16 @@
 	import { useRouter } from '#app';
 
 	interface Card {
-		id: Number;
-		name: String;
-		teacher: String;
-		subject: String;
-		description: String;
-		status: String;
+		student: String;
+
+		project_details: {
+			id: Number;
+			name: String;
+			teacher: String;
+			subject: String;
+			description: String;
+			status: String;
+		};
 	}
 
 	const router = useRouter();
@@ -44,19 +54,28 @@
 	}>();
 
 	const onRoute = (card: Card) => {
-		router.push(`/dashboard/details/${card.id}`);
+		router.push(`/dashboard/details/${card.project_details.id}`);
 	};
 
 	const getSeverity = (status: any) => {
 		switch (status) {
-			case 'Zabránená':
-				return 'danger';
+			case 'taken':
+				return {
+					value: 'danger',
+					label: 'Obsadená',
+				};
 
-			case 'Voľná':
-				return 'success';
+			case 'free':
+				return {
+					value: 'success',
+					label: 'Voľná',
+				};
 
-			case 'Čakajúca':
-				return 'info';
+			case 'waiting':
+				return {
+					value: 'info',
+					label: 'Čakájúca',
+				};
 		}
 	};
 </script>

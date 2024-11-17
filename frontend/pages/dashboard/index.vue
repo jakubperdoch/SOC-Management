@@ -1,25 +1,29 @@
 <template>
-	<section>
+	<section v-if="ProjectData">
 		<section
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8 tw-h-fit"
 			v-if="user?.role == 'teacher'">
 			<Stats :data="statsData" />
-			<ProjectTable @refresh="getProjects" :cells="ProjectData" />
+			<ProjectTable @refresh="getProjects" :cells="ProjectData.projects" />
 		</section>
 
 		<section
 			v-if="user?.role == 'student'"
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
-			<Card :cards="ProjectData" />
+			<Card :cards="ProjectData.projects" />
 		</section>
 
 		<section
 			v-if="user?.role == 'admin'"
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
 			<Stats :data="statsData" />
-			<ProjectTable :cells="ProjectData" />
+			<ProjectTable :cells="ProjectData.projects" />
 			<UserTable />
 		</section>
+	</section>
+	
+	<section v-else>
+		<Loader />
 	</section>
 </template>
 <script setup lang="ts">
@@ -41,7 +45,7 @@
 		}
 	});
 
-	const ProjectData = ref([]);
+	const ProjectData = ref();
 	const teacherName = `${user.value?.name} ${user.value?.surname}`;
 
 	const {
@@ -58,7 +62,7 @@
 				},
 			}),
 		onSuccess: (data) => {
-			ProjectData.value = data;
+			ProjectData.value = data || {};
 		},
 		onError: (error) => {
 			console.log(error);
@@ -66,21 +70,18 @@
 	});
 
 	const statsData = computed(() => {
-		const projectsByTeacher = ProjectData.value.filter(
-			(project: any) => project.teacher === teacherName
-		);
-
+		const projects = ProjectData.value?.projects || [];
 		return {
 			title: 'Vaše Projekty',
-			overallNumber: projectsByTeacher.length,
-			openStatus: projectsByTeacher.filter(
-				(project: any) => project.status === 'Voľná'
+			overallNumber: projects.length,
+			openStatus: projects.filter(
+				(project: any) => project.project_details?.status === 'free'
 			).length,
-			waitingStatus: projectsByTeacher.filter(
-				(project: any) => project.status === 'Čakajúca'
+			waitingStatus: projects.filter(
+				(project: any) => project.project_details?.status === 'waiting'
 			).length,
-			takenStatus: projectsByTeacher.filter(
-				(project: any) => project.status === 'Zabraná'
+			takenStatus: projects.filter(
+				(project: any) => project.project_details?.status === 'taken'
 			).length,
 		};
 	});

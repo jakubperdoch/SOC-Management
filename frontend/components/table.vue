@@ -15,12 +15,12 @@
 			</template>
 			<Column field="name" header="Názov" sortable style="min-width: 14rem">
 				<template #body="{ data }">
-					{{ data.title }}
+					{{ data.project_details.title }}
 				</template>
 			</Column>
 			<Column field="subject" header="Odbor" sortable style="min-width: 14rem">
 				<template #body="{ data }">
-					<span>{{ data.odbor }}</span>
+					<span>{{ data.project_details.odbor }}</span>
 				</template>
 			</Column>
 			<Column field="student" header="Študent" sortable style="min-width: 14rem">
@@ -31,8 +31,8 @@
 			<Column header="Status" field="status" sortable style="min-width: 12rem">
 				<template #body="{ data }">
 					<Tag
-						:value="getSeverity(data.status)?.label"
-						:severity="getSeverity(data.status)?.value" />
+						:value="getSeverity(data.project_details.status)?.label"
+						:severity="getSeverity(data.project_details.status)?.value" />
 				</template>
 			</Column>
 			<Column
@@ -80,12 +80,16 @@
 	const emit = defineEmits(['refresh']);
 
 	interface Cell {
-		id: Number;
-		name: String;
-		teacher: String;
-		subject: String;
-		description: String;
-		status: String;
+		student: String;
+
+		project_details: {
+			id: Number;
+			name: String;
+			teacher: String;
+			subject: String;
+			description: String;
+			status: String;
+		};
 	}
 
 	const props = defineProps<{
@@ -97,7 +101,7 @@
 			case 'taken':
 				return {
 					value: 'danger',
-					label: 'Obsadená',
+					label: 'Zabraná',
 				};
 
 			case 'free':

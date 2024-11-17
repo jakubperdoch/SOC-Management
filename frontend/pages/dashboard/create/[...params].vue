@@ -24,19 +24,21 @@
 	const route = useRoute();
 
 	onMounted(() => {
-		project.value.teacherId = userId;
+		project.value.teacher_id = userId;
 
-		if (route.params?.id) {
+		if (route.params?.params?.[0]) {
 			getProject();
+			project.value.id = Number(route.params?.params?.[0]);
 		}
 	});
 
 	const project = ref<Project>({
+		id: null,
 		name: '',
 		description: '',
 		status: '',
-		studentId: null,
-		teacherId: null,
+		student_id: null,
+		teacher_id: null,
 		odbor: '',
 	});
 
@@ -91,6 +93,7 @@
 				body: { id: 1 },
 			}),
 		onSuccess: (data) => {
+			console.log(data);
 			project.value = data;
 		},
 		onError: () => {
@@ -132,7 +135,7 @@
 				life: 3000,
 			});
 			return false;
-		} else if (!project.value.studentId) {
+		} else if (!project.value.student_id) {
 			toast.add({
 				severity: 'error',
 				summary: 'Nastala chyba',
@@ -159,18 +162,18 @@
 				name: project.value.name,
 				description: project.value.description,
 				status: project.value?.status?.[0],
-				studentId: project.value?.studentId?.[0],
-				teacherId: project.value.teacherId,
+				student_id: project.value?.student_id?.[0],
+				teacher_id: project.value.teacher_id,
 				odbor: project.value?.odbor?.[0],
 			});
 		} else if (inputValidation() && route.params?.params?.[0]) {
 			updateProject({
-				id: route.params?.params?.[0],
+				id: Number(route.params?.params?.[0]),
 				name: project.value.name,
 				description: project.value.description,
 				status: project.value?.status?.[0],
-				studentId: project.value?.studentId?.[0],
-				teacherId: project.value.teacherId,
+				student_id: project.value?.student_id?.[0],
+				teacher_id: project.value.teacher_id,
 				odbor: project.value?.odbor?.[0],
 			});
 		}
@@ -242,7 +245,7 @@
 								<label class="form-label"> Študent :</label>
 
 								<MultiSelect
-									v-model="project.studentId"
+									v-model="project.student_id"
 									display="chip"
 									fluid
 									:options="studentOptions"

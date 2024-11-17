@@ -1,9 +1,9 @@
 export interface Project {
-	id?: string | null;
+	id?: number | null;
 	name: string;
 	description: string;
 	odbor: string;
 	status: string;
-	studentId: any;
-	teacherId: number | null;
+	student_id: any;
+	teacher_id: number | null;
 }
