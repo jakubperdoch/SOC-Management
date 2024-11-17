@@ -13,21 +13,44 @@
 					<p class="tw-text-lg tw-text-gray-500">Žiadne projekty</p>
 				</div>
 			</template>
-			<Column field="name" header="Názov" sortable style="min-width: 14rem">
+
+			<Column
+				field="project_details.title"
+				header="Názov"
+				sortable
+				style="min-width: 14rem">
 				<template #body="{ data }">
 					{{ data.project_details.title }}
 				</template>
 			</Column>
-			<Column field="subject" header="Odbor" sortable style="min-width: 14rem">
+
+			<Column
+				field="project_details.odbor"
+				header="Odbor"
+				sortable
+				style="min-width: 14rem">
 				<template #body="{ data }">
 					<span class="tw-capitalize">{{ data.project_details.odbor }}</span>
 				</template>
 			</Column>
+
 			<Column field="student" header="Študent" sortable style="min-width: 14rem">
 				<template #body="{ data }">
 					<span>{{ data.student }}</span>
 				</template>
 			</Column>
+
+			<Column
+				field="teacher"
+				header="Učiteľ"
+				sortable
+				style="min-width: 14rem"
+				v-if="user?.role == 'admin'">
+				<template #body="{ data }">
+					<span>{{ data.teacher }}</span>
+				</template>
+			</Column>
+
 			<Column header="Status" field="status" sortable style="min-width: 12rem">
 				<template #body="{ data }">
 					<Tag
@@ -36,6 +59,7 @@
 						:severity="getSeverity(data.project_details.status)?.value" />
 				</template>
 			</Column>
+
 			<Column
 				header="Akcie"
 				headerStyle="width: 5rem; text-align: center"
@@ -75,7 +99,9 @@
 	import { useMutation } from '@tanstack/vue-query';
 	import { useConfirm } from 'primevue/useconfirm';
 	import { useToast } from 'primevue/usetoast';
+	import useAuth from '~/composable/useAuth';
 
+	const { user, getUser } = useAuth();
 	const confirm = useConfirm();
 	const toast = useToast();
 	const emit = defineEmits(['refresh']);
@@ -182,6 +208,14 @@
 			},
 		});
 	};
+
+	onMounted(async () => {
+		try {
+			await getUser();
+		} catch (err) {
+			console.log(err);
+		}
+	});
 </script>
 
 <style scoped>
