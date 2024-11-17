@@ -2,9 +2,7 @@
 	<div class="landing-page-wrapper">
 		<!-- Main Section -->
 		<div class="main-content landing-main tw-h-max px-0 !tw-bg-[#845adfb3]">
-			<section
-				class="landing-banner tw-py-10"
-				id="home">
+			<section class="landing-banner tw-py-10" id="home">
 				<section class="section">
 					<div class="container main-banner-container pb-lg-0">
 						<div class="row">
@@ -46,9 +44,7 @@
 		</div>
 
 		<!-- Hero Section -->
-		<section
-			class="section tw-mt-16"
-			id="team">
+		<section class="section tw-mt-16" id="team">
 			<div class="container text-center">
 				<p class="fs-12 fw-semibold text-success mb-1">
 					<span class="landing-section-heading"> Náš tím </span>
@@ -59,7 +55,8 @@
 				<div class="row justify-content-center">
 					<div class="col-xl-7">
 						<p class="text-muted fs-15 mb-5 fw-normal">
-							Our team consists of highly qulified employees that works hard to raise
+							Naši členovia tímu sú skvelí odborníci, ktorí sú pripravení pomôcť vám s
+							akýmkoľvek problémom, ktoré by ste mohli mať.
 						</p>
 					</div>
 				</div>
@@ -71,10 +68,7 @@
 							:key="memberId">
 							<div class="card-body p-5">
 								<span class="avatar avatar-rounded mb-3 team-avatar">
-									<img
-										class="!tw-w-24 !tw-h-24"
-										:src="member.image"
-										alt="avatar" />
+									<img class="!tw-w-24 !tw-h-24" :src="member.image" alt="avatar" />
 									/>
 								</span>
 								<p class="fw-semibold fs-17 mb-0 text-default">{{ member.name }}</p>

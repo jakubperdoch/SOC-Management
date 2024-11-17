@@ -3,6 +3,9 @@
  */
 
 type User = {
+	id: number;
+	name: string | null;
+	surname: string | null;
 	email: string | null;
 	role: string | null;
 };
@@ -30,11 +33,10 @@ function useAuth() {
 				},
 			});
 
-			const { token: userToken, ...user } = response;
+			const { user } = response;
 
 			updateUser(user);
-
-			token.value = userToken;
+			generateToken();
 
 			return Promise.resolve(response);
 		} catch (error) {
@@ -55,17 +57,90 @@ function useAuth() {
 	 * @returns {Promise<void>}
 	 */
 	const logout = async () => {
+		token.value = null;
+		user.value = null;
+		navigateTo('/');
+
+		return Promise.resolve();
+	};
+
+	const register = async (
+		name: string,
+		surname: string,
+		email: string,
+		password: string,
+		role: string
+	) => {
 		try {
-			await apiFetch('/logout', {
+			const response = await apiFetch('/register', {
 				method: 'POST',
+				body: {
+					name,
+					surname,
+					email,
+					password,
+					role,
+				},
 			});
+
+			navigateTo('/auth/login');
+
+			return Promise.resolve(response);
+		} catch (error) {
+			return Promise.reject(error);
+		}
+	};
+
+	/**
+	 * Generate random token
+	 */
+	/**
+	 * Generate random token with user.id included
+	 */
+	const generateToken = () => {
+		if (!user.value) return;
+		// Create a unique token including the user ID
+		const randomString = Math.random().toString(36).substring(2);
+		token.value = `Bearer ${randomString}_${user.value.id}`;
+	};
+
+	/**
+	 * Get user ID from token
+	 * @returns {number | null}
+	 */
+
+	const getUserIdFromToken = () => {
+		if (!token.value) return null;
+
+		const parts = token.value.split('_');
+		return parts.length > 1 ? parseInt(parts[1], 10) : null;
+	};
+
+	/**
+	 * Fetch user data
+	 * @returns {Promise<void>}
+	 */
+
+	const getUser = async () => {
+		if (!token.value) {
+			return;
+		}
+
+		try {
+			const response = await apiFetch('/student/info', {
+				method: 'POST',
+				body: {
+					id: getUserIdFromToken(),
+				},
+			});
+
+			const { user } = response;
+			updateUser(user);
+
+			return Promise.resolve(response);
 		} catch (error) {
 			console.error(error);
-		} finally {
-			token.value = null;
-			user.value = null;
-
-			return Promise.resolve();
+			return Promise.reject(error);
 		}
 	};
 
@@ -75,6 +150,9 @@ function useAuth() {
 		login,
 		logout,
 		updateUser,
+		getUser,
+		register,
+		getUserIdFromToken,
 	};
 }
 

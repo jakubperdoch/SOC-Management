@@ -1,0 +1,23 @@
+[
+	{
+		"name": "Elektrotechnika",
+		"value": "Elektrotechnika"
+	},
+	{
+		"name": "Informatika",
+		"value": "informatika"
+	},
+	{
+		"name": "Strojárstvo",
+		"value": "Strojárstvo"
+	},
+	{
+		"name": "Učebné pomôcky",
+		"value": "Učebné pomôcky"
+	},
+
+	{
+		"name": "Ostatné",
+		"value": "Ostatné"
+	}
+]

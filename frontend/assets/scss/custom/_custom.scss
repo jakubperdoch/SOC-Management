@@ -1492,7 +1492,7 @@ button {
 
 /* Start:: Profile */
 .main-profile-cover {
-  background-image: url("/images/media/team-covers/4.jpg");
+
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -2968,8 +2968,8 @@ html[data-nav-layout="vertical"] .main-menu {
   }
 }
 
-  [data-bg-img][data-vertical-style="doublemenu"][data-nav-layout="vertical"][data-theme-mode="dark"][data-menu-styles="light"] {
-    .slide.has-sub .slide-menu {
-      background-color: $white;
-    }
+[data-bg-img][data-vertical-style="doublemenu"][data-nav-layout="vertical"][data-theme-mode="dark"][data-menu-styles="light"] {
+  .slide.has-sub .slide-menu {
+    background-color: $white;
   }
+}

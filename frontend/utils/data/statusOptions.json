@@ -1,0 +1,14 @@
+[
+	{
+		"name": "Voľná",
+		"value": "free"
+	},
+	{
+		"name": "Čakákajúca",
+		"value": "waiting"
+	},
+	{
+		"name": "Zabraná",
+		"value": "taken"
+	}
+]

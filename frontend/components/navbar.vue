@@ -2,9 +2,7 @@
 	<nav
 		class="navbar navbar-expand-lg !tw-rounded-none !tw-bg-[#845adfb3] !tw-py-0 tw-fixed">
 		<div class="container-fluid tw-flex tw-items-center tw-justify-center">
-			<img
-				src="../public/images/logo.png"
-				class="navbar-brand tw-w-16" />
+			<img src="../public/images/logo.png" class="navbar-brand tw-w-16" />
 			<Button
 				outlined
 				severity="secondary"
@@ -20,9 +18,7 @@
 				id="offcanvasNavbar"
 				aria-labelledby="offcanvasNavbarLabel">
 				<div class="offcanvas-header !tw-items-start">
-					<img
-						src="../public/images/logo.png"
-						class="navbar-brand tw-w-24" />
+					<img src="../public/images/logo.png" class="navbar-brand tw-w-24" />
 					<button
 						type="button"
 						class="btn-close mt-1"
@@ -55,42 +51,58 @@
 </template>
 
 <script setup lang="ts">
-	import Sidebar from 'primevue/sidebar';
 	import { useRoute } from '#app';
-	import useAuth from '~/composable/useAuth';
 
-	const authStore = useAuth();
 	const route = useRoute();
+	const token = useCookie('token');
 
-	interface Sidebar {
+	interface SidebarItem {
 		title: string;
 		route: string;
-		role: string;
+		role?: string[] | null;
 	}
 
 	const props = defineProps<{
-		data: Sidebar[];
+		data: SidebarItem[];
+		userData: any;
 	}>();
 
-	const filteredData = props.data.filter((item) => {
-		const token = useCookie('token').value;
+	const userRole = ref(props.userData?.user?.role || null);
 
-		if (!item.role) {
-			if (
-				token &&
-				(item.route === 'auth/login' || item.route === 'auth/register')
-			) {
+	watch(
+		() => token.value,
+		(newToken) => {
+			if (!newToken) {
+				userRole.value = null;
+			}
+		}
+	);
+
+	watch(
+		() => props.userData,
+		(newUserData) => {
+			userRole.value = newUserData?.user?.role || null;
+		}
+	);
+
+	const filteredData = computed(() => {
+		if (!token.value) {
+			return props.data.filter(
+				(item) =>
+					item.route === '/auth/login' ||
+					item.route === '/auth/register' ||
+					item.route === '/'
+			);
+		}
+
+		return props.data.filter((item) => {
+			if (item.route === '/auth/login' || item.route === '/auth/register') {
 				return false;
 			}
-			return true;
-		}
-
-		if (token && item.route.startsWith('auth')) {
-			return false;
-		}
-
-		return (
-			authStore.user.value?.role && item.role.includes(authStore.user.value.role)
-		);
+			if (!item.role) {
+				return true;
+			}
+			return item.role.includes(userRole.value);
+		});
 	});
 </script>

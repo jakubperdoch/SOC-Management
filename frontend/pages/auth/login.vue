@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="container !tw-font-sans">
 		<div
 			class="row justify-content-center align-items-center authentication authentication-basic h-100">
 			<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
@@ -11,14 +11,13 @@
 						</p>
 						<div class="row gy-3">
 							<div class="col-xl-12">
-								<label
-									for="signin-password"
-									class="form-label text-default d-block">
+								<label for="signin-password" class="form-label text-default d-block">
 									Email
 								</label>
 								<IconField class="w-100">
 									<InputIcon class="pi pi-user" />
 									<InputText
+										class="!tw-text-sm"
 										id="username"
 										v-model="user.email"
 										type="email"
@@ -26,19 +25,14 @@
 								</IconField>
 							</div>
 							<div class="col-xl-12 mb-2">
-								<label
-									for="signin-password"
-									class="form-label text-default d-block">
+								<label for="signin-password" class="form-label text-default d-block">
 									Heslo
 								</label>
 								<div class="input-group">
-									<IconField
-										class="w-100"
-										id="signin-password">
-										<InputIcon
-											class="pi pi-lock"
-											style="z-index: 1" />
+									<IconField class="w-100" id="signin-password">
+										<InputIcon class="pi pi-lock" style="z-index: 1" />
 										<Password
+											class="!tw-text-sm"
 											v-model="user.password"
 											toggleMask
 											fluid
@@ -48,9 +42,7 @@
 								</div>
 							</div>
 							<div class="col-xl-12 d-grid mt-2">
-								<Button
-									@click="loginUserIn"
-									class="btn btn-lg btn-primary">
+								<Button @click="loginUserIn" class="btn btn-lg btn-primary">
 									Prihlásiť sa
 								</Button>
 							</div>
@@ -58,9 +50,7 @@
 						<div class="text-center">
 							<p class="fs-12 text-muted mt-3">
 								Nemáte účet?
-								<NuxtLink
-									to="/auth/register"
-									class="text-primary">
+								<NuxtLink to="/auth/register" class="text-primary">
 									Zaregistrovať sa
 								</NuxtLink>
 							</p>
@@ -88,10 +78,15 @@
 		layout: 'custom',
 	});
 
+	onMounted(() => {
+		user.value.email = route.query.email;
+	});
+
 	const { login } = useAuth();
 
 	const toast = useToast();
 	const router = useRouter();
+	const route = useRoute();
 	const user = ref({
 		email: '',
 		password: '',

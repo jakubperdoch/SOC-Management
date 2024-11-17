@@ -5,15 +5,20 @@
 	},
 	{
 		"title": "Login",
-		"route": "auth/login"
+		"route": "/auth/login"
 	},
 	{
 		"title": "Register",
-		"route": "auth/register"
+		"route": "/auth/register"
 	},
 	{
 		"title": "Dashboard",
 		"route": "/dashboard",
-		"role": ["ROLE_ADMIN", "ROLE_STUDENT", "ROLE_TEACHER"]
+		"role": ["admin", "student", "teacher"]
+	},
+	{
+		"title": "Profile",
+		"route": "/profile",
+		"role": ["admin", "student", "teacher"]
 	}
 ]

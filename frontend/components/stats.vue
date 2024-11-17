@@ -1,9 +1,10 @@
 <template>
-	<div class="card custom-card tw-col-start-4 tw-col-span-1 !tw-font-sans">
+	<div
+		class="card custom-card tw-col-start-4 tw-col-span-1 !tw-font-sans !tw-mb-0">
 		<div class="card-header justify-content-between">
 			<div class="card-title">{{ props.data.title }}</div>
 			<button
-				@click="() => router.push('/dashboard/details')"
+				@click="() => router.push('/dashboard/create')"
 				class="btn btn-sm btn-primary btn-wave waves-light !tw-flex !tw-items-center !tw-justify-center">
 				<i
 					class="pi pi-plus fw-semibold align-middle me-1"
@@ -29,7 +30,7 @@
 					aria-valuemin="0"
 					aria-valuemax="100"></div>
 				<div
-					class="progress-bar bg-warning"
+					class="progress-bar bg-info"
 					role="progressbar"
 					:style="{
 						width: `${percentageCalc(data.waitingStatus, data.overallNumber)}%`,
@@ -38,7 +39,7 @@
 					aria-valuemin="0"
 					aria-valuemax="100"></div>
 				<div
-					class="progress-bar bg-danger"
+					class="progress-bar bg-warning"
 					role="progressbar"
 					:style="{
 						width: `${percentageCalc(data.takenStatus, data.overallNumber)}%`,
@@ -54,13 +55,13 @@
 						<div class="fs-12 text-muted">{{ data.openStatus }}</div>
 					</div>
 				</li>
-				<li class="warning">
+				<li class="info">
 					<div class="d-flex align-items-center justify-content-between">
 						<div>Čakajuče projekty</div>
 						<div class="fs-12 text-muted">{{ data.waitingStatus }}</div>
 					</div>
 				</li>
-				<li class="danger">
+				<li class="warning">
 					<div class="d-flex align-items-center justify-content-between">
 						<div>Zabrané projekty</div>
 						<div class="fs-12 text-muted">{{ data.takenStatus }}</div>
