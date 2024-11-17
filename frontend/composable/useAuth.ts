@@ -87,7 +87,7 @@ function useAuth() {
 					surname,
 					email,
 					password,
-					role
+					role,
 				},
 			});
 
@@ -135,7 +135,7 @@ function useAuth() {
 		}
 
 		try {
-			const response = await apiFetch('/student-info', {
+			const response = await apiFetch('/student/info', {
 				method: 'POST',
 				body: {
 					id: getUserIdFromToken(),

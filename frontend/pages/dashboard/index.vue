@@ -50,7 +50,7 @@
 		error,
 	} = useMutation({
 		mutationFn: () =>
-			apiFetch('/project-info', {
+			apiFetch('/project/info', {
 				method: 'POST',
 				body: {
 					id: 4,

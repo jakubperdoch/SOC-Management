@@ -14,7 +14,7 @@
 
 	const { mutate: mutateUser } = useMutation({
 		mutationFn: () =>
-			apiFetch('/student-info', {
+			apiFetch('/student/info', {
 				method: 'POST',
 				body: {
 					id: getUserIdFromToken(),
