@@ -98,4 +98,15 @@ class AuthController extends Controller
         ], 200);
     }
 
+    public function delete(Request $request)
+    {
+        // Delete the user from the accounts table
+        $user = User::where('id', $request->id)->first();
+        $user->delete();
+
+        return response()->json([
+            'message' => 'Úspešne ste odstránili svoj účet',
+        ], 200);
+    }
+
 }
