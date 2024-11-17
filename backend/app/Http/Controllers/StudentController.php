@@ -40,7 +40,7 @@ class StudentController extends Controller
             ]);
         } else {
             // If no project is assigned, get all projects without a student assigned
-            $unassignedProjects = Project::whereNull('student_id')->get();
+            $unassignedProjects = Project::where('status', "free")->get();
 
             return response()->json([
                 'message' => 'No project assigned to this student. Here are the unassigned projects.',
