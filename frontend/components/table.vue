@@ -39,16 +39,23 @@
 				header="Akcie"
 				headerStyle="width: 5rem; text-align: center"
 				bodyStyle="text-align: center; overflow: visible">
-				<template #body>
+				<template #body="{ data }">
 					<div class="tw-flex tw-gap-2">
 						<Button
+							@click="getDetails"
 							type="button"
 							severity="info"
 							icon="pi pi-search"
 							size="small"
 							rounded />
-						<Button type="button" icon="pi pi-pencil" size="small" rounded />
 						<Button
+							@click="getEdit"
+							type="button"
+							icon="pi pi-pencil"
+							size="small"
+							rounded />
+						<Button
+							@click="deleteProjectHandler(data.id)"
 							type="button"
 							severity="danger"
 							icon="pi pi-trash"
@@ -59,9 +66,19 @@
 			</Column>
 		</DataTable>
 	</div>
+	<Toast />
+	<ConfirmDialog></ConfirmDialog>
 </template>
 
 <script setup lang="ts">
+	import { useMutation } from '@tanstack/vue-query';
+	import { useConfirm } from 'primevue/useconfirm';
+	import { useToast } from 'primevue/usetoast';
+
+	const confirm = useConfirm();
+	const toast = useToast();
+	const emit = defineEmits(['refresh']);
+
 	interface Cell {
 		id: Number;
 		name: String;
@@ -79,7 +96,7 @@
 		switch (status) {
 			case 'taken':
 				return {
-					value: 'warning',
+					value: 'danger',
 					label: 'Obsadená',
 				};
 
@@ -99,8 +116,64 @@
 
 	const getDetails = () => {
 		navigateTo({
-			path: '/project/create',
-			query: {},
+			path: 'dashboard/create',
+			query: {
+				edit: 'false',
+			},
+		});
+	};
+
+	const getEdit = () => {
+		navigateTo({
+			path: 'dashboard/create',
+			query: {
+				edit: 'true',
+			},
+		});
+	};
+
+	const {
+		mutate: deleteProject,
+		error,
+		status,
+	} = useMutation({
+		mutationFn: (id: Number) =>
+			apiFetch('/project/delete', {
+				method: 'DELETE',
+				body: {
+					id,
+				},
+			}),
+
+		onSettled: () => {
+			emit('refresh');
+		},
+	});
+
+	const deleteProjectHandler = (id: number) => {
+		confirm.require({
+			message: 'Vážne chcete zmazať tento projekt?',
+			header: 'Potvrdenie',
+			icon: 'pi pi-info-circle',
+			rejectLabel: 'Cancel',
+			rejectProps: {
+				label: 'Zrušiť',
+				severity: 'secondary',
+				outlined: true,
+			},
+			acceptProps: {
+				label: 'Vymazať',
+				severity: 'danger',
+			},
+			accept: () => {
+				deleteProject(id);
+				toast.add({
+					severity: 'info',
+					summary: 'Vymazané',
+					detail: 'Projekt bol vymazaný',
+					life: 3000,
+				});
+			},
 		});
 	};
 </script>

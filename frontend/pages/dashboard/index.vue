@@ -4,7 +4,7 @@
 			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8 tw-h-fit"
 			v-if="user?.role == 'teacher'">
 			<Stats :data="statsData" />
-			<ProjectTable :cells="ProjectData" />
+			<ProjectTable @refresh="getProjects" :cells="ProjectData" />
 		</section>
 
 		<section
