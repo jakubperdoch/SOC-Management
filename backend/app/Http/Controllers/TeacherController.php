@@ -53,7 +53,41 @@ class TeacherController extends Controller
 
     public function getProjectInfo(Request $request)
     {
-        $project = Project::where('teacher_id', $request->id)->get();
-        return response()->json($project, 200);
+        // Find the teacher by their ID
+        $teacher = User::where('id', $request->id)->first();
+
+        if (!$teacher) {
+            return response()->json([
+                'message' => 'Teacher not found.'
+            ], 404);
+        }
+
+        // Combine teacher name
+        $teacherName = $teacher->name . ' ' . $teacher->surname;
+
+        // Find all projects assigned to the teacher
+        $projects = Project::where('teacher_id', $request->id)->get();
+
+        if ($projects->isEmpty()) {
+            return response()->json([
+                'message' => 'Teacher has no assigned projects.',
+                'teacher' => $teacherName
+            ], 200);
+        }
+
+        // Prepare projects with student details
+        $projectsWithDetails = $projects->map(function ($project) {
+            $student = User::where('id', $project->student_id)->first();
+            return [
+                'project_details' => $project,
+                'student' => $student ? $student->name . ' ' . $student->surname : null
+            ];
+        });
+
+        return response()->json([
+            'message' => 'Teacher has assigned projects.',
+            'teacher' => $teacherName,
+            'projects' => $projectsWithDetails
+        ], 200);
     }
 }

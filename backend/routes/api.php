@@ -41,6 +41,8 @@ Route::put('/login/update', [AuthController::class, 'updateLogin']);
 Route::delete('/login/delete', [AuthController::class, 'deleteLogin']);
 
 
+route::post('/project', [ProjectController::class, 'getSingleProject']); //admin-done teacher-done  student-done  
+
 route::post('/project/info', [ProjectController::class, 'getProject']); //admin-done teacher-done  student-done  
 
 route::post('/project/create', [ProjectController::class, 'createProject']); //done
