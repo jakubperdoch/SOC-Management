@@ -17,9 +17,7 @@
 						</button>
 					</li>
 					<li>
-						<button class="dropdown-item" @click="props.deleteUserDialog(2)">
-							Vymazať
-						</button>
+						<button class="dropdown-item" @click="handleDeleteUser">Vymazať</button>
 					</li>
 				</ul>
 			</div>
@@ -52,9 +50,15 @@
 	import type { User } from '~/interfaces/user';
 
 	const props = defineProps<{
-		deleteUserDialog: (id: number) => void;
 		user: User;
+		index: number;
 	}>();
 
+	const emit = defineEmits(['isDeleteDialogVisible']);
+
 	const isModalVisible = ref(false);
+
+	const handleDeleteUser = () => {
+		emit('isDeleteDialogVisible', props.user.id, props.index);
+	};
 </script>

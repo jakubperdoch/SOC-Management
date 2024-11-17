@@ -1,17 +1,20 @@
 <template>
 	<div class="tw-grid tw-grid-cols-4 tw-gap-4 tw-col-span-3 !tw-font-sans">
 		<UserCard
-			v-for="user in users"
-			:delete-user-dialog="deleteUserDialog"
+			v-for="(user, index) in users"
+			@isDeleteDialogVisible="deleteUserDialog"
+			:key="index"
+			:index
 			:user />
 	</div>
 	<Toast />
-	<ConfirmDialog></ConfirmDialog>
 </template>
 
 <script setup lang="ts">
 	import { useMutation } from '@tanstack/vue-query';
 	import type { User } from '~/interfaces/user';
+	import ConfirmDialog from 'primevue/confirmdialog';
+	import { get } from 'http';
 
 	const confirm = useConfirm();
 	const toast = useToast();
@@ -34,11 +37,34 @@
 		},
 	});
 
+	const { mutate: deleteUser } = useMutation({
+		mutationFn: (id) =>
+			apiFetch('/login/delete', {
+				method: 'DELETE',
+				body: {
+					id: id,
+				},
+			}),
+		onSuccess: () => {
+			getUsers();
+
+			toast.add({
+				severity: 'success',
+				summary: 'Confirmed',
+				detail: 'Učiteľ bol zmazaný',
+				life: 3000,
+			});
+		},
+		onError: (error) => {
+			console.log(error);
+		},
+	});
+
 	onMounted(() => {
 		getUsers();
 	});
 
-	const deleteUserDialog = (id: number) => {
+	const deleteUserDialog = (id: number | null, index: number) => {
 		confirm.require({
 			message: 'Vážne chcete zmazať tohto učiteľa ?',
 			header: 'Potvrdenie zmazania',
@@ -51,24 +77,6 @@
 			acceptProps: {
 				label: 'Zmazať',
 				severity: 'danger',
-			},
-			accept: () => {
-				console.log('Deleted ', id);
-				toast.add({
-					severity: 'success',
-					summary: 'Confirmed',
-					detail: 'Učiteľ bol zmazaný',
-					life: 3000,
-				});
-			},
-			reject: () => {
-				console.log('Rejected');
-				toast.add({
-					severity: 'error',
-					summary: 'Rejected',
-					detail: 'Učiteľ nebol zmazaný',
-					life: 3000,
-				});
 			},
 		});
 	};
