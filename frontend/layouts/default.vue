@@ -13,7 +13,7 @@
 	const userData = ref(null);
 
 	const { mutate: mutateUser } = useMutation({
-		mutationFn: (data) =>
+		mutationFn: () =>
 			apiFetch('/student-info', {
 				method: 'POST',
 				body: {
