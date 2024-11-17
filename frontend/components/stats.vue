@@ -30,7 +30,7 @@
 					aria-valuemin="0"
 					aria-valuemax="100"></div>
 				<div
-					class="progress-bar bg-warning"
+					class="progress-bar bg-info"
 					role="progressbar"
 					:style="{
 						width: `${percentageCalc(data.waitingStatus, data.overallNumber)}%`,
@@ -39,7 +39,7 @@
 					aria-valuemin="0"
 					aria-valuemax="100"></div>
 				<div
-					class="progress-bar bg-danger"
+					class="progress-bar bg-warning"
 					role="progressbar"
 					:style="{
 						width: `${percentageCalc(data.takenStatus, data.overallNumber)}%`,

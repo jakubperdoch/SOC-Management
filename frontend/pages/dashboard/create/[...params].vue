@@ -44,14 +44,21 @@
 	const studentOptions = ref([]);
 
 	const { mutate: createProject } = useMutation({
-		mutationFn: (data: Project) =>
+		mutationFn: (data: any) =>
 			apiFetch('/project/create', {
 				method: 'POST',
-				body: data,
+				body: {
+					title: data.title,
+					description: data.description,
+					status: data.status[0],
+					student_id: data.student_id[0],
+					teacher_id: data.teacher_id,
+					odbor: data.odbor[0],
+				},
 			}),
 		onSuccess: () => {
 			setTimeout(() => {
-				router.push('/');
+				router.push('/dashboard');
 			}, 1000);
 
 			toast.add({
@@ -63,14 +70,22 @@
 	});
 
 	const { mutate: updateProject } = useMutation({
-		mutationFn: (data: Project) =>
+		mutationFn: (data: any) =>
 			apiFetch('/project/update', {
 				method: 'PUT',
-				body: data,
+				body: {
+					id: data.id,
+					title: data.title,
+					description: data.description,
+					status: data.status[0],
+					student_id: data.student_id[0],
+					teacher_id: data.teacher_id,
+					odbor: data.odbor[0],
+				},
 			}),
 		onSuccess: () => {
 			setTimeout(() => {
-				router.push('/');
+				router.push('/dashboard');
 			}, 1000);
 
 			toast.add({
@@ -93,11 +108,11 @@
 				name: data.project.title,
 				description: data.project.description,
 				status: [data.project.status],
-				student: Number(data.project.student),
+				student:
+					Number(data.project.student) === 0 ? null : [Number(data.project.student)],
 				teacher: Number(data.project.teacher),
 				odbor: [data.project.odbor],
 			};
-			console.log(project.value);
 		},
 		onError: () => {
 			toast.add({
@@ -118,7 +133,7 @@
 				},
 			}),
 		onSuccess: (data) => {
-			studentOptions.value = data.students;
+			studentOptions.value = data;
 		},
 		onError: () => {
 			toast.add({
@@ -183,11 +198,11 @@
 		if (inputValidation()) {
 			const data = {
 				id: project.value.id,
-				name: project.value.name,
+				title: project.value.name,
 				description: project.value.description,
 				status: project.value.status,
-				student: project.value.student,
-				teacher: project.value.teacher,
+				student_id: project.value.student,
+				teacher_id: project.value.teacher,
 				odbor: project.value.odbor,
 			};
 
@@ -266,8 +281,8 @@
 									display="chip"
 									fluid
 									:options="studentOptions"
-									optionLabel="name"
-									option-value="code"
+									optionLabel="surname"
+									option-value="id"
 									filter
 									placeholder="Vyberte študenta"
 									:selection-limit="1"

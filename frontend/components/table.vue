@@ -5,7 +5,7 @@
 			:value="props.cells"
 			paginator
 			removableSort
-			:rows="10"
+			:rows="5"
 			:table-class="'!tw-rounded-lg'"
 			dataKey="id">
 			<template #empty>
@@ -20,7 +20,7 @@
 			</Column>
 			<Column field="subject" header="Odbor" sortable style="min-width: 14rem">
 				<template #body="{ data }">
-					<span>{{ data.project_details.odbor }}</span>
+					<span class="tw-capitalize">{{ data.project_details.odbor }}</span>
 				</template>
 			</Column>
 			<Column field="student" header="Študent" sortable style="min-width: 14rem">
@@ -31,6 +31,7 @@
 			<Column header="Status" field="status" sortable style="min-width: 12rem">
 				<template #body="{ data }">
 					<Tag
+						class="!tw-capitalize"
 						:value="getSeverity(data.project_details.status)?.label"
 						:severity="getSeverity(data.project_details.status)?.value" />
 				</template>
@@ -55,7 +56,7 @@
 							size="small"
 							rounded />
 						<Button
-							@click="deleteProjectHandler(data.id)"
+							@click="deleteProjectHandler(data.project_details.id)"
 							type="button"
 							severity="danger"
 							icon="pi pi-trash"
@@ -145,10 +146,23 @@
 			apiFetch('/project/delete', {
 				method: 'DELETE',
 				body: {
-					id,
+					id: id,
 				},
 			}),
-
+		onSuccess: () => {
+			toast.add({
+				severity: 'success',
+				summary: 'Projekt bol úspešne zmazaný',
+				life: 3000,
+			});
+		},
+		onError: () => {
+			toast.add({
+				severity: 'error',
+				summary: 'Projekt sa nepodarilo zmazať',
+				life: 3000,
+			});
+		},
 		onSettled: () => {
 			emit('refresh');
 		},
@@ -171,12 +185,6 @@
 			},
 			accept: () => {
 				deleteProject(id);
-				toast.add({
-					severity: 'info',
-					summary: 'Vymazané',
-					detail: 'Projekt bol vymazaný',
-					life: 3000,
-				});
 			},
 		});
 	};
