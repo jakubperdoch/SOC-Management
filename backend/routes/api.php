@@ -36,29 +36,29 @@ Route::post('/login', [AuthController::class, 'login']); //done
 
 Route::post('/register', [AuthController::class, 'register']); //done
 
-Route::put('/login-update', [AuthController::class, 'updateLogin']);
+Route::put('/login/update', [AuthController::class, 'updateLogin']);
 
-Route::put('/login-delete', [AuthController::class, 'deleteLogin']);
-
-
-route::post('/project-info', [ProjectController::class, 'getProject']); //admin-done teacher-done  student-done  
-
-route::post('/project-create', [ProjectController::class, 'createProject']); //done
-
-route::put('/project-update', [ProjectController::class, 'updateProject']);
-
-route::put('/project-delete', [ProjectController::class, 'deleteProject']);
+Route::delete('/login/delete', [AuthController::class, 'deleteLogin']);
 
 
-route::post('/student-info', [StudentController::class, 'getStudent']);
+route::post('/project/info', [ProjectController::class, 'getProject']); //admin-done teacher-done  student-done  
+
+route::post('/project/create', [ProjectController::class, 'createProject']); //done
+
+route::put('/project/update', [ProjectController::class, 'updateProject']);
+
+route::delete('/project/delete', [ProjectController::class, 'deleteProject']);
+
+
+route::post('/student/info', [StudentController::class, 'getStudent']);
 
 
 route::post('/teacher', [TeacherController::class, 'getTeacher']);
 
-route::post('/teacher-create', [TeacherController::class, 'createTeacher']);
+route::post('/teacher/create', [TeacherController::class, 'createTeacher']);
 
-route::put('/teacher-update', [TeacherController::class, 'updateTeacher']);
+route::put('/teacher/update', [TeacherController::class, 'updateTeacher']);
 
-route::put('/teacher-delete', [TeacherController::class, 'deleteTeacher']);
+route::delete('/teacher/delete', [TeacherController::class, 'deleteTeacher']);
 
 
