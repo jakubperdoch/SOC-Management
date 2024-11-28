@@ -49,7 +49,7 @@
 
 	const { mutate: deleteUser } = useMutation({
 		mutationFn: (id: any) =>
-			apiFetch('/login/delete', {
+			apiFetch('/teacher/delete', {
 				method: 'DELETE',
 				body: {
 					id: id,

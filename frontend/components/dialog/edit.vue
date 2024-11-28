@@ -103,7 +103,6 @@
 		() => props.user,
 		(value) => {
 			user.value = value;
-			console.log(user.value);
 		}
 	);
 
