@@ -1,5 +1,5 @@
 <template>
-	<navbar :data="navigationData" :userData />
+	<navbar :data="navigationData" :userData class="!tw-z-10" />
 	<slot />
 </template>
 

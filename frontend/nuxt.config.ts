@@ -30,9 +30,9 @@ export default defineNuxtConfig({
 	},
 
 	modules: [
+		'@nuxtjs/tailwindcss',
 		'@pinia/nuxt',
 		'@primevue/nuxt-module',
-		'@nuxtjs/tailwindcss',
 		'nuxt-icon',
 		'@pinia/nuxt',
 		'@primevue/nuxt-module',
@@ -55,7 +55,7 @@ export default defineNuxtConfig({
 	],
 
 	build: {
-		transpile: ['vuetify','bootstrap'],
+		transpile: ['vuetify', 'bootstrap'],
 	},
 
 	runtimeConfig: {

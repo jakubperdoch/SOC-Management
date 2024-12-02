@@ -1,42 +1,43 @@
 <template>
 	<nav
-		class="navbar navbar-expand-lg !tw-rounded-none !tw-bg-[#845adfb3] !tw-py-0 tw-fixed">
+		class="navbar navbar-expand-lg !tw-rounded-none md:!tw-fixed tw-w-full !tw-bg-primary !tw-py-0 tw-fixed">
 		<div class="container-fluid tw-flex tw-items-center tw-justify-center">
-			<img src="../public/images/logo.png" class="navbar-brand tw-w-16" />
+			<img src="../public/images/logo.svg" class="navbar-brand tw-w-32 tw-m-5" />
 			<Button
 				outlined
 				severity="secondary"
-				class="navbar-toggler !tw-text-white hover:!tw-text-black"
+				class="navbar-toggler !tw-text-white hover:!tw-text-black tw-m-5"
 				data-bs-toggle="offcanvas"
 				data-bs-target="#offcanvasNavbar"
 				aria-controls="offcanvasNavbar">
 				<i class="pi pi-bars"></i>
 			</Button>
 			<div
-				class="offcanvas offcanvas-start !tw-w-64"
+				class="offcanvas offcanvas-start !tw-border-0 !tw-rounded-r-xl !tw-w-64 !tw-bg-primary"
 				tabindex="-1"
 				id="offcanvasNavbar"
 				aria-labelledby="offcanvasNavbarLabel">
-				<div class="offcanvas-header !tw-items-start">
-					<img src="../public/images/logo.png" class="navbar-brand tw-w-24" />
-					<button
-						type="button"
-						class="btn-close mt-1"
+				<div class="offcanvas-header !tw-items-center">
+					<img src="../public/images/logo.svg" class="navbar-brand tw-w-28" />
+
+					<Button
+						icon="pi pi-times"
+						text
+						rounded
+						class="!tw-text-white hover:!tw-bg-white/[0.1]"
 						data-bs-dismiss="offcanvas"
-						aria-label="Close"></button>
+						aria-label="Close" />
 				</div>
 				<div class="offcanvas-body">
-					<ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+					<ul class="navbar-nav !tw-gap-2 justify-content-end flex-grow-1 pe-3">
 						<li
 							class="nav-item"
 							v-for="(navItem, itemIndex) in filteredData"
 							:key="itemIndex">
 							<a
-								class="nav-link hover:!tw-text-[#7031f7] !tw-font-extralight tw-font-sans"
+								class="nav-link hover:!tw-text-secondary !tw-font-extralight tw-font-sans"
 								:class="[
-									route.path == navItem.route
-										? '!tw-text-[#7031f7]'
-										: 'min-[991px]:!tw-text-white',
+									route.path == navItem.route ? '!tw-text-secondary' : '!tw-text-white',
 								]"
 								aria-current="page"
 								:href="navItem.route"

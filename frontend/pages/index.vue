@@ -1,15 +1,16 @@
 <template>
 	<div class="landing-page-wrapper">
 		<!-- Main Section -->
-		<div class="main-content landing-main tw-h-max px-0 !tw-bg-[#845adfb3]">
-			<section class="landing-banner tw-py-10" id="home">
+		<div class="main-content landing-main tw-h-max px-0 !tw-bg-primary">
+			<section class="landing-banner tw-pt-20 tw-pb-10" id="home">
 				<section class="section">
-					<div class="container main-banner-container pb-lg-0">
+					<div class="container main-banner-container pb-lg-0 !tw-mx-5">
 						<div class="row">
 							<div class="col-xxl-7 col-xl-7 col-lg-7 col-md-8">
 								<div class="py-lg-5">
 									<div class="mb-3">
-										<h5 class="text-fixed-white op-9 md:tw-text-xl tw-font-sans">
+										<h5
+											class="text-fixed-white tw-flex op-9 md:tw-text-xl tw-font-sans !tw-z-[-1]">
 											V jednoduchosti je krása
 										</h5>
 									</div>
@@ -17,15 +18,15 @@
 										class="landing-banner-heading !tw-text-balance mb-3 tw-font-sans tw-text-3xl md:tw-text-5xl tw-text-white tw-font-semibold">
 										Zjednodušte správu a hodnotenie školských prác
 									</p>
-									<div class="fs-16 mb-5 text-fixed-white op-7 tw-font-sans">
+									<div class="fs-16 mb-5 text-fixed-white op-7 tw-font-sans !tw-z-[-1]">
 										EduManage vám teraz ponúka platformu, pomocou ktorej môžete spravovať
 										všetky zadania a školské práce s maximálnou efektivitou.
 									</div>
 									<NuxtLink
 										to="/auth/register"
-										class="m-1 btn btn-primary !tw-font-sans !tw-font-light">
+										class="m-1 btn !tw-font-sans !tw-font-light !tw-bg-secondary !tw-text-white">
 										Začni svoje dobrodrúžstvo
-										<i class="pi pi-graduation-cap ms-2 align-middle"></i>
+										<i class="pi pi-graduation-cap ms-2 align-middle tw-text-white"></i>
 									</NuxtLink>
 								</div>
 							</div>
@@ -33,8 +34,8 @@
 								class="col-xxl-5 col-xl-5 col-lg-5 col-md-4 tw-flex tw-items-end md:tw-items-center tw-justify-end">
 								<div class="text-end landing-main-image landing-heading-img">
 									<img
-										src="../public/images/landing--image.png"
-										class="img-fluid tw-hidden lg:tw-block tw-rounded-2xl tw-max-h-96 !tw-transition-transform !tw-duration-500 hover:-tw-translate-y-4" />
+										src="../public/images/landing--image.svg"
+										class="img-fluid tw-hidden lg:tw-block tw-rounded-2xl tw-max-h-[30rem] !tw-transition-transform !tw-duration-500 hover:-tw-translate-y-4" />
 								</div>
 							</div>
 						</div>

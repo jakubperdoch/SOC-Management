@@ -1,14 +1,14 @@
 [
 	{
-		"title": "Landing",
+		"title": "Domovská stránka",
 		"route": "/"
 	},
 	{
-		"title": "Login",
+		"title": "Prihlásenie",
 		"route": "/auth/login"
 	},
 	{
-		"title": "Register",
+		"title": "Registrácia",
 		"route": "/auth/register"
 	},
 	{
@@ -17,7 +17,7 @@
 		"role": ["admin", "student", "teacher"]
 	},
 	{
-		"title": "Profile",
+		"title": "Profil",
 		"route": "/profile",
 		"role": ["admin", "student", "teacher"]
 	}
