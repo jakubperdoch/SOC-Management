@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EncryptionController;
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -58,6 +59,8 @@ Route::put('/project/update', [ProjectController::class, 'updateProject']);
 
 Route::delete('/project/delete', [ProjectController::class, 'deleteProject']);
 
+Route::put('/project/add-review', [ProjectController::class, 'addReview']);
+
 
 Route::post('/student/info', [StudentController::class, 'getStudent']);
 
@@ -70,4 +73,12 @@ Route::put('/teacher/update', [TeacherController::class, 'updateTeacher']);
 
 Route::delete('/teacher/delete', [TeacherController::class, 'deleteTeacher']);
 
+
+
 Route::post('/project/deadline', [ProjectController::class, 'setProjectDeadline']);
+
+Route::post('/project/deadline/get-deadline', [ProjectController::class, 'getProjectDeadline']);
+
+Route::post('project/deadline/alert-deadline', [AdminController::class, 'alertDeadlines']);
+
+

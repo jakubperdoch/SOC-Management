@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Deadline;
 
 class AdminController extends Controller
 {
@@ -28,6 +29,19 @@ class AdminController extends Controller
         return response()->json([
             'message' => 'All projects with their details.',
             'projects' => $projectsWithDetails,
+        ]);
+    }
+
+    public function alertDeadlines()
+    {
+        $deadlines = Deadline::all();
+        $project = Project::all();
+        $deadlines = [];
+
+
+        return response()->json([
+            'message' => 'Projects with deadlines today.',
+            'projects' => $deadlines,
         ]);
     }
 }

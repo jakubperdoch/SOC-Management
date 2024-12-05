@@ -178,4 +178,56 @@ class ProjectController extends Controller
             ],
         ], 201);
     }
+
+    public function getProjectDeadline(Request $request)
+    {
+
+        $deadline = Deadline::where('id', 1)->first();
+
+        return response()->json([
+            'message' => 'Deadliny',
+            'deadline' => [
+                'id' => $deadline->id,
+                'first_date' => $deadline->first_date,
+                'second_date' => $deadline->second_date,
+                'third_date' => $deadline->third_date,
+            ],
+        ], 200);
+    }
+
+    public function addReview(Request $request)
+    {
+        //connection to database from table projects 
+        $project = Project::where('id', $request->id)->first();
+        if (!$project) {
+            return response()->json([
+                'message' => 'Project neexistuje',
+            ], 404);
+        }
+
+        //select which review to add first, second or third
+        $review_order = $request->review;
+        if ($review_order == '1') {
+            $project->first_review = $request->review;
+        }
+        if ($review_order == '2') {
+            $project->second_review = $request->review;
+        }
+        if ($review_order == '3') {
+            $project->third_review = $request->review;
+        }
+        $project->save();
+
+        return response()->json([
+            'message' => 'Review added',
+            'project' => [
+                'id' => $project->id,
+                'first_review' => $project->first_review,
+                'second_review' => $project->second_review,
+                'third_review' => $project->third_review,
+            ],
+        ], 200);
+
+
+    }
 }
