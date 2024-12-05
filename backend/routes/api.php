@@ -13,8 +13,8 @@ use App\Http\Controllers\EncryptionController;
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
+| Here is where you can register API Routes for your application. These
+| Routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
@@ -48,26 +48,26 @@ Route::put('/login/update', [AuthController::class, 'updateLogin']);
 Route::delete('/login/delete', [AuthController::class, 'deleteLogin']);
 
 
-route::post('/project', [ProjectController::class, 'getSingleProject']); //admin-done teacher-done  student-done  
+Route::post('/project', [ProjectController::class, 'getSingleProject']); //admin-done teacher-done  student-done  
 
-route::post('/project/info', [ProjectController::class, 'getProject']); //admin-done teacher-done  student-done  
+Route::post('/project/info', [ProjectController::class, 'getProject']); //admin-done teacher-done  student-done  
 
-route::post('/project/create', [ProjectController::class, 'createProject']); //done
+Route::post('/project/create', [ProjectController::class, 'createProject']); //done
 
-route::put('/project/update', [ProjectController::class, 'updateProject']);
+Route::put('/project/update', [ProjectController::class, 'updateProject']);
 
-route::delete('/project/delete', [ProjectController::class, 'deleteProject']);
-
-
-route::post('/student/info', [StudentController::class, 'getStudent']);
+Route::delete('/project/delete', [ProjectController::class, 'deleteProject']);
 
 
-route::post('/teacher', [TeacherController::class, 'getTeacher']);
-
-route::post('/teacher/create', [TeacherController::class, 'createTeacher']);
-
-route::put('/teacher/update', [TeacherController::class, 'updateTeacher']);
-
-route::delete('/teacher/delete', [TeacherController::class, 'deleteTeacher']);
+Route::post('/student/info', [StudentController::class, 'getStudent']);
 
 
+Route::post('/teacher', [TeacherController::class, 'getTeacher']);
+
+Route::post('/teacher/create', [TeacherController::class, 'createTeacher']);
+
+Route::put('/teacher/update', [TeacherController::class, 'updateTeacher']);
+
+Route::delete('/teacher/delete', [TeacherController::class, 'deleteTeacher']);
+
+Route::post('/project/deadline', [ProjectController::class, 'setProjectDeadline']);

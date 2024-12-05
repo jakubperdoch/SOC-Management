@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Deadline;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
+use DateTime;
 
 class ProjectController extends Controller
 {
@@ -142,4 +144,38 @@ class ProjectController extends Controller
     }
 
 
+    public function setProjectDeadline(Request $request)
+    {
+        //connection to database from table deadlines 
+        $originalDate1 = $request->first_date;
+        $date1 = DateTime::createFromFormat('d.m.Y', $originalDate1);
+        $reversedDate1 = $date1->format('Y.m.d');
+
+        $originalDate2 = $request->second_date;
+        $date2 = DateTime::createFromFormat('d.m.Y', $originalDate2);
+        $reversedDate2 = $date2->format('Y.m.d');
+
+        $originalDate3 = $request->third_date;
+        $date3 = DateTime::createFromFormat('d.m.Y', $originalDate3);
+        $reversedDate3 = $date3->format('Y.m.d');
+
+
+
+        $deadline = Deadline::where('id', 1)->first();
+        $deadline->first_date = $reversedDate1;
+        $deadline->second_date = $reversedDate2;
+        $deadline->third_date = $reversedDate3;
+
+        $deadline->save();
+
+        return response()->json([
+            'message' => 'Deadline updated',
+            'deadline' => [
+                'id' => $deadline->id,
+                'first_date' => $deadline->first_date,
+                'second_date' => $deadline->second_date,
+                'third_date' => $deadline->third_date,
+            ],
+        ], 201);
+    }
 }
