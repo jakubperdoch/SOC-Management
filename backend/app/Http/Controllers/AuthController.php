@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -49,25 +49,25 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Check if the user with the given email exists
-        $user = User::where('email', $credentials['email'])->first();
-
-        // If the user exists, verify the password without hashing
-        if ($user && $credentials['password'] === $user->password) {
-            // If the credentials are correct, return user data and a success message
-            return response()->json([
-                'message' => 'Úspešne ste boli prihlásený!',
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'surname' => $user->surname,
-                    'email' => $user->email,
-                ],
-            ], 200);
-        } else {
-            // If the credentials are incorrect, return an error message
+        // Attempt authentication and issue a token
+        if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['message' => 'Nesprávne prihlasovacie údaje!'], 401);
         }
+
+        // Fetch the authenticated user
+        $user = auth()->user();
+
+        // Return the token and user details
+        return response()->json([
+            'message' => 'Úspešne ste boli prihlásený!',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'surname' => $user->surname,
+                'email' => $user->email,
+            ],
+            'token' => $token,
+        ], 200);
     }
 
     public function update(Request $request)

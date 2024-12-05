@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EncryptionController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,6 +31,11 @@ Route::get('/test-db', function () {
         return 'Could not connect to the database. Please check your configuration.';
     }
 });
+
+Route::post('/encrypt-data', [EncryptionController::class, 'encryptData']);
+
+Route::post('/decrypt-data', [EncryptionController::class, 'decryptData']);
+
 
 Route::post('/users', [UserController::class, 'getUsers']); //done
 
