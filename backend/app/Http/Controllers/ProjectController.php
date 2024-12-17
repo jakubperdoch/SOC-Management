@@ -205,17 +205,10 @@ class ProjectController extends Controller
             ], 404);
         }
 
-        //select which review to add first, second or third
-        $review_order = $request->review;
-        if ($review_order == '1') {
-            $project->first_review = $request->review;
-        }
-        if ($review_order == '2') {
-            $project->second_review = $request->review;
-        }
-        if ($review_order == '3') {
-            $project->third_review = $request->review;
-        }
+        $project->first_review = $request->first_review;
+        $project->second_review = $request->second_review;
+        $project->third_review = $request->third_review;
+
         $project->save();
 
         return response()->json([
