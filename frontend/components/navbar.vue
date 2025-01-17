@@ -1,8 +1,8 @@
 <template>
 	<nav
-		class="navbar navbar-expand-lg !tw-rounded-none md:!tw-fixed tw-w-full !tw-bg-primary !tw-py-0 tw-fixed">
+		class="navbar navbar-expand-lg !tw-rounded-none !tw-fixed tw-w-full !tw-h-20 !tw-bg-primary !tw-py-0 ">
 		<div class="container-fluid tw-flex tw-items-center tw-justify-center">
-			<img src="../public/images/logo.svg" class="navbar-brand tw-w-32 tw-m-5" />
+			<img @click='router.push("/")' src="../public/images/logo.svg" class="navbar-brand tw-w-32 tw-m-5 hover:tw-cursor-pointer" />
 			<Button
 				outlined
 				severity="secondary"
@@ -53,9 +53,13 @@
 
 <script setup lang="ts">
 	import { useRoute } from '#app';
+  import {useRouter} from "#imports";
 
 	const route = useRoute();
+  const router=useRouter()
 	const token = useCookie('token');
+
+  console.log(token.value);
 
 	interface SidebarItem {
 		title: string;

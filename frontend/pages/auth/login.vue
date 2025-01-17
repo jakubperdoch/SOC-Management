@@ -1,9 +1,7 @@
 <template>
-	<div class="container !tw-font-sans">
-		<div
-			class="row justify-content-center align-items-center authentication authentication-basic h-100">
+	<div class="!tw-font-sans tw-bg-primary row justify-content-center align-items-center authentication authentication-basic">
 			<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
-				<div class="card custom-card">
+				<div class="card custom-card !tw-shadow-md !tw-shadow-secondary">
 					<div class="card-body p-5">
 						<p class="h5 fw-semibold mb-2 text-center">Prihlásenie</p>
 						<p class="mb-4 text-muted op-7 fw-normal text-center">
@@ -42,7 +40,7 @@
 								</div>
 							</div>
 							<div class="col-xl-12 d-grid mt-2">
-								<Button @click="loginUserIn" class="btn btn-lg btn-primary">
+								<Button @click="loginUserIn" class="btn btn-lg  !tw-bg-secondary !tw-border-secondary">
 									Prihlásiť sa
 								</Button>
 							</div>
@@ -50,7 +48,7 @@
 						<div class="text-center">
 							<p class="fs-12 text-muted mt-3">
 								Nemáte účet?
-								<NuxtLink to="/auth/register" class="text-primary">
+								<NuxtLink to="/auth/register" class="tw-text-secondary">
 									Zaregistrovať sa
 								</NuxtLink>
 							</p>
@@ -58,7 +56,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
 		<Toast />
 	</div>
 </template>
@@ -75,7 +72,7 @@
 		title: 'EduManage',
 		description: 'EduManage - správa školských prác',
 		middleware: [auth],
-		layout: 'custom',
+		layout: 'default',
 	});
 
 	onMounted(() => {

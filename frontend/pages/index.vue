@@ -2,7 +2,7 @@
 	<div class="landing-page-wrapper">
 		<!-- Main Section -->
 		<div class="main-content landing-main tw-h-max px-0 !tw-bg-primary">
-			<section class="landing-banner tw-pt-20 tw-pb-10" id="home">
+			<section class="landing-banner md:tw-pt-20 tw-pb-10" id="home">
 				<section class="section">
 					<div class="container main-banner-container pb-lg-0 !tw-mx-5">
 						<div class="row">
@@ -48,7 +48,7 @@
 		<section class="section tw-mt-16" id="team">
 			<div class="container text-center">
 				<p class="fs-12 fw-semibold text-success mb-1">
-					<span class="landing-section-heading"> Náš tím </span>
+					<span class="landing-section-heading tw-text-secondary"> Náš tím </span>
 				</p>
 				<h3 class="fw-semibold mb-2">
 					Skvelé výsledky dosahujeme len vďaka skvelému tímu
@@ -62,7 +62,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="tw-grid md:tw-grid-cols-2 gap-5">
+					<div class="tw-grid md:tw-grid-cols-2 md:tw-gap-5">
 						<div
 							class="card custom-card text-center team-card"
 							v-for="(member, memberId) in teamMembers"
@@ -73,7 +73,7 @@
 									/>
 								</span>
 								<p class="fw-semibold fs-17 mb-0 text-default">{{ member.name }}</p>
-								<span class="text-muted fs-14 text-primary fw-semibold">{{
+								<span class="fs-14 tw-text-secondary fw-semibold">{{
 									member.role
 								}}</span>
 								<p class="text-muted mt-2 fs-13">
@@ -82,13 +82,13 @@
 								<div class="mt-2 tw-flex tw-justify-center tw-gap-4">
 									<a
 										:href="member.linkedin"
-										class="btn btn-primary btn-sm btn-icon btn-icon-start">
+										class="btn !tw-bg-primary btn-sm btn-icon btn-icon-start">
 										<i class="pi pi-link !tw-text-white"></i>
 									</a>
 
 									<a
 										:href="member.github"
-										class="btn btn-primary btn-sm btn-icon btn-icon-start">
+										class="btn !tw-bg-primary btn-sm btn-icon btn-icon-start">
 										<i class="pi pi-github !tw-text-white"></i>
 									</a>
 								</div>

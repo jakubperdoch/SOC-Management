@@ -16,6 +16,8 @@ class UserController extends Controller
             ], 404);
         }
 
+
+
         return response()->json([
             'message' => 'User existuje',
             'user' => [

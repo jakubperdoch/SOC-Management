@@ -1,9 +1,7 @@
 <template>
-	<div class="container !tw-font-sans">
-		<div
-			class="row justify-content-center align-items-center authentication authentication-basic h-100">
+	<div class="tw-my-auto tw-bg-primary !tw-font-sans row justify-content-center align-items-center authentication authentication-basic">
 			<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
-				<div class="card custom-card">
+				<div class="card custom-card !tw-shadow-md !tw-shadow-secondary">
 					<div class="card-body p-5">
 						<p class="h5 fw-semibold mb-2 text-center">Registrácia</p>
 						<p class="mb-4 text-muted op-7 fw-normal text-center">
@@ -74,7 +72,7 @@
 							</div>
 
 							<div class="col-xl-12 d-grid mt-2">
-								<Button @click="registerUser" class="btn btn-lg btn-primary">
+								<Button @click="registerUser" class="btn btn-lg !tw-bg-secondary !tw-border-secondary">
 									Zaregistrovať sa
 								</Button>
 							</div>
@@ -82,14 +80,13 @@
 						<div class="text-center">
 							<p class="fs-12 text-muted mt-3">
 								Máte účet?
-								<NuxtLink to="/auth/login" class="text-primary">
+								<NuxtLink to="/auth/login" class="tw-text-secondary">
 									Prihlásiť sa
 								</NuxtLink>
 							</p>
 						</div>
 					</div>
 				</div>
-			</div>
 		</div>
 		<Toast />
 	</div>
@@ -107,7 +104,7 @@
 		title: 'EduManage',
 		description: 'EduManage - správa školských prác',
 		middleware: [auth],
-		layout: 'custom',
+		layout: 'default',
 	});
 
 	const { register } = useAuth();

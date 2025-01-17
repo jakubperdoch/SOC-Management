@@ -1,11 +1,11 @@
 <template>
 	<div
-		class="loader-wrapper"
+		class="loader-wrapper !tw-bg-primary"
 		v-if="loader">
 		<div class="row loader-img">
 			<div class="col-12">
 				<div
-					class="spinner-border"
+					class="spinner-border !tw-text-secondary"
 					role="status"></div>
 			</div>
 		</div>
