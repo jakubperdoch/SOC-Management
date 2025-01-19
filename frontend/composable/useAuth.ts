@@ -3,157 +3,157 @@
  */
 
 type User = {
-	id: number;
-	name: string | null;
-	surname: string | null;
-	email: string | null;
-	role: string | null;
+  id: number;
+  name: string | null;
+  surname: string | null;
+  email: string | null;
+  role: string | null;
 };
 
 function useAuth() {
-	const user = ref<User | null>(null);
-	const status = computed(() =>
-		user.value ? 'authenticated' : 'unauthenticated'
-	);
-	const token = useCookie('token');
+  const user = ref<User | null>(null);
+  const status = computed(() =>
+    user.value ? "authenticated" : "unauthenticated",
+  );
+  const token = useCookie("token");
 
-	/**
-	 * Login user
-	 * @param {string} login
-	 * @param {string} password
-	 * @returns {Promise<object>}
-	 */
-	const login = async (email: string, password: string) => {
-		try {
-			const response = await apiFetch('/login', {
-				method: 'POST',
-				body: {
-					email,
-					password,
-				},
-			});
+  /**
+   * Login user
+   * @param {string} login
+   * @param {string} password
+   * @returns {Promise<object>}
+   */
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await apiFetch("/login", {
+        method: "POST",
+        body: {
+          email,
+          password,
+        },
+      });
 
-			const { user } = response;
+      const { user } = response;
 
-			updateUser(user);
-			generateToken();
+      updateUser(user);
+      generateToken();
 
-			return Promise.resolve(response);
-		} catch (error) {
-			return Promise.reject(error);
-		}
-	};
+      await getUser();
 
-	/**
-	 * Sets user data
-	 * @param {object} userData
-	 */
-	const updateUser = (userData: any) => {
-		user.value = userData;
-	};
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 
-	/**
-	 * Logout user
-	 * @returns {Promise<void>}
-	 */
-	const logout = async () => {
-		token.value = null;
-		user.value = null;
-		navigateTo('/');
+  /**
+   * Sets user data
+   * @param {object} userData
+   */
+  const updateUser = (userData: any) => {
+    user.value = userData;
+  };
 
-		return Promise.resolve();
-	};
+  /**
+   * Logout user
+   * @returns {Promise<void>}
+   */
+  const logout = async () => {
+    token.value = null;
+    user.value = null;
+    navigateTo("/");
 
-	const register = async (
-		name: string,
-		surname: string,
-		email: string,
-		password: string,
-		role: string
-	) => {
-		try {
-			const response = await apiFetch('/register', {
-				method: 'POST',
-				body: {
-					name,
-					surname,
-					email,
-					password,
-					role,
-				},
-			});
+    return Promise.resolve();
+  };
 
-			navigateTo('/auth/login');
+  const register = async (
+    name: string,
+    surname: string,
+    email: string,
+    password: string,
+    role: string,
+  ) => {
+    try {
+      const response = await apiFetch("/register", {
+        method: "POST",
+        body: {
+          name,
+          surname,
+          email,
+          password,
+          role,
+        },
+      });
 
-			return Promise.resolve(response);
-		} catch (error) {
-			return Promise.reject(error);
-		}
-	};
+      navigateTo("/auth/login");
 
-	/**
-	 * Generate random token
-	 */
-	/**
-	 * Generate random token with user.id included
-	 */
-	const generateToken = () => {
-		if (!user.value) return;
-		// Create a unique token including the user ID
-		const randomString = Math.random().toString(36).substring(2);
-		token.value = `Bearer ${randomString}_${user.value.id}`;
-	};
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 
-	/**
-	 * Get user ID from token
-	 * @returns {number | null}
-	 */
+  /**
+   * Generate random token
+   */
+  /**
+   * Generate random token with user.id included
+   */
+  const generateToken = () => {
+    if (!user.value) return;
+    const randomString = Math.random().toString(36).substring(2);
+    token.value = `Bearer ${randomString}_${user.value.id}`;
+  };
 
-	const getUserIdFromToken = () => {
-		if (!token.value) return null;
+  /**
+   * Get user ID from token
+   * @returns {number | null}
+   */
 
-		const parts = token.value.split('_');
-		return parts.length > 1 ? parseInt(parts[1], 10) : null;
-	};
+  const getUserIdFromToken = () => {
+    if (!token.value) return null;
 
-	/**
-	 * Fetch user data
-	 * @returns {Promise<void>}
-	 */
+    const parts = token.value.split("_");
+    return parts.length > 1 ? parseInt(parts[1], 10) : null;
+  };
 
-	const getUser = async () => {
-		if (!token.value) {
-			return;
-		}
+  /**
+   * Fetch user data
+   * @returns {Promise<void>}
+   */
 
-		try {
-			const response = await apiFetch('/student/info', {
-				method: 'POST',
-				body: {
-					id: getUserIdFromToken(),
-				},
-			});
+  const getUser = async () => {
+    if (!token.value) {
+      return;
+    }
 
-			const { user } = response;
-			updateUser(user);
+    try {
+      const response = await apiFetch("/student/info", {
+        method: "POST",
+        body: {
+          id: getUserIdFromToken(),
+        },
+      });
 
-			return Promise.resolve(response);
-		} catch (error) {
-			console.error(error);
-			return Promise.reject(error);
-		}
-	};
+      const { user } = response;
+      updateUser(user);
 
-	return {
-		user,
-		status,
-		login,
-		logout,
-		updateUser,
-		getUser,
-		register,
-		getUserIdFromToken,
-	};
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  return {
+    user,
+    status,
+    login,
+    logout,
+    updateUser,
+    getUser,
+    register,
+    getUserIdFromToken,
+  };
 }
 
 export default useAuth;

@@ -3,7 +3,6 @@ import useAuth from '~/composable/useAuth';
 export default defineNuxtRouteMiddleware(async (to) => {
 	const { getUserIdFromToken, getUser, user } = useAuth();
 	const userId = getUserIdFromToken();
-
 	await getUser();
 
 	if (userId && to?.name === 'auth-login') {

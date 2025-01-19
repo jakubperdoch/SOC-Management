@@ -1,37 +1,34 @@
 <template>
-	<navbar :data="navigationData" :userData class="!tw-z-10" />
+  <div class="tw-h-screen">
+    <navbar :user-profile="user" :data="navigationData" class="!tw-z-10" />
 
-	<slot />
+    <div class="tw-pt-20 tw-h-full">
+      <slot />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-	import navbar from '~/components/navbar.vue';
-	import navigationData from '@/utils/data/navbar.json';
-	import { useMutation } from '@tanstack/vue-query';
-	import useAuth from '~/composable/useAuth';
+import navbar from "~/components/navbar.vue";
+import navigationData from "@/utils/data/navbar.json";
+const token = useCookie("token");
+import useAuth from "~/composable/useAuth";
+const { getUser, user } = useAuth();
 
-	const { getUserIdFromToken } = useAuth();
-	const userData = ref(null);
+onMounted(() => {
+  if (token.value) {
+    getUser();
+  }
+});
 
-	const { mutate: mutateUser } = useMutation({
-		mutationFn: () =>
-			apiFetch('/student/info', {
-				method: 'POST',
-				body: {
-					id: getUserIdFromToken(),
-				},
-			}),
-		onSuccess: (data) => {
-			userData.value = data;
-		},
-		onError: (error) => {
-			console.log(error);
-		},
-	});
-
-	onMounted(() => {
-		if (getUserIdFromToken()) {
-			mutateUser();
-		}
-	});
+watch(
+  () => token.value,
+  (newToken, oldToken) => {
+    if (newToken) {
+      getUser();
+    } else {
+      console.log("No token found");
+    }
+  },
+);
 </script>

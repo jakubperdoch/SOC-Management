@@ -1,10 +1,10 @@
 <template>
-	<Loader />
-	<NuxtLayout>
-		<NuxtPage />
-	</NuxtLayout>
+  <Loader />
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <script>
-	import Loader from './components/loader.vue';
+import Loader from "./components/loader.vue";
 </script>

@@ -1,5 +1,5 @@
 <template>
-	<div class="!tw-font-sans tw-bg-primary row justify-content-center align-items-center authentication authentication-basic">
+	<div class="!tw-font-sans tw-bg-primary tw-flex tw-items-center tw-justify-center tw-h-full">
 			<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
 				<div class="card custom-card !tw-shadow-md !tw-shadow-secondary">
 					<div class="card-body p-5">
@@ -76,7 +76,7 @@
 	});
 
 	onMounted(() => {
-		user.value.email = route.query.email;
+		user.value.email =String( route.query.email || '');
 	});
 
 	const { login } = useAuth();
