@@ -30,9 +30,9 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function getUsers(Request $request)
+    public function getUsers(Request $request, $role)
     {
-        $users = User::where('role', $request->role)->get();
+        $users = User::where('role', $role)->get();
         return response()->json($users, 200);
     }
 }

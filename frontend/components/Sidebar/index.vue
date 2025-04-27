@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="tw-flex tw-flex-col tw-h-screen tw-bg-primary tw-transition-all tw-duration-300 tw-ease-in-out tw-overflow-hidden"
+    class="tw-flex tw-fixed md:tw-top-2 tw-flex-col tw-min-h-screen tw-bg-primary md:tw-rounded-t-2xl tw-transition-all tw-duration-300 tw-ease-in-out tw-overflow-hidden"
     :class="isSidebarCollapsed ? 'tw-w-0' : 'tw-w-[80px] md:tw-w-[240px]'"
   >
     <NuxtLink
@@ -21,7 +21,7 @@
         :icon="link.icon"
       >
         <span
-          class="tw-hidden md:tw-block tw-transition-all tw-duration-150 tw-ease-in-out"
+          class="tw-hidden tw-font-sans md:tw-block tw-transition-all tw-duration-150 tw-ease-in-out"
           >{{ link.name }}</span
         >
       </SidebarLink>

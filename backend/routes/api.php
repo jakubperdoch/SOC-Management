@@ -31,7 +31,7 @@ Route::get('/test-db', function () {
     }
 });
 
-Route::post('/users', [UserController::class, 'getUsers']); //done
+Route::get('/users/{role}', [UserController::class, 'getUsers']); //done
 
 Route::post('/login', [AuthController::class, 'login']); //done
 
@@ -42,9 +42,9 @@ Route::put('/login/update', [AuthController::class, 'updateLogin']);
 Route::delete('/login/delete', [AuthController::class, 'deleteLogin']);
 
 
-route::post('/project', [ProjectController::class, 'getSingleProject']); //admin-done teacher-done  student-done  
+route::post('/project', [ProjectController::class, 'getSingleProject']); //admin-done teacher-done  student-done
 
-route::post('/project/info', [ProjectController::class, 'getProject']); //admin-done teacher-done  student-done  
+route::post('/project/info', [ProjectController::class, 'getProject']); //admin-done teacher-done  student-done
 
 route::post('/project/create', [ProjectController::class, 'createProject']); //done
 
