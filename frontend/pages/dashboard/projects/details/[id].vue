@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Teachers</h1>
+    <h1>Project details</h1>
   </div>
 </template>
 <script setup lang="ts">

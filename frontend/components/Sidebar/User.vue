@@ -6,9 +6,7 @@
     <Avatar size="xl" label="U" />
     <span
       class="tw-text-sm tw-font-semibold tw-text-white tw-hidden md:tw-block tw-transition-all tw-duration-150 tw-ease-in-out"
-      >{{
-        authStore.user?.name ? authStore.user.name : "Neznámy používateľ"
-      }}</span
+      >{{ user?.name ? authStore.user.name : "Neznámy používateľ" }}</span
     >
   </div>
 </template>
@@ -18,11 +16,8 @@ import useAuthStore from "~/store/auth";
 
 const confirm = useConfirm();
 
-const authStore = useAuthStore();
+const { user, fetchUser, logout } = useAuthStore();
 
-/**
- * Log out the user, redirecting to the login page.
- */
 function handleLogout() {
   confirm.require({
     header: "Odhlásenie",
@@ -34,7 +29,7 @@ function handleLogout() {
     acceptClass:
       "flex items-center gap-2 font-bold text-sm py-[10px] px-4 rounded-md bg-[#EF4444] text-white",
     accept: async () => {
-      await authStore.logout();
+      await logout();
       navigateTo({ path: "/login" });
     },
   });

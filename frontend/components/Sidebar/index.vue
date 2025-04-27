@@ -39,19 +39,15 @@ const { isSidebarCollapsed, links } = defineProps({
   links: {
     type: Array,
     default: () => [
-      { icon: "home", name: "Dashboard", to: "/" },
+      { icon: "home", name: "Dashboard", to: "/dashboard" },
       { icon: "users", name: "Učitelia", to: "/dashboard/users" },
-      { icon: "file", name: "Projekty", to: "/projects" },
-      { icon: "wrench", name: "Nastavenia", to: "/settings" },
+      { icon: "file", name: "Projekty", to: "/dashboard/projects" },
+      { icon: "wrench", name: "Nastavenia", to: "/dashboard/settings" },
     ],
   },
   isSidebarCollapsed: {
     type: Boolean,
     default: false,
   },
-});
-
-watchEffect(() => {
-  console.log(isSidebarCollapsed);
 });
 </script>

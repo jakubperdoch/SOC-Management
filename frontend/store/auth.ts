@@ -79,9 +79,10 @@ const useAuthStore = defineStore("auth", () => {
     }
 
     try {
-      const response = await apiFetch("/user");
+      const response = await apiFetch("/student/info");
 
-      user.value = response;
+      // user.value = response;
+      console.log(response);
 
       return Promise.resolve(response);
     } catch (error) {
