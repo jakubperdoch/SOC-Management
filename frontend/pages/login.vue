@@ -28,7 +28,7 @@
 
       <div class="tw-flex tw-flex-col tw-gap-1">
         <label for="password">Heslo</label>
-        <InputText name="password" type="text" placeholder="Heslo" fluid />
+        <Password name="password" toggleMask fluid />
         <Message
           v-if="$form.password?.invalid"
           severity="error"
@@ -66,6 +66,7 @@ import { useMutation } from "@tanstack/vue-query";
 import useAuthStore from "~/store/auth";
 
 definePageMeta({
+  title: "Prihlásenie",
   layout: "auth",
 });
 
@@ -82,9 +83,9 @@ const resolver = ref(
     z.object({
       email: z
         .string()
-        .min(1, { message: "Email is required." })
-        .email({ message: "Invalid email address." }),
-      password: z.string().min(1, { message: "Password is required." }),
+        .min(1, { message: "Email je povinný." })
+        .email({ message: "Neplatný email." }),
+      password: z.string().min(1, { message: "Heslo je povinné." }),
     }),
   ),
 );
@@ -100,7 +101,7 @@ const { mutate, error, isPending } = useMutation({
   onSuccess: () => {
     toast.add({
       severity: "success",
-      summary: "Login successful.",
+      summary: "Prihlásenie úspešné.",
       life: 3000,
     });
 
@@ -112,7 +113,7 @@ const { mutate, error, isPending } = useMutation({
   onError: (error: Error) => {
     toast.add({
       severity: "error",
-      summary: "Login failed.",
+      summary: "Prihlásenie zlyhalo.",
       detail: apiErrorMessageHandler(error),
       life: 3000,
     });
@@ -125,7 +126,7 @@ const onFormSubmit = (e: any) => {
   } else {
     toast.add({
       severity: "error",
-      summary: "Please fill in all required fields.",
+      summary: "Je nutné vyplniť všetky polia.",
       life: 3000,
     });
   }

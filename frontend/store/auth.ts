@@ -21,22 +21,15 @@ const useAuthStore = defineStore("auth", () => {
    */
   const login = async (credentials: any) => {
     try {
-      const response = await apiFetch("/login", {
+      const response = await apiFetch("/auth/login", {
         method: "POST",
         body: credentials,
       });
 
-      const { userData } = response;
-
-      // const { token: userToken, ...userData } = response;
-      // Generate a mock token
-      const randomBytes = crypto.getRandomValues(new Uint8Array(16));
-      const randomToken = Array.from(randomBytes)
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
+      const { access_token, user: userData } = response;
 
       user.value = userData;
-      tokenCookie.value = randomToken;
+      tokenCookie.value = access_token;
 
       return Promise.resolve(userData);
     } catch (error) {
@@ -46,19 +39,12 @@ const useAuthStore = defineStore("auth", () => {
 
   const register = async (credentials: any) => {
     try {
-      const response = await apiFetch("/register", {
+      const response = await apiFetch("/auth/register", {
         method: "POST",
         body: credentials,
       });
 
-      const { userData } = response;
-
-      // const { token: userToken, ...userData } = response;
-      // Generate a mock token
-      const randomBytes = crypto.getRandomValues(new Uint8Array(16));
-      const randomToken = Array.from(randomBytes)
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
+      const { access_token, user: userData } = response;
 
       user.value = userData;
       tokenCookie.value = randomToken;
@@ -79,10 +65,9 @@ const useAuthStore = defineStore("auth", () => {
     }
 
     try {
-      const response = await apiFetch("/student/info");
+      const response = await apiFetch("/user/info");
 
-      // user.value = response;
-      console.log(response);
+      user.value = response?.user;
 
       return Promise.resolve(response);
     } catch (error) {
@@ -137,6 +122,10 @@ const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  const init = async () => {
+    await fetchUser();
+  };
+
   return {
     login,
     register,
@@ -147,6 +136,7 @@ const useAuthStore = defineStore("auth", () => {
     token,
     status,
     role,
+    init,
   };
 });
 

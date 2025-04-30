@@ -8,7 +8,11 @@
     <div
       class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4 2xl:tw-grid-cols-5 gap-4"
     >
-      <UserCard v-for="user in users" :key="user.id" :user="user"></UserCard>
+      <UserCard
+        v-for="user in users?.data"
+        :key="user.id"
+        :user="user"
+      ></UserCard>
     </div>
   </div>
 </template>

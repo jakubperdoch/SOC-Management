@@ -5,27 +5,22 @@
       <Button class="tw-font-sans" outlined>Pridať projekt</Button>
     </div>
 
-    <div
-      class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4 2xl:tw-grid-cols-5 gap-4"
-    >
-      <UserCard v-for="user in users" :key="user.id" :user="user"></UserCard>
-    </div>
+    <ProjectTable
+      :cells="projects?.projects ?? []"
+      :is-loading="isProjectsLoading || isProjectsPending"
+    />
   </div>
 </template>
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
-const selectedCategory = ref("teacher");
 
 const {
-  data: users,
-  isPending,
-  isLoading,
+  data: projects,
+  isPending: isProjectsPending,
+  isLoading: isProjectsLoading,
 } = useQuery({
-  queryKey: ["users"],
-  queryFn: () =>
-    apiFetch(`/users/${selectedCategory.value}`, {
-      role: selectedCategory.value,
-    }),
+  queryKey: ["projects"],
+  queryFn: () => apiFetch(`/projects`),
 });
 
 definePageMeta({

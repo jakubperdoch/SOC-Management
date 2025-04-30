@@ -10,7 +10,8 @@ class StudentController extends Controller
 {
     public function getStudent(Request $request)
     {
-        $user = User::where('id', $request->id)->first();
+        $user = $request->user();
+
         if (!$user) {
             return response()->json([
                 'message' => 'Student neexistuje',

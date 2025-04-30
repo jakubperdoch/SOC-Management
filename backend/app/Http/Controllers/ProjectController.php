@@ -53,8 +53,9 @@ class ProjectController extends Controller
 
     public function getProject(Request $request, TeacherController $TeacherController, StudentController $StudentController, AdminController $AdminController)
     {
-        //connection to database from table projects 
-        $role = $request->role;
+
+        $role = $request->user()->role;
+
         if ($role == 'teacher') {
             return $TeacherController->getProjectInfo($request);
         }
@@ -68,7 +69,7 @@ class ProjectController extends Controller
 
     public function createProject(Request $request)
     {
-        //connection to database from table projects 
+        //connection to database from table projects
         $project = new Project();
         $project->title = $request->title;
         $project->description = $request->description;
@@ -94,7 +95,7 @@ class ProjectController extends Controller
 
     public function updateProject(Request $request)
     {
-        //connection to database from table projects 
+        //connection to database from table projects
         $project = Project::where('id', $request->id)->first();
         if (!$project) {
             return response()->json([
@@ -126,7 +127,7 @@ class ProjectController extends Controller
 
     public function deleteProject(Request $request)
     {
-        //connection to database from table projects 
+        //connection to database from table projects
         $project = Project::where('id', $request->id)->first();
         if (!$project) {
             return response()->json([

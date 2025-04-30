@@ -40,7 +40,7 @@ const { isSidebarCollapsed, links } = defineProps({
     type: Array,
     default: () => [
       { icon: "home", name: "Dashboard", to: "/dashboard" },
-      { icon: "users", name: "Učitelia", to: "/dashboard/users" },
+      { icon: "users", name: "Uživatelia", to: "/dashboard/users" },
       { icon: "file", name: "Projekty", to: "/dashboard/projects" },
       { icon: "wrench", name: "Nastavenia", to: "/dashboard/settings" },
     ],

@@ -54,15 +54,12 @@ class AuthController extends Controller
 
         // If the user exists, verify the password without hashing
         if ($user && $credentials['password'] === $user->password) {
-            // If the credentials are correct, return user data and a success message
+            $token = $user->createToken('auth_token')->plainTextToken;
+
             return response()->json([
-                'message' => 'Úspešne ste boli prihlásený!',
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'surname' => $user->surname,
-                    'email' => $user->email,
-                ],
+                'message' => 'Successfully logged in.',
+                'access_token' => $token,
+                'user' => $user,
             ], 200);
         } else {
             // If the credentials are incorrect, return an error message

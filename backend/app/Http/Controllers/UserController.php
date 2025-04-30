@@ -32,7 +32,12 @@ class UserController extends Controller
 
     public function getUsers(Request $request, $role)
     {
-        $users = User::where('role', $role)->get();
+        if ($role =='all') {
+            $users = User::paginate(10);
+        } else {
+            $users = User::where('role', $role)->paginate(10);
+        }
+
         return response()->json($users, 200);
     }
 }
