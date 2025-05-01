@@ -1,7 +1,10 @@
 <template>
-  <div class="tw-w-1/2">
-    <Radar v-if="!status" :data="data" :options="options" />
-    <Skeleton v-else height="30rem" borderRadius="16px" />
+  <Skeleton v-if="status" height="30rem" borderRadius="16px" />
+  <div
+    v-else
+    class="card custom-card tw-col-span-1 tw-p-4 !tw-font-sans !tw-mb-0 !tw-h-fit"
+  >
+    <Radar :data="data" :options="options" />
   </div>
 </template>
 

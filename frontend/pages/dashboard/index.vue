@@ -4,14 +4,23 @@
       <h1 class="tw-text-2xl tw-font-semibold tw-font-sans">Hlavný panel</h1>
     </div>
 
-    <DashboardAdminInterestGraph
-      :status="statsLoading"
-      :statsDataset="stats?.projectsCount ?? []"
-    />
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4">
+      <StatusGraph
+        :data="stats?.projectsStats ?? []"
+        :status="statsLoading || statsPending"
+      />
+
+      <DashboardAdminInterestGraph
+        :status="statsLoading || statsPending"
+        :statsDataset="stats?.projectsCount ?? []"
+      />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
+import StatusGraph from "~/components/Dashboard/StatusGraph.vue";
+import DashboardAdminInterestGraph from "~/components/Dashboard/InterestGraph.vue";
 
 const selectedCategory = ref("teacher");
 

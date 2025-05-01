@@ -29,13 +29,30 @@ class StatsController extends Controller
             "Učebné pomôcky" => 0,
         ];
 
-        $projects->each(function ($project) use (&$projectsCount) {
+        $projectsStats=[
+            'overall' => 0,
+            'openStatus' => 0,
+            'waitingStatus' => 0,
+            'takenStatus' => 0,
+        ];
+
+        $projects->each(function ($project) use (&$projectsCount, &$projectsStats) {
             $projectsCount[$project->odbor] = isset($projectsCount[$project->odbor]) ? $projectsCount[$project->odbor] + 1 : 1;
+            $projectsStats['overall']++;
+
+            if ($project->status == 'free') {
+                $projectsStats['openStatus']++;
+            } elseif ($project->status == 'waiting') {
+                $projectsStats['waitingStatus']++;
+            } elseif ($project->status == 'taken') {
+                $projectsStats['takenStatus']++;
+            }
         });
 
         return response()->json([
             'message' => 'Stats retrieved successfully.',
             'projectsCount' => array_values($projectsCount),
+            'projectsStats' => $projectsStats,
         ]);
     }
 
