@@ -95,22 +95,26 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function updateLogin(Request $request)
+    public function updateLogin(Request $request,$id)
     {
-        // Validate the request inputs
         $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
+            'role' => 'required|string|in:student,teacher,admin',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        // Update the user in the accounts table
-        $user = User::where('id', $request->id)->first();
+        $user = User::where('id',$id)->first();
         $user->email = $request->email;
-        $user->password = $request->password; // Plain text password (since you chose not to hash)
+        $user->password = $request->password;
+        $user->name = $request->name;
+        $user->surname = $request->surname;
+        $user->role = $request->role;
         $user->save();
 
         return response()->json([

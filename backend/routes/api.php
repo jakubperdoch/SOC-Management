@@ -43,12 +43,13 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     route::get('/user/info', [StudentController::class, 'getStudent'])->name('user.info');
     Route::delete('/user/delete', [AuthController::class, 'deleteLogin'])->name('user.delete');
-    Route::put('/user/update', [AuthController::class, 'updateLogin'])->name('user.update');
+    Route::put('/user/{id}/update', [AuthController::class, 'updateLogin'])->name('user.update');
     Route::get('/users/{role}', [UserController::class, 'getUsers'])->name('user.getUsers');
+    route::get('/user/{id}', [UserController::class, 'getUser'])->name('user.getUser');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    route::post('/project', [ProjectController::class, 'getSingleProject'])->name('project.getSingleProject');
+    route::get('/project/{id}', [ProjectController::class, 'getSingleProject'])->name('project.getSingleProject');
     route::get('/projects', [ProjectController::class, 'getProject'])->name('project.getProject');
     route::post('/project/create', [ProjectController::class, 'createProject'])->name('project.createProject');
     route::put('/project/update', [ProjectController::class, 'updateProject'])->name('project.updateProject');

@@ -12,12 +12,13 @@ use App\Http\Controllers\StudentController;
 class ProjectController extends Controller
 {
 
-    public function getSingleProject(Request $request)
+    public function getSingleProject(Request $request,$id)
     {
         // Fetch the project from the database
-        $project = Project::where('id', $request->id)->first();
+        $project = Project::where('id', $id)->first();
 
         // Check if the project exists
+
         if (!$project) {
             return response()->json([
                 'message' => 'Project neexistuje', // Project does not exist

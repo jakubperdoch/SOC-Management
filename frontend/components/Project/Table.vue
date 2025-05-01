@@ -8,6 +8,7 @@
       :rows="7"
       :table-class="'!tw-rounded-lg'"
       dataKey="id"
+      scrollable
     >
       <template #empty>
         <div class="tw-flex tw-justify-center tw-items-center tw-h-40">

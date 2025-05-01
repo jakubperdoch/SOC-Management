@@ -7,9 +7,9 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function getUser(Request $request)
+    public function getUser(Request $request,$id)
     {
-        $user = User::where('id', $request->id)->first();
+        $user = User::where('id', $id)->first();
         if (!$user) {
             return response()->json([
                 'message' => 'User neexistuje',
