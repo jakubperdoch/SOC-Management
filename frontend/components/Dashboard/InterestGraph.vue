@@ -63,7 +63,6 @@ watch(
   () => statsDataset,
   (newDataset) => {
     data.value.datasets[0].data = newDataset;
-    console.log(status);
   },
   { immediate: true },
 );

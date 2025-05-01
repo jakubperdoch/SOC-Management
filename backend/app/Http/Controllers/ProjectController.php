@@ -35,7 +35,6 @@ class ProjectController extends Controller
 
 
 
-
         return response()->json([
             'message' => 'Project existuje',
             'project' => [
@@ -43,9 +42,13 @@ class ProjectController extends Controller
                 'title' => $project->title,
                 'description' => $project->description,
                 'status' => $project->status,
-                'student' => $project->student_id,
-                'teacher' => $project->teacher_id,
+                'student_id' => $project->student_id,
+                'teacher_id' => $project->teacher_id,
                 'odbor' => $project->odbor,
+                'first_review' => $project->first_review,
+                'second_review' => $project->second_review,
+                'third_review' => $project->third_review,
+                'mark' => $project->mark,
             ],
             'student' => $studentName,
             'teacher' => $teacherName

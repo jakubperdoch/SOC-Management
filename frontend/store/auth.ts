@@ -1,11 +1,17 @@
 import { defineStore } from "pinia";
+interface IUser {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
 
 const useAuthStore = defineStore("auth", () => {
   const tokenCookie = useCookie("token", {
     sameSite: "strict",
   });
 
-  const user = ref(null);
+  const user = ref<IUser | null>(null);
   const token = computed(() => tokenCookie.value);
 
   const status = computed(() =>
@@ -47,7 +53,7 @@ const useAuthStore = defineStore("auth", () => {
       const { access_token, user: userData } = response;
 
       user.value = userData;
-      tokenCookie.value = randomToken;
+      tokenCookie.value = access_token;
 
       return Promise.resolve(userData);
     } catch (error) {
