@@ -11,7 +11,13 @@
           option-label="label"
           option-value="value"
         />
-        <Button class="tw-font-sans" outlined> Pridať uživateľa </Button>
+        <Button
+          class="tw-font-sans"
+          outlined
+          @click="isModalVisible = !isModalVisible"
+        >
+          Pridať uživateľa
+        </Button>
       </div>
     </div>
 
@@ -33,12 +39,17 @@
       ></UserCard>
     </div>
   </div>
+  <UserDialog
+    :visible="isModalVisible"
+    @update:visible="(value) => (isModalVisible = value)"
+  />
 </template>
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
 
 const selectedCategory = ref("teacher");
 const queryKey = computed(() => ["users", selectedCategory.value]);
+const isModalVisible = ref(false);
 
 const {
   data: users,
