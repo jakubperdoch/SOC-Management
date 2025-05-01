@@ -32,7 +32,8 @@ class StudentController extends Controller
     public function getProjectInfo(Request $request)
     {
 
-        $studentProject = Project::where('student_id', $request->id)->first();
+        $user = $request->user();
+        $studentProject = Project::where('student_id', $user->id)->first();
 
         $student = User::where('id', $request->id)->first();
 

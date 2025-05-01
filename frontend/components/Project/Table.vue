@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-rounded-2xl tw-h-fit tw-font-sans">
+  <div class="!tw-rounded-2xl !tw-h-fit !tw-font-sans">
     <DataTable
       :value="cells"
       :loading="isLoading"

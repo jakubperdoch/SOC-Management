@@ -7,7 +7,7 @@
 
       <div class="tw-flex tw-gap-4">
         <Button
-          size="medium"
+          size="small"
           class="tw-font-sans"
           :disabled="isPending || isLoading"
           @click="toggleEdit"
@@ -18,6 +18,7 @@
         </Button>
 
         <Button
+          size="small"
           class="tw-font-sans tw-transition-all tw-duration-300 tw-ease-in-out"
           :class="{ 'tw-hidden': !isEditMode }"
           outlined
@@ -28,6 +29,7 @@
         </Button>
 
         <Button
+          size="small"
           class="tw-font-sans tw-flex tw-items-center"
           outlined
           severity="danger"

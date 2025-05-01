@@ -33,11 +33,21 @@ class UserController extends Controller
 
     public function getUsers(Request $request, $role)
     {
-        if ($role =='all') {
-            $users = User::paginate(10);
-        } else {
-            $users = User::where('role', $role)->paginate(10);
-        }
+        $search = $request->query('search', '');
+
+        $users = User::query()
+            ->when($role !== 'all', function ($q) use ($role) {
+                $q->where('role', $role);
+            })
+
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($q) use ($search) {
+                    $q->where('name',    'LIKE', "%{$search}%")
+                        ->orWhere('surname', 'LIKE', "%{$search}%")
+                        ->orWhere('email',   'LIKE', "%{$search}%");
+                });
+            })
+            ->paginate(16);
 
         return response()->json($users, 200);
     }
