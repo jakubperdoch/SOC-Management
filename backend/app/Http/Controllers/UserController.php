@@ -25,6 +25,7 @@ class UserController extends Controller
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'email' => $user->email,
+                'password' => $user->password,
                 'role' => $user->role,
             ],
         ], 200);

@@ -18,7 +18,15 @@
     <div
       class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4 2xl:tw-grid-cols-5 gap-4"
     >
+      <Skeleton
+        v-if="isPending || isLoading"
+        v-for="i in 4"
+        :key="i"
+        class="tw-px-11 tw-py-24"
+      />
+
       <UserCard
+        v-else
         v-for="user in users?.data"
         :key="user.id"
         :user="user"

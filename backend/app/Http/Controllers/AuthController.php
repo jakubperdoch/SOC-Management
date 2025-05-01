@@ -110,12 +110,18 @@ class AuthController extends Controller
         }
 
         $user = User::where('id',$id)->first();
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->name = $request->name;
-        $user->surname = $request->surname;
-        $user->role = $request->role;
-        $user->save();
+        if (!$user) {
+            return response()->json(['message' => 'User neexistuje'], 404);
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'password' => $request->password,
+            'role' => $request->role,
+        ]);
+
 
         return response()->json([
             'message' => 'Úspešne ste aktualizovali svoje prihlasovacie údaje',

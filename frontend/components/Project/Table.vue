@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-rounded-2xl tw-h-fit">
+  <div class="tw-rounded-2xl tw-h-fit tw-font-sans">
     <DataTable
       :value="cells"
       :loading="isLoading"
@@ -157,13 +157,13 @@ const getSeverity = (status: any) => {
 
 const getDetails = (id: number) => {
   navigateTo({
-    path: `/dashboard/details/${id}`,
+    path: `/dashboard/projects/details/${id}`,
   });
 };
 
 const getEdit = (id: number) => {
   navigateTo({
-    path: `/dashboard/create/${id}`,
+    path: `/dashboard/projects/create/${id}`,
   });
 };
 
