@@ -146,6 +146,8 @@
       </div>
     </div>
   </section>
+
+  <LandingFooter />
 </template>
 
 <script setup lang="ts">

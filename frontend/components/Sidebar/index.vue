@@ -8,7 +8,7 @@
       class="tw-px-2 md:tw-px-8 tw-py-6 tw-font-bold tw-text-2xl tw-flex tw-items-center tw-gap-3"
     >
       <img
-        src="/images/logo.svg"
+        src="/images/logo--light.svg"
         class="tw-w-full tw-max-w-24 md:tw-max-w-40 tw-transition-all tw-duration-150 tw-ease-in-out"
         alt="Logo"
       />
