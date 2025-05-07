@@ -73,21 +73,7 @@
         />
       </div>
 
-      <!-- Odbor -->
-      <div class="tw-flex tw-flex-col">
-        <label class="tw-mb-1">Odbor</label>
-        <Select
-          class="tw-text-[13px]"
-          v-model="projectForm.odbor"
-          :options="fieldOptions"
-          optionLabel="label"
-          optionValue="value"
-          :disabled="!isEditMode"
-          placeholder="Zadajte odbor"
-        />
-      </div>
-
-      <!-- Student & Teacher (read-only) -->
+      <!-- Student & Teacher  -->
       <div class="tw-flex tw-flex-col">
         <label class="tw-mb-1">Študent</label>
 
@@ -111,12 +97,48 @@
         </Select>
       </div>
 
-      <div class="tw-flex tw-flex-col" v-if="user?.role == 'admin'">
-        <label class="tw-mb-1">Učiteľ</label>
-        <span class="tw-p-2 tw-border tw-rounded">{{
-          project.teacher || "-"
-        }}</span>
+      <div class="tw-flex tw-flex-col">
+        <label class="tw-mb-1">
+          Učiteľ
+          <span v-if="user?.role === 'admin'" class="tw-text-red-500">
+            (len pre adminov)
+          </span>
+        </label>
+
+        <Select
+          v-model="projectForm.teacher_id"
+          display="chip"
+          fluid
+          :options="teachers?.data"
+          filter
+          optionLabel="surname"
+          optionValue="id"
+          placeholder="Vyberte učiteľa"
+          :selection-limit="1"
+          :maxSelectedLabels="1"
+          :disabled="!isEditMode"
+          :showClear="true"
+        >
+          <template #option="slotProps">
+            {{ slotProps.option.name }} {{ slotProps.option.surname }}
+          </template>
+        </Select>
       </div>
+
+      <!-- Odbor -->
+      <div class="tw-flex tw-flex-col">
+        <label class="tw-mb-1">Odbor</label>
+        <Select
+          class="tw-text-[13px]"
+          v-model="projectForm.odbor"
+          :options="fieldOptions"
+          optionLabel="label"
+          optionValue="value"
+          :disabled="!isEditMode"
+          placeholder="Zadajte odbor"
+        />
+      </div>
+
       <!-- Mark -->
 
       <div class="tw-flex tw-flex-col">
@@ -232,6 +254,12 @@ const {
 const { data: students } = useQuery({
   queryKey: ["students"],
   queryFn: () => apiFetch("/users/student"),
+  enabled: !!params.id,
+});
+
+const { data: teachers } = useQuery({
+  queryKey: ["teachers"],
+  queryFn: () => apiFetch("/users/teacher"),
   enabled: !!params.id,
 });
 
