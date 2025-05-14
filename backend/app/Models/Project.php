@@ -11,7 +11,7 @@ class Project extends Model
 {
     use HasFactory, Searchable;
 
-    protected $table = 'Projects';
+    protected $table = 'projects';
 
     /**
      * The attributes that are mass assignable.
@@ -22,8 +22,13 @@ class Project extends Model
         'title',
         'description',
         'status',
-        'student',
-        'teacher',
+        'student_id',
+        'teacher_id',
+        'odbor',
+        'first_review',
+        'second_review',
+        'third_review',
+        'mark',
     ];
 
     public function toSearchableArray()
@@ -33,8 +38,13 @@ class Project extends Model
             'title' => $this->title,
             'description' => $this->description,
             'status' => $this->status,
-            'student' => $this->student,
-            'teacher' => $this->teacher,
+            'student_id' => $this->student_id,
+            'teacher_id' => $this->teacher_id,
+            'odbor' => $this->odbor,
+            'first_review' => $this->first_review,
+            'second_review' => $this->second_review,
+            'third_review' => $this->third_review,
+            'mark' => $this->mark,
         ];
 
     }

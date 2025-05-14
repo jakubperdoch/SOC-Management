@@ -1,4 +1,3 @@
-import { defineStore } from "pinia";
 interface IUser {
   id: number;
   name: string;
@@ -6,100 +5,86 @@ interface IUser {
   role: string;
 }
 
+export interface AuthResponse {
+  access_token: string;
+  user: IUser;
+}
+
+export interface Credentials {
+  email: string;
+  password: string;
+}
+
+import { defineStore } from "pinia";
+
 const useAuthStore = defineStore("auth", () => {
-  const tokenCookie = useCookie("token", {
-    sameSite: "strict",
-  });
-
+  const tokenCookie = useCookie<string | null>("token", { sameSite: "strict" });
   const user = ref<IUser | null>(null);
+
   const token = computed(() => tokenCookie.value);
-
   const status = computed(() =>
-    !!user.value ? "authenticated" : "unauthenticated",
+    user.value ? "authenticated" : "unauthenticated",
   );
-
-  const role = computed(() => user.value?.role || "guest");
+  const role = computed(() => user.value?.role ?? "guest");
 
   /**
-   * Login user with credentials
-   * @param {{ email: string; password: string; }} credentials
+   * Fetch data from API
+   * @param url
+   * @param creds
+   */
+  async function doAuth(url: string, creds: unknown): Promise<IUser> {
+    const { access_token, user: u } = await apiFetch(url, {
+      method: "POST",
+      body: creds,
+    });
+    tokenCookie.value = access_token;
+    user.value = u;
+    return u;
+  }
+
+  /**
+   * Login user
+   * @param {Object} creds
    * @returns {Promise<Object>}
    */
-  const login = async (credentials: any) => {
-    try {
-      const response = await apiFetch("/auth/login", {
-        method: "POST",
-        body: credentials,
-      });
+  async function login(creds: Credentials): Promise<IUser> {
+    return doAuth("/auth/login", creds);
+  }
 
-      const { access_token, user: userData } = response;
-
-      user.value = userData;
-      tokenCookie.value = access_token;
-
-      return Promise.resolve(userData);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
-
-  const register = async (credentials: any) => {
-    try {
-      const response = await apiFetch("/auth/register", {
-        method: "POST",
-        body: credentials,
-      });
-
-      const { access_token, user: userData } = response;
-
-      user.value = userData;
-      tokenCookie.value = access_token;
-
-      return Promise.resolve(userData);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
+  /**
+   * Register user
+   * @param {Object} creds
+   * @returns {Promise<Object>}
+   */
+  async function register(creds: Credentials): Promise<IUser> {
+    return doAuth("/auth/register", creds);
+  }
 
   /**
    * Fetch user data (it token exists)
    * @returns {Promise<Object>}
    */
-  const fetchUser = async () => {
-    if (!tokenCookie.value) {
-      return;
-    }
-
-    try {
-      const response = await apiFetch("/user/info");
-
-      user.value = response?.user;
-
-      return Promise.resolve(response);
-    } catch (error) {
-      tokenCookie.value = null;
-
-      return Promise.reject(error);
-    }
-  };
+  async function fetchUser(): Promise<IUser | void> {
+    if (!tokenCookie.value) return;
+    const { user: u } = await apiFetch("/user/info");
+    user.value = u;
+    return u;
+  }
 
   /**
    * Logout user
    * @returns {Promise<void>}
    */
-  const logout = async () => {
+  async function logout(): Promise<void> {
     try {
-      await apiFetch("/user/logout", {
-        method: "POST",
-      });
-    } catch (error) {
+      await apiFetch("/user/logout", { method: "POST" });
+    } catch (_) {
+      /* optionally log */
     } finally {
       tokenCookie.value = null;
       user.value = null;
-
-      return Promise.resolve();
     }
-  };
+  }
 
   /**
    * Refresh user token (if exists)
@@ -128,9 +113,9 @@ const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  const init = async () => {
+  async function init() {
     await fetchUser();
-  };
+  }
 
   return {
     login,

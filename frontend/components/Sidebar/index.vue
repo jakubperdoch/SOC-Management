@@ -1,7 +1,7 @@
 <template>
   <aside
-    class="tw-flex tw-fixed md:tw-top-2 tw-flex-col tw-min-h-screen tw-bg-primary md:tw-rounded-t-2xl tw-transition-all tw-duration-300 tw-ease-in-out tw-overflow-hidden"
-    :class="isSidebarCollapsed ? 'tw-w-0' : 'tw-w-[80px] md:tw-w-[240px]'"
+    class="tw-flex tw-fixed tw-items-center md:tw-top-2 tw-flex-col tw-min-h-screen tw-bg-primary md:tw-rounded-t-2xl tw-transition-all tw-duration-300 tw-ease-in-out tw-overflow-hidden"
+    :class="isSidebarCollapsed ? 'tw-w-0' : 'tw-w-[80px] md:tw-w-[250px]'"
   >
     <NuxtLink
       to="/"
@@ -13,7 +13,7 @@
         alt="Logo"
       />
     </NuxtLink>
-    <nav class="tw-flex tw-flex-col tw-px-4 md:tw-px-6">
+    <nav class="tw-flex tw-w-full tw-flex-col tw-px-4 md:tw-px-6">
       <SidebarLink
         v-for="link in links"
         :key="link.name"

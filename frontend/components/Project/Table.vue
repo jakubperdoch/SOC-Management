@@ -1,16 +1,26 @@
 <template>
-  <div class="!tw-rounded-2xl !tw-h-fit !tw-font-sans">
+  <div class="!tw-rounded-2xl card tw-p-3 !tw-h-fit !tw-font-sans">
     <DataTable
       :value="cells"
       :loading="isLoading"
       paginator
       removableSort
       :rows="7"
-      :table-class="'!tw-rounded-lg'"
       dataKey="id"
       scrollable
       selectionMode="single"
     >
+      <template #header>
+        <div class="tw-flex tw-justify-end">
+          <IconField>
+            <InputIcon>
+              <i class="pi pi-search" />
+            </InputIcon>
+            <InputText placeholder="Kľúčové slovo" size="small" />
+          </IconField>
+        </div>
+      </template>
+
       <template #empty>
         <div class="tw-flex tw-justify-center tw-items-center tw-h-40">
           <p class="tw-text-lg tw-text-gray-500">Žiadne projekty</p>
@@ -19,7 +29,7 @@
 
       <template #loading>
         <div
-          class="tw-flex tw-bg-white !tw-rounded-2xl tw-justify-center tw-items-center tw-h-full tw-w-full"
+          class="tw-flex tw-bg-white tw-justify-center tw-items-center tw-h-full tw-w-full"
         >
           <p
             class="tw-text-lg tw-text-gray-500 tw-flex tw-items-center tw-gap-2"
@@ -30,7 +40,15 @@
         </div>
       </template>
 
-      <Column field="title" header="Názov" sortable>
+      <template #paginatorstart>
+        <Button type="button" icon="pi pi-refresh" text />
+      </template>
+
+      <template #paginatorend>
+        <Button type="button" icon="pi pi-download" text />
+      </template>
+
+      <Column field="title" header="Názov" sortable filter>
         <template #body="{ data }">
           {{ data.title }}
         </template>
@@ -113,6 +131,7 @@ import { useMutation } from "@tanstack/vue-query";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import useAuthStore from "~/store/auth";
+import { FilterMatchMode } from "@primevue/core/api";
 
 const { user } = useAuthStore();
 const confirm = useConfirm();
@@ -219,10 +238,6 @@ const deleteProjectHandler = (id: number) => {
     },
   });
 };
-
-watchEffect(() => {
-  console.log(isLoading);
-});
 </script>
 
 <style scoped>

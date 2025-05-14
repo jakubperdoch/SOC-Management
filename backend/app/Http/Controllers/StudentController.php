@@ -21,6 +21,7 @@ class StudentController extends Controller
         return response()->json([
             'message' => 'Student existuje',
             'user' => [
+                'id' => $user->id,
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'email' => $user->email,

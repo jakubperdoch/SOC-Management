@@ -10,7 +10,7 @@
         :status="statsLoading || statsPending"
       />
 
-      <DashboardAdminInterestGraph
+      <InterestGraph
         :status="statsLoading || statsPending"
         :statsDataset="stats?.projectsCount ?? []"
       />
@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { useQuery } from "@tanstack/vue-query";
 import StatusGraph from "~/components/Dashboard/StatusGraph.vue";
-import DashboardAdminInterestGraph from "~/components/Dashboard/InterestGraph.vue";
+import InterestGraph from "~/components/Dashboard/InterestGraph.vue";
 
 const selectedCategory = ref("teacher");
 

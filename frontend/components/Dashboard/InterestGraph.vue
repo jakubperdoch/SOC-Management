@@ -69,5 +69,6 @@ watch(
 
 const options = ref<ChartOptions<"radar">>({
   responsive: true,
+  maintainAspectRatio: false,
 });
 </script>

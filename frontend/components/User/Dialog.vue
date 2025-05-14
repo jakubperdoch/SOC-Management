@@ -11,6 +11,7 @@
       <div class="tw-flex tw-items-center tw-gap-4">
         <label for="name" class="tw-w-24 tw-font-semibold">Meno</label>
         <InputText
+          class="tw-text-[13px]"
           id="name"
           v-model="userForm.name"
           :disabled="isPending"
@@ -23,6 +24,7 @@
       <div class="tw-flex tw-items-center tw-gap-4">
         <label for="surname" class="tw-w-24 tw-font-semibold">Priezvisko</label>
         <InputText
+          class="tw-text-[13px]"
           id="surname"
           v-model="userForm.surname"
           :disabled="isPending"
@@ -35,6 +37,7 @@
       <div class="tw-flex tw-items-center tw-gap-4">
         <label for="email" class="tw-w-24 tw-font-semibold">Email</label>
         <InputText
+          class="tw-text-[13px]"
           id="email"
           v-model="userForm.email"
           :disabled="isPending"
@@ -48,7 +51,7 @@
       <div class="tw-flex tw-items-center tw-gap-4">
         <label for="password" class="tw-w-24 tw-font-semibold">Heslo</label>
         <Password
-          class="tw-w-full"
+          class="tw-text-[13px] tw-w-full"
           id="password"
           v-model="userForm.password"
           :disabled="isPending"
@@ -62,6 +65,7 @@
       <div class="tw-flex tw-items-center tw-gap-4">
         <label for="role" class="tw-w-24 tw-font-semibold">Rola</label>
         <Dropdown
+          class="tw-text-[13px]"
           id="role"
           v-model="userForm.role"
           :options="roles"
@@ -179,7 +183,7 @@ const { mutate: saveUser, isPending } = useMutation({
       closeDialog();
     }, 1000);
 
-    queryClient.invalidateQueries(["users"]);
+    queryClient.invalidateQueries({ queryKey: ["users"] });
   },
 
   onError(error: Error) {

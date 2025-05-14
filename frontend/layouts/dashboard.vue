@@ -4,7 +4,7 @@
 
     <main
       class="tw-pb-2 tw-flex-1 tw-transition-all tw-duration-300 tw-ease-in-out"
-      :class="isSidebarCollapsed ? 'tw-pl-0' : 'tw-pl-[80px] md:tw-pl-[240px]'"
+      :class="isSidebarCollapsed ? 'tw-pl-0' : 'tw-pl-[80px] md:tw-pl-[250px]'"
     >
       <Navbar @toggleSidebar="isSidebarCollapsed = !isSidebarCollapsed" />
       <slot />

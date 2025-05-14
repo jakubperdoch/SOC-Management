@@ -68,6 +68,7 @@
           :options="statusOptions"
           :disabled="!isEditMode"
           placeholder="Vyberte status"
+          class="tw-text-[13px]"
           optionLabel="label"
           optionValue="value"
         />
@@ -86,6 +87,7 @@
           optionLabel="surname"
           optionValue="id"
           placeholder="Vyberte študenta"
+          class="tw-text-[13px]"
           :selection-limit="1"
           :maxSelectedLabels="1"
           :disabled="!isEditMode"
@@ -112,6 +114,7 @@
           :options="teachers?.data"
           filter
           optionLabel="surname"
+          class="tw-text-[13px]"
           optionValue="id"
           placeholder="Vyberte učiteľa"
           :selection-limit="1"
@@ -146,6 +149,7 @@
         <InputNumber
           v-model="projectForm.mark"
           :disabled="!isEditMode"
+          class="tw-text-[13px]"
           placeholder="Zadajte známku"
           mode="decimal"
           :min="1"
@@ -157,10 +161,12 @@
       <!-- Description -->
       <div class="md:tw-col-span-2 tw-flex tw-flex-col">
         <label class="tw-mb-1">Popis</label>
-        <Textarea
+
+        <Editor
           class="tw-text-[13px]"
+          editorStyle="height: 320px"
           v-model="projectForm.description"
-          :disabled="!isEditMode"
+          :readonly="!isEditMode"
           rows="4"
           placeholder="Zadajte popis projektu"
         />
