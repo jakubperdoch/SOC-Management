@@ -5,14 +5,14 @@
 
       <div class="tw-flex tw-gap-4">
         <InputText
+          v-model="search"
           placeholder="Hľadať užívateľov"
           size="small"
-          v-model="search"
         />
         <SelectButton
-          class="tw-font-sans"
           v-model="selectedCategory"
           :options="options"
+          class="tw-font-sans"
           option-label="label"
           option-value="value"
           size="small"
@@ -32,8 +32,8 @@
       class="tw-grid md:tw-grid-rows-4 tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4 2xl:tw-grid-cols-5 gap-4"
     >
       <Skeleton
-        v-if="isPending || isLoading"
         v-for="i in 4"
+        v-if="isPending || isLoading"
         :key="i"
         class="tw-px-11 tw-py-24"
       />
@@ -52,17 +52,17 @@
       </h3>
 
       <UserCard
-        v-else
         v-for="user in users?.data"
+        v-else
         :key="user.id"
         :user="user"
       ></UserCard>
     </div>
     <Paginator
       v-show="!isPending && !isLoading && users?.data.length > 0"
+      v-model="pagination"
       :rows="users?.per_page"
       :totalRecords="users?.total"
-      v-model="pagination"
       @page="handlePage"
     ></Paginator>
   </div>
@@ -72,7 +72,7 @@
     @update:visible="(value) => (isModalVisible = value)"
   />
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useQuery } from "@tanstack/vue-query";
 
 const selectedCategory = ref("teacher");

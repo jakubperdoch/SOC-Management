@@ -2,37 +2,37 @@
   <div class="tw-px-8 tw-py-9 tw-flex tw-flex-col tw-font-sans tw-gap-6">
     <!-- Header -->
     <div class="tw-flex tw-items-center tw-justify-between">
-      <Skeleton v-if="isPending || isLoading" width="12rem" height="2rem" />
+      <Skeleton v-if="isPending || isLoading" height="2rem" width="12rem" />
       <h1 v-else class="tw-text-2xl tw-font-semibold tw-font-sans">
         {{ projectForm?.title || "Nový projekt" }}
       </h1>
       <div class="tw-flex tw-gap-3">
         <Button
-          size="small"
-          class="tw-font-sans"
           :disabled="isPending || isLoading"
-          @click="toggleEdit"
           :outlined="!isEditMode"
           :severity="isEditMode ? 'success' : 'primary'"
+          class="tw-font-sans"
+          size="small"
+          @click="toggleEdit"
         >
           {{ isEditMode ? "Uložiť" : "Upraviť" }}
         </Button>
         <Button
           v-if="isEditMode"
-          size="small"
           class="tw-font-sans"
           outlined
           severity="warning"
+          size="small"
           @click="cancelEdit"
         >
           Zrušiť
         </Button>
         <Button
-          size="small"
+          :disabled="isPending || isLoading"
           class="tw-font-sans tw-flex tw-items-center"
           outlined
           severity="danger"
-          :disabled="isPending || isLoading"
+          size="small"
         >
           <Trash2 class="tw-mr-1" />
           Odstrániť
@@ -53,9 +53,9 @@
       <div class="tw-flex tw-flex-col">
         <label class="tw-mb-1">Názov projektu</label>
         <InputText
-          class="tw-text-[13px]"
           v-model="projectForm.title"
           :disabled="!isEditMode"
+          class="tw-text-[13px]"
           placeholder="Zadajte názov projektu"
         />
       </div>
@@ -65,12 +65,12 @@
         <label class="tw-mb-1">Status</label>
         <Select
           v-model="projectForm.status"
-          :options="statusOptions"
           :disabled="!isEditMode"
-          placeholder="Vyberte status"
+          :options="statusOptions"
           class="tw-text-[13px]"
           optionLabel="label"
           optionValue="value"
+          placeholder="Vyberte status"
         />
       </div>
 
@@ -80,18 +80,18 @@
 
         <Select
           v-model="projectForm.student_id"
-          display="chip"
-          fluid
+          :disabled="!isEditMode"
+          :maxSelectedLabels="1"
           :options="students?.data"
+          :selection-limit="1"
+          :showClear="true"
+          class="tw-text-[13px]"
+          display="chip"
           filter
+          fluid
           optionLabel="surname"
           optionValue="id"
           placeholder="Vyberte študenta"
-          class="tw-text-[13px]"
-          :selection-limit="1"
-          :maxSelectedLabels="1"
-          :disabled="!isEditMode"
-          :showClear="true"
         >
           <template #option="slotProps">
             {{ slotProps.option.name }} {{ slotProps.option.surname }}
@@ -109,18 +109,18 @@
 
         <Select
           v-model="projectForm.teacher_id"
-          display="chip"
-          fluid
+          :disabled="!isEditMode"
+          :maxSelectedLabels="1"
           :options="teachers?.data"
-          filter
-          optionLabel="surname"
+          :selection-limit="1"
+          :showClear="true"
           class="tw-text-[13px]"
+          display="chip"
+          filter
+          fluid
+          optionLabel="surname"
           optionValue="id"
           placeholder="Vyberte učiteľa"
-          :selection-limit="1"
-          :maxSelectedLabels="1"
-          :disabled="!isEditMode"
-          :showClear="true"
         >
           <template #option="slotProps">
             {{ slotProps.option.name }} {{ slotProps.option.surname }}
@@ -132,12 +132,12 @@
       <div class="tw-flex tw-flex-col">
         <label class="tw-mb-1">Odbor</label>
         <Select
-          class="tw-text-[13px]"
           v-model="projectForm.odbor"
+          :disabled="!isEditMode"
           :options="fieldOptions"
+          class="tw-text-[13px]"
           optionLabel="label"
           optionValue="value"
-          :disabled="!isEditMode"
           placeholder="Zadajte odbor"
         />
       </div>
@@ -149,12 +149,12 @@
         <InputNumber
           v-model="projectForm.mark"
           :disabled="!isEditMode"
-          class="tw-text-[13px]"
-          placeholder="Zadajte známku"
-          mode="decimal"
-          :min="1"
           :max="5"
+          :min="1"
+          :pt="inputNumberPT"
           :showButtons="true"
+          mode="decimal"
+          placeholder="Zadajte známku"
         />
       </div>
 
@@ -163,51 +163,52 @@
         <label class="tw-mb-1">Popis</label>
 
         <Editor
-          class="tw-text-[13px]"
-          editorStyle="height: 320px"
           v-model="projectForm.description"
           :readonly="!isEditMode"
-          rows="4"
+          class="tw-text-[13px]"
+          editorStyle="height: 320px; opacity: 0.6;"
           placeholder="Zadajte popis projektu"
-        />
+          rows="4"
+        >
+        </Editor>
       </div>
 
       <!-- Reviews -->
       <div class="tw-flex tw-flex-col">
         <label class="tw-mb-1">Prvé hodnotenie</label>
         <Textarea
-          class="tw-text-[13px]"
           v-model="projectForm.first_review"
           :disabled="!isEditMode"
-          rows="3"
+          class="tw-text-[13px]"
           placeholder="Hodnotenie prvej recenzie"
+          rows="3"
         />
       </div>
       <div class="tw-flex tw-flex-col">
         <label class="tw-mb-1">Druhé hodnotenie </label>
         <Textarea
-          class="tw-text-[13px]"
           v-model="projectForm.second_review"
           :disabled="!isEditMode"
-          rows="3"
+          class="tw-text-[13px]"
           placeholder="Hodnotenie druhej recenzie"
+          rows="3"
         />
       </div>
       <div class="md:tw-col-span-2 tw-flex tw-flex-col">
         <label class="tw-mb-1">Tretie hodnotenie </label>
         <Textarea
-          class="tw-text-[13px]"
           v-model="projectForm.third_review"
           :disabled="!isEditMode"
-          rows="3"
+          class="tw-text-[13px]"
           placeholder="Hodnotenie tretej recenzie"
+          rows="3"
         />
       </div>
     </form>
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useQuery } from "@tanstack/vue-query";
 import { Trash2 } from "lucide-vue-next";
 import useAuthStore from "~/store/auth";
@@ -293,9 +294,15 @@ watchEffect(() => {
       teacher_id: Number(project.value.project.teacher_id),
     };
   }
-
-  console.log(projectForm.value);
 });
+
+const inputNumberPT = {
+  pcInputText: {
+    root: {
+      class: "tw-text-[13px]",
+    },
+  },
+};
 
 definePageMeta({
   layout: "dashboard",

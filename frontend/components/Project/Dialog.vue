@@ -1,60 +1,60 @@
 <template>
   <Dialog
     v-model:visible="isModalVisible"
-    modal
-    header="Vytvoriť používateľa"
-    class="tw-max-w-[40rem] tw-w-full tw-font-sans"
     :baseZIndex="10000"
+    class="tw-max-w-[40rem] tw-w-full tw-font-sans"
+    header="Vytvorenie projektu"
+    modal
     @hide="onHide"
   >
     <div class="tw-flex tw-flex-col tw-gap-4 tw-py-4">
       <div class="tw-flex tw-flex-col tw-gap-2">
-        <label for="title" class="tw-font-semibold"> Názov projektu </label>
+        <label class="tw-font-semibold" for="title"> Názov projektu </label>
         <InputText
           id="title"
-          class="tw-text-[13px]"
           v-model="projectForm.title"
           :disabled="isPending"
-          placeholder="Zadajte názov projektu"
+          class="tw-text-[13px]"
           fluid
+          placeholder="Zadajte názov projektu"
           required
         />
       </div>
 
       <div class="tw-flex tw-flex-col tw-gap-2">
-        <label for="description" class="tw-font-semibold">
+        <label class="tw-font-semibold" for="description">
           Popis projektu
         </label>
 
         <Editor
-          class="tw-text-[13px]"
           id="description"
           v-model="projectForm.description"
           :disabled="isPending"
-          placeholder="Zadajte popis projektu"
-          fluid
-          required
+          class="tw-text-[13px]"
           editorStyle="height: 320px"
+          fluid
+          placeholder="Zadajte popis projektu"
+          required
         />
       </div>
 
       <div class="tw-flex tw-flex-col tw-gap-2">
-        <label for="student" class="tw-font-semibold"> Študent </label>
+        <label class="tw-font-semibold" for="student"> Študent </label>
 
         <Select
-          class="tw-text-[13px]"
           id="student"
           v-model="projectForm.student_id"
-          display="chip"
-          fluid
+          :maxSelectedLabels="1"
           :options="students?.data"
+          :selection-limit="1"
+          :showClear="true"
+          class="tw-text-[13px]"
+          display="chip"
           filter
+          fluid
           optionLabel="surname"
           optionValue="id"
           placeholder="Vyberte študenta"
-          :selection-limit="1"
-          :maxSelectedLabels="1"
-          :showClear="true"
         >
           <template #option="slotProps">
             {{ slotProps.option.name }} {{ slotProps.option.surname }}
@@ -63,32 +63,32 @@
       </div>
 
       <div class="tw-flex tw-flex-col tw-gap-2">
-        <label for="role" class="tw-font-semibold"> Status </label>
+        <label class="tw-font-semibold" for="role"> Status </label>
         <Select
-          class="tw-text-[13px]"
           id="role"
           v-model="projectForm.status"
+          :disabled="isPending"
           :options="statuses"
+          class="tw-text-[13px]"
+          fluid
           optionLabel="name"
           optionValue="code"
-          :disabled="isPending"
-          fluid
           placeholder="Vyberte status"
           required
         />
       </div>
 
       <div class="tw-flex tw-flex-col tw-gap-2">
-        <label for="odbor" class="tw-font-semibold"> Odbor </label>
+        <label class="tw-font-semibold" for="odbor"> Odbor </label>
         <Select
-          class="tw-text-[13px]"
           id="odbor"
           v-model="projectForm.odbor"
+          :disabled="isPending"
           :options="divisions"
+          class="tw-text-[13px]"
+          fluid
           optionLabel="name"
           optionValue="code"
-          :disabled="isPending"
-          fluid
           placeholder="Vyberte odbor"
           required
         />
@@ -97,16 +97,16 @@
 
     <template #footer>
       <Button
-        label="Zrušiť"
-        text
-        severity="secondary"
-        @click="closeDialog"
         :disabled="isPending"
+        label="Zrušiť"
+        severity="secondary"
+        text
+        @click="closeDialog"
       />
       <Button
+        :loading="isPending"
         label="Vytvoriť"
         severity="success"
-        :loading="isPending"
         @click="
           () => {
             createProject(projectForm);
@@ -117,7 +117,7 @@
   </Dialog>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, watch } from "vue";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { Form } from "@primevue/forms";
@@ -177,6 +177,7 @@ watch(
 function closeDialog() {
   emit("update:visible", false);
 }
+
 function onHide() {
   closeDialog();
 }

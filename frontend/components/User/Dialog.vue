@@ -1,78 +1,78 @@
 <template>
   <Dialog
     v-model:visible="isModalVisible"
-    modal
-    header="Vytvoriť používateľa"
-    :style="{ width: '30rem' }"
     :baseZIndex="10000"
+    :style="{ width: '30rem' }"
+    header="Vytvorenie užívateľa"
+    modal
     @hide="onHide"
   >
     <div class="tw-flex tw-flex-col tw-gap-4 tw-py-4">
       <div class="tw-flex tw-items-center tw-gap-4">
-        <label for="name" class="tw-w-24 tw-font-semibold">Meno</label>
+        <label class="tw-w-24 tw-font-semibold" for="name">Meno</label>
         <InputText
-          class="tw-text-[13px]"
           id="name"
           v-model="userForm.name"
           :disabled="isPending"
-          placeholder="Zadajte meno"
+          class="tw-text-[13px]"
           fluid
+          placeholder="Zadajte meno"
           required
         />
       </div>
 
       <div class="tw-flex tw-items-center tw-gap-4">
-        <label for="surname" class="tw-w-24 tw-font-semibold">Priezvisko</label>
+        <label class="tw-w-24 tw-font-semibold" for="surname">Priezvisko</label>
         <InputText
-          class="tw-text-[13px]"
           id="surname"
           v-model="userForm.surname"
           :disabled="isPending"
-          placeholder="Zadajte priezvisko"
+          class="tw-text-[13px]"
           fluid
+          placeholder="Zadajte priezvisko"
           required
         />
       </div>
 
       <div class="tw-flex tw-items-center tw-gap-4">
-        <label for="email" class="tw-w-24 tw-font-semibold">Email</label>
+        <label class="tw-w-24 tw-font-semibold" for="email">Email</label>
         <InputText
-          class="tw-text-[13px]"
           id="email"
           v-model="userForm.email"
           :disabled="isPending"
-          placeholder="Zadajte email"
+          class="tw-text-[13px]"
           fluid
-          type="email"
+          placeholder="Zadajte email"
           required
+          type="email"
         />
       </div>
 
       <div class="tw-flex tw-items-center tw-gap-4">
-        <label for="password" class="tw-w-24 tw-font-semibold">Heslo</label>
+        <label class="tw-w-24 tw-font-semibold" for="password">Heslo</label>
         <Password
-          class="tw-text-[13px] tw-w-full"
           id="password"
           v-model="userForm.password"
           :disabled="isPending"
-          placeholder="Zadajte heslo"
-          toggleMask
+          class="tw-text-[13px] tw-w-full"
           fluid
+          placeholder="Zadajte heslo"
           required
+          toggleMask
         />
       </div>
 
       <div class="tw-flex tw-items-center tw-gap-4">
-        <label for="role" class="tw-w-24 tw-font-semibold">Rola</label>
+        <label class="tw-w-24 tw-font-semibold" for="role">Rola</label>
         <Dropdown
-          class="tw-text-[13px]"
           id="role"
           v-model="userForm.role"
+          :disabled="isPending"
           :options="roles"
+          class="tw-text-[13px]"
+          fluid
           optionLabel="name"
           optionValue="code"
-          :disabled="isPending"
-          fluid
           placeholder="Vyberte rolu"
           required
         />
@@ -81,16 +81,16 @@
 
     <template #footer>
       <Button
-        label="Zrušiť"
-        text
-        severity="secondary"
-        @click="closeDialog"
         :disabled="isPending"
+        label="Zrušiť"
+        severity="secondary"
+        text
+        @click="closeDialog"
       />
       <Button
+        :loading="isPending"
         label="Vytvoriť"
         severity="success"
-        :loading="isPending"
         @click="
           () => {
             saveUser(userForm);
@@ -101,7 +101,7 @@
   </Dialog>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, watch } from "vue";
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 
@@ -149,6 +149,7 @@ watch(
 function closeDialog() {
   emit("update:visible", false);
 }
+
 function onHide() {
   closeDialog();
 }
