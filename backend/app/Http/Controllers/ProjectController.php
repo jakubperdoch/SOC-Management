@@ -14,7 +14,7 @@ use Illuminate\Validation\Rule;
 class ProjectController extends Controller
 {
 
-    public function getSingleProject(Request $request,$id)
+    public function getSingleProject(Request $request, $id)
     {
         // Fetch the project from the database
         $project = Project::where('id', $id)->first();
@@ -34,7 +34,6 @@ class ProjectController extends Controller
         // Prepare student and teacher names
         $studentName = $student ? $student->name . ' ' . $student->surname : null;
         $teacherName = $teacher ? $teacher->name . ' ' . $teacher->surname : null;
-
 
 
         return response()->json([
@@ -80,12 +79,12 @@ class ProjectController extends Controller
     public function createProject(Request $request)
     {
 
-        $validator=Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'status' => [
                 'required',
-                Rule::in(['taken', 'free','waiting']),
+                Rule::in(['taken', 'free', 'waiting']),
             ],
             'teacher_id' => [
                 'required',
@@ -93,7 +92,7 @@ class ProjectController extends Controller
                     ->where('role', 'teacher'),
             ],
             'odbor' => 'required|string|max:255',
-        ],[
+        ], [
             'title.required' => 'Názov projektu je povinný.',
             'description.required' => 'Popis projektu je povinný.',
             'status.required' => 'Status projektu je povinný.',
@@ -116,6 +115,8 @@ class ProjectController extends Controller
                 'odbor' => $request->odbor,
             ]
         );
+
+        $project->save();
 
         return response()->json([
             'message' => 'Project created',

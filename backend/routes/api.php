@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\InviteController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,6 +34,9 @@ Route::get('/test-db', function () {
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+    Route::get('/invite/validate', [InviteController::class, 'validateToken']);
+
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -63,9 +68,11 @@ Route::middleware('auth:sanctum')->group(function () {
     route::delete('/teacher/delete', [TeacherController::class, 'deleteTeacher'])->name('teacher.deleteTeacher');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin,teacher'])
+    ->post('/invite/send', [InviteController::class, 'sendInvite']);
 
-    route::get('/stats',[StatsController::class, 'getStats'])->name('stats.getStats');
+Route::middleware('auth:sanctum')->group(function () {
+    route::get('/stats', [StatsController::class, 'getStats'])->name('stats.getStats');
 });
 
 

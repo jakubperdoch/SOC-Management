@@ -7,29 +7,29 @@
       class="tw-flex tw-place-self-start tw-justify-between tw-items-center tw-gap-10 tw-w-full tw-px-10 md:tw-px-20"
     >
       <img
-        src="/images/logo.svg"
         alt="School Logo"
         class="tw-h-auto md:tw-max-h-16 tw-max-h-12"
+        src="/images/logo.svg"
       />
 
       <a
         v-if="!token"
-        href="/login"
         class="cursor-pointer hover:tw-opacity-75 tw-transition tw-duration-300"
+        href="/login"
       >
-        <Icon icon="mdi:user" width="35" height="35" color="#86C725" />
+        <Icon color="#86C725" height="35" icon="mdi:user" width="35" />
       </a>
 
       <a
         v-else
-        href="/dashboard"
         class="cursor-pointer tw-flex tw-items-center tw-gap-1 hover:tw-opacity-75 tw-transition tw-duration-300"
+        href="/dashboard"
       >
         <Icon
+          color="#86C725"
+          height="35"
           icon="ic:twotone-dashboard"
           width="35"
-          height="35"
-          color="#86C725"
         />
 
         <span
@@ -71,15 +71,16 @@
       </div>
 
       <a
-        href="#documents"
         class="hover:tw-scale-125 tw-transition tw-duration-300"
+        href="#documents"
       >
         <Icon
+          color="#86C725"
+          height="40"
           icon="solar:double-alt-arrow-down-line-duotone"
           width="40"
-          height="40"
-          color="#86C725"
-      /></a>
+        />
+      </a>
     </div>
   </section>
 
@@ -111,30 +112,30 @@
     </div>
 
     <div
-      class="accordion !tw-w-full tw-grid tw-grid-cols-2 tw-gap-5 tw-items-center tw-justify-center"
       id="accordions"
+      class="accordion !tw-w-full tw-grid tw-grid-cols-2 tw-gap-5 tw-items-center tw-justify-center"
     >
       <div
-        class="accordion-item !tw-bg-transparent !tw-rounded-xl !tw-mt-0 tw-col-span-2 md:tw-col-span-1"
         v-for="(question, index) in questions"
         :key="index"
+        class="accordion-item !tw-bg-transparent !tw-rounded-xl !tw-mt-0 tw-col-span-2 md:tw-col-span-1"
       >
-        <h2 class="accordion-header" :id="`headingcustomicon1One${index}`">
+        <h2 :id="`headingcustomicon1One${index}`" class="accordion-header">
           <button
-            class="accordion-button collapsed !tw-py-9 !tw-font-sans !tw-text-xl !tw-px-14 !tw-rounded-tl-xl !tw-rounded-tr-xl"
-            type="button"
-            data-bs-toggle="collapse"
+            :aria-controls="`collapsecustomicon1One${index}`"
             :data-bs-target="`#collapsecustomicon1One${index}`"
             aria-expanded="true"
-            :aria-controls="`collapsecustomicon1One${index}`"
+            class="accordion-button collapsed !tw-py-9 !tw-font-sans !tw-text-xl !tw-px-14 !tw-rounded-tl-xl !tw-rounded-tr-xl"
+            data-bs-toggle="collapse"
+            type="button"
           >
             {{ question.question }}
           </button>
         </h2>
         <div
           :id="`collapsecustomicon1One${index}`"
-          class="accordion-collapse collapse"
           :aria-labelledby="`headingcustomicon1One${index}`"
+          class="accordion-collapse collapse"
           data-bs-parent="#accordions"
         >
           <div
@@ -150,7 +151,7 @@
   <LandingFooter />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Icon } from "@iconify/vue";
 import FileCard from "~/components/Landing/FileCard.vue";
 import useAuthStore from "~/store/auth";
@@ -233,6 +234,7 @@ const questions = ref([
       background-image: url(/icons/minus.svg);
     }
   }
+
   &-item:not(.accordion-button.collapsed) .accordion-body {
     background-color: #86c725;
     border-bottom-right-radius: 0.75rem;

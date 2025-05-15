@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
 {
-    public function getUser(Request $request,$id)
+    public function getUser(Request $request, $id)
     {
         $user = User::where('id', $id)->first();
         if (!$user) {
@@ -15,7 +16,6 @@ class UserController extends Controller
                 'message' => 'User neexistuje',
             ], 404);
         }
-
 
 
         return response()->json([
@@ -39,16 +39,17 @@ class UserController extends Controller
             ->when($role !== 'all', function ($q) use ($role) {
                 $q->where('role', $role);
             })
-
             ->when($search, function ($q) use ($search) {
                 $q->where(function ($q) use ($search) {
-                    $q->where('name',    'LIKE', "%{$search}%")
+                    $q->where('name', 'LIKE', "%{$search}%")
                         ->orWhere('surname', 'LIKE', "%{$search}%")
-                        ->orWhere('email',   'LIKE', "%{$search}%");
+                        ->orWhere('email', 'LIKE', "%{$search}%");
                 });
             })
             ->paginate(16);
 
         return response()->json($users, 200);
     }
+
+
 }
