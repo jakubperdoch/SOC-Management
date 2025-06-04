@@ -9,45 +9,48 @@
 
     <Form
       v-slot="$form"
-      :resolver="resolver"
       :initialValues="initialValues"
-      @submit="onFormSubmit"
+      :resolver="resolver"
       class="tw-flex tw-flex-col tw-gap-6 tw-w-full tw-sm:w-56 tw-font-montserrat"
+      @submit="onFormSubmit"
     >
       <div class="tw-flex tw-flex-col tw-gap-1">
         <label for="email">Email</label>
-        <InputText name="email" type="text" placeholder="Email" fluid />
+        <InputText fluid name="email" placeholder="Email" type="text" />
         <Message
           v-if="$form.email?.invalid"
           severity="error"
           size="small"
           variant="simple"
-          >{{ $form.email.error?.message }}</Message
-        >
+          >{{ $form.email.error?.message }}
+        </Message>
       </div>
 
       <div class="tw-flex tw-flex-col tw-gap-1">
         <label for="password">Heslo</label>
-        <Password name="password" toggleMask fluid />
+        <Password fluid name="password" toggleMask />
         <Message
           v-if="$form.password?.invalid"
           severity="error"
           size="small"
           variant="simple"
-          >{{ $form.password.error?.message }}</Message
-        >
+          >{{ $form.password.error?.message }}
+        </Message>
       </div>
 
       <div class="tw-flex tw-flex-col tw-gap-3">
         <Button
-          type="submit"
+          :loading="isPending"
           class="tw-bg-secondary tw-border-secondary"
           label="Prihlásiť sa"
-          :loading="isPending"
+          type="submit"
         />
         <span class="tw-font-montserrat tw-text-sm tw-text-center">
           Nemáte účet?
-          <NuxtLink to="/register" class="tw-text-secondary tw-underline">
+          <NuxtLink
+            class="tw-text-secondary tw-underline tw-duration-200"
+            to="/register"
+          >
             Zaregistrujte sa
           </NuxtLink>
         </span>
@@ -57,7 +60,7 @@
   <Toast />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { useToast } from "primevue/usetoast";

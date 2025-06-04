@@ -4,11 +4,20 @@
       <h1 class="tw-text-2xl tw-font-semibold tw-font-sans">Uživatelia</h1>
 
       <div class="tw-flex tw-gap-4">
-        <InputText
-          v-model="search"
-          placeholder="Hľadať užívateľov"
-          size="small"
-        />
+        <IconField class="tw-flex">
+          <InputText
+            v-model="search"
+            class="tw-w-64 tw-font-sans"
+            placeholder="Hľadať užívateľov"
+            size="small"
+          />
+          <InputIcon
+            :class="!search ? 'tw-scale-0' : 'tw-scale-100'"
+            class="pi pi-times hover:tw-cursor-pointer hover:tw-text-black/90 tw-transition-all tw-duration-200"
+            @click="search = ''"
+          />
+        </IconField>
+
         <SelectButton
           v-model="selectedCategory"
           :options="options"

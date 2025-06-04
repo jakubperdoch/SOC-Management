@@ -1,23 +1,28 @@
 <template>
   <div
+    v-if="!authStore.user?.name"
+    class="tw-flex tw-gap-3 tw-items-center tw-justify-center md:tw-px-3 tw-py-[10px] tw-cursor-pointer"
+  >
+    <Skeleton borderRadius="6px" height="2rem" width="2rem" />
+    <Skeleton borderRadius="6px" height="1.2rem" width="5rem" />
+  </div>
+
+  <div
+    v-else
     class="tw-flex tw-gap-3 tw-items-center tw-justify-center md:tw-px-3 tw-py-[10px] tw-cursor-pointer"
     @click="handleLogout"
   >
-    <Avatar size="xl" :label="authStore.user?.name.charAt(0).toUpperCase()" />
+    <Avatar :label="authStore.user?.name.charAt(0).toUpperCase()" size="xl" />
+
     <span
       class="tw-text-sm tw-font-semibold tw-text-white tw-hidden md:tw-block tw-transition-all tw-duration-150 tw-ease-in-out"
-      >{{
-        authStore.user?.name
-          ? `${authStore.user?.name} ${authStore.user?.surname}`
-          : "Neznámy používateľ"
-      }}</span
+      >{{ `${authStore.user?.name} ${authStore.user?.surname}` }}</span
     >
   </div>
 </template>
 
 <script setup>
 import useAuthStore from "~/store/auth";
-import { useQuery } from "@tanstack/vue-query";
 
 const confirm = useConfirm();
 

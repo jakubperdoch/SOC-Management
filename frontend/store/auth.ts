@@ -79,7 +79,6 @@ const useAuthStore = defineStore("auth", () => {
     try {
       await apiFetch("/user/logout", { method: "POST" });
     } catch (_) {
-      /* optionally log */
     } finally {
       tokenCookie.value = null;
       user.value = null;
