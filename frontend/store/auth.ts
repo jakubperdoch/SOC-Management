@@ -1,6 +1,7 @@
 interface IUser {
   id: number;
   name: string;
+  surname: string;
   email: string;
   role: string;
 }
@@ -10,9 +11,17 @@ export interface AuthResponse {
   user: IUser;
 }
 
-export interface Credentials {
+export interface LoginCredentials {
   email: string;
   password: string;
+}
+
+export interface RegisterCredentials {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+  role: string;
 }
 
 import { defineStore } from "pinia";
@@ -47,7 +56,7 @@ const useAuthStore = defineStore("auth", () => {
    * @param {Object} creds
    * @returns {Promise<Object>}
    */
-  async function login(creds: Credentials): Promise<IUser> {
+  async function login(creds: LoginCredentials): Promise<IUser> {
     return doAuth("/auth/login", creds);
   }
 
@@ -56,7 +65,7 @@ const useAuthStore = defineStore("auth", () => {
    * @param {Object} creds
    * @returns {Promise<Object>}
    */
-  async function register(creds: Credentials): Promise<IUser> {
+  async function register(creds: RegisterCredentials): Promise<IUser> {
     return doAuth("/auth/register", creds);
   }
 

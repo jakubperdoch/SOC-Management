@@ -11,10 +11,34 @@
       v-slot="$form"
       :initialValues="initialValues"
       :resolver="resolver"
-      class="tw-flex tw-flex-col tw-gap-6 tw-w-full tw-sm:w-56 tw-font-montserrat"
+      class="tw-flex tw-flex-col md:tw-grid md:tw-grid-cols-2 tw-gap-6 tw-w-full tw-font-montserrat"
       @submit="onFormSubmit"
     >
       <div class="tw-flex tw-flex-col tw-gap-1">
+        <label for="name">Meno</label>
+        <InputText fluid name="name" placeholder="Meno" type="text" />
+        <Message
+          v-if="$form.name?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+          >{{ $form.name.error?.message }}
+        </Message>
+      </div>
+
+      <div class="tw-flex tw-flex-col tw-gap-1">
+        <label for="surname">Priezvisko</label>
+        <InputText fluid name="surname" placeholder="Priezvisko" type="text" />
+        <Message
+          v-if="$form.surname?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+          >{{ $form.surname.error?.message }}
+        </Message>
+      </div>
+
+      <div class="tw-flex tw-flex-col tw-gap-1 tw-col-span-2">
         <label for="email">Email</label>
         <InputText fluid name="email" placeholder="Email" type="text" />
         <Message
@@ -28,7 +52,7 @@
 
       <div class="tw-flex tw-flex-col tw-gap-1">
         <label for="password">Heslo</label>
-        <Password fluid name="password" toggleMask />
+        <Password fluid name="password" placeholder="Heslo" toggleMask />
         <Message
           v-if="$form.password?.invalid"
           severity="error"
@@ -40,7 +64,12 @@
 
       <div class="tw-flex tw-flex-col tw-gap-1">
         <label for="confirmPassword">Potvrdenie hesla</label>
-        <Password fluid name="confirmPassword" toggleMask />
+        <Password
+          fluid
+          name="confirmPassword"
+          placeholder="Potvrdenie hesla"
+          toggleMask
+        />
         <Message
           v-if="$form.confirmPassword?.invalid"
           severity="error"
@@ -50,7 +79,7 @@
         </Message>
       </div>
 
-      <div class="tw-flex tw-flex-col tw-gap-3">
+      <div class="tw-flex tw-flex-col tw-gap-3 tw-col-span-2">
         <Button
           :loading="isPending"
           class="tw-bg-secondary tw-border-secondary"
@@ -89,8 +118,11 @@ const toast = useToast();
 const authStore = useAuthStore();
 
 const initialValues = ref({
+  name: "",
+  surname: "",
   email: "",
   password: "",
+  confirmPassword: "",
 });
 
 const resolver = ref(
@@ -101,21 +133,33 @@ const resolver = ref(
           .string()
           .min(1, { message: "Email je povinný." })
           .email({ message: "Neplatný email." }),
+        name: z.string().min(1, { message: "Meno je povinné." }),
+        surname: z.string().min(1, { message: "Priezvisko je povinné." }),
         password: z.string().min(5, { message: "Heslo je krátke" }),
         confirmPassword: z.string(),
       })
       .refine((data) => data.password === data.confirmPassword, {
         message: "Heslá sa nezhodujú.",
+        path: ["confirmPassword"],
       }),
   ),
 );
 
 const { mutate, error, isPending } = useMutation({
   mutationKey: ["register"],
-  mutationFn: (data: { email: string; password: string }) =>
+  mutationFn: (data: {
+    email: string;
+    password: string;
+    name: string;
+    surname: string;
+  }) =>
     authStore.register({
       email: data.email,
       password: data.password,
+      name: data.name,
+      surname: data.surname,
+      role: "student",
+      //   TODO: add role
     }),
 
   onSuccess: () => {

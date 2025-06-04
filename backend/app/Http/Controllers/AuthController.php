@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -19,6 +20,14 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:accounts',
             'password' => 'required|string|min:8',
             'role' => 'required|string|in:student,teacher,admin',
+        ], [
+            'email.unique' => 'Email už je zaregistrovaný',
+            'role.in' => 'Role musí byť student, teacher alebo admin',
+            'password.min' => 'Heslo musí mať aspoň 8 znakov',
+            'name.required' => 'Meno je povinné',
+            'surname.required' => 'Priezvisko je povinné',
+            'email.required' => 'Email je povinný',
+            'password.required' => 'Heslo je povinné',
         ]);
 
         if ($validator->fails()) {
@@ -67,6 +76,40 @@ class AuthController extends Controller
         }
     }
 
+    public function updateLogin(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8',
+            'role' => 'required|string|in:student,teacher,admin',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $user = User::where('id', $id)->first();
+        if (!$user) {
+            return response()->json(['message' => 'User neexistuje'], 404);
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'password' => $request->password,
+            'role' => $request->role,
+        ]);
+
+
+        return response()->json([
+            'message' => 'Úspešne ste aktualizovali svoje prihlasovacie údaje',
+            'user' => $user,
+        ], 200);
+    }
+
     public function update(Request $request)
     {
         // Validate the request inputs
@@ -88,40 +131,6 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = $request->password; // Plain text password (since you chose not to hash)
         $user->save();
-
-        return response()->json([
-            'message' => 'Úspešne ste aktualizovali svoje prihlasovacie údaje',
-            'user' => $user,
-        ], 200);
-    }
-
-    public function updateLogin(Request $request,$id)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8',
-            'role' => 'required|string|in:student,teacher,admin',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
-
-        $user = User::where('id',$id)->first();
-        if (!$user) {
-            return response()->json(['message' => 'User neexistuje'], 404);
-        }
-
-        $user->update([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'email' => $request->email,
-            'password' => $request->password,
-            'role' => $request->role,
-        ]);
-
 
         return response()->json([
             'message' => 'Úspešne ste aktualizovali svoje prihlasovacie údaje',
