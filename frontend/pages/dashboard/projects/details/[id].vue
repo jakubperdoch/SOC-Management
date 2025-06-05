@@ -164,6 +164,14 @@
 
         <Editor
           v-model="projectForm.description"
+          :modules="{
+            toolbar: toolbarOptions,
+          }"
+          :pt="{
+            toolbar: {
+              class: '!tw-hidden',
+            },
+          }"
           :readonly="!isEditMode"
           class="tw-text-[13px]"
           editorStyle="height: 320px; opacity: 0.6;"
@@ -243,6 +251,16 @@ const fieldOptions = [
   { label: "Strojárstvo", value: "Strojárstvo" },
   { label: "Elektrotechnika", value: "Elektrotechnika" },
   { label: "Učebné pomôcky", value: "Učebné pomôcky" },
+];
+
+const toolbarOptions = [
+  { size: ["small", false, "large", "huge"] },
+  "bold",
+  "italic",
+  "link",
+  "underline",
+  "strike",
+  "clean",
 ];
 
 const {

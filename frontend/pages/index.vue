@@ -148,7 +148,7 @@
     </div>
   </section>
 
-  <LandingFooter />
+  <CustomLandingFooter />
 </template>
 
 <script lang="ts" setup>

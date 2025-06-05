@@ -5,7 +5,7 @@
   >
     <NuxtLink
       class="tw-px-2 md:tw-px-8 tw-py-6 tw-font-bold tw-text-2xl tw-flex tw-items-center tw-gap-3"
-      to="/frontend/public"
+      to="/"
     >
       <img
         alt="Logo"

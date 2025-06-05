@@ -30,12 +30,21 @@
           id="description"
           v-model="projectForm.description"
           :disabled="isPending"
+          :modules="{
+            toolbar: toolbarOptions,
+          }"
+          :pt="{
+            toolbar: {
+              class: '!tw-hidden',
+            },
+          }"
           class="tw-text-[13px]"
           editorStyle="height: 320px"
           fluid
           placeholder="Zadajte popis projektu"
           required
-        />
+        >
+        </Editor>
       </div>
 
       <div class="tw-flex tw-flex-col tw-gap-2">
@@ -156,6 +165,16 @@ const divisions = [
   { name: "Elektrotechnika", code: "Elektrotechnika" },
   { name: "Učebné pomôcky", code: "Učebné pomôcky" },
   { name: "Logistika", code: "Logistika" },
+];
+
+const toolbarOptions = [
+  { size: ["small", false, "large", "huge"] },
+  "bold",
+  "italic",
+  "link",
+  "underline",
+  "strike",
+  "clean",
 ];
 
 watch(
