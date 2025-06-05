@@ -7,23 +7,24 @@
         outlined
         size="small"
         @click="isModalVisible = !isModalVisible"
-        >Pridať projekt</Button
-      >
+        >Pridať projekt
+      </Button>
     </div>
 
-    <ProjectTable
+    <CustomProjectTable
       :cells="projects?.projects ?? []"
       :is-loading="isProjectsLoading || isProjectsPending"
     />
   </div>
 
-  <ProjectDialog
+  <CustomProjectDialog
     :visible="isModalVisible"
     @update:visible="(value) => (isModalVisible = value)"
   />
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useQuery } from "@tanstack/vue-query";
+
 const isModalVisible = ref(false);
 
 const {

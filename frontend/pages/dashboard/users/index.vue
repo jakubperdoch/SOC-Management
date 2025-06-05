@@ -60,12 +60,12 @@
         </div>
       </h3>
 
-      <UserCard
+      <CustomUserCard
         v-for="user in users?.data"
         v-else
         :key="user.id"
         :user="user"
-      ></UserCard>
+      ></CustomUserCard>
     </div>
     <Paginator
       v-show="!isPending && !isLoading && users?.data.length > 0"
@@ -76,9 +76,9 @@
     ></Paginator>
   </div>
 
-  <UserDialog
+  <CustomUserDialog
     :visible="isModalVisible"
-    @update:visible="(value) => (isModalVisible = value)"
+    @update:visible="(value: boolean) => (isModalVisible = value)"
   />
 </template>
 <script lang="ts" setup>

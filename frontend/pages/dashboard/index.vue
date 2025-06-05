@@ -11,30 +11,16 @@
       />
 
       <InterestGraph
-        :status="statsLoading || statsPending"
         :statsDataset="stats?.projectsCount ?? []"
+        :status="statsLoading || statsPending"
       />
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useQuery } from "@tanstack/vue-query";
-import StatusGraph from "~/components/Dashboard/StatusGraph.vue";
-import InterestGraph from "~/components/Dashboard/InterestGraph.vue";
-
-const selectedCategory = ref("teacher");
-
-const {
-  data: users,
-  isPending,
-  isLoading,
-} = useQuery({
-  queryKey: ["users"],
-  queryFn: () =>
-    apiFetch(`/users/${selectedCategory.value}`, {
-      role: selectedCategory.value,
-    }),
-});
+import StatusGraph from "~/components/custom/Dashboard/StatusGraph.vue";
+import InterestGraph from "~/components/custom/Dashboard/InterestGraph.vue";
 
 const {
   data: stats,

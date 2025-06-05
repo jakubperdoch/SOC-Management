@@ -11,8 +11,8 @@ class Project extends Model
 {
     use HasFactory, Searchable;
 
+    public $timestamps = true;
     protected $table = 'projects';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -29,6 +29,8 @@ class Project extends Model
         'second_review',
         'third_review',
         'mark',
+        'document',
+        'presentation',
     ];
 
     public function toSearchableArray()
@@ -45,10 +47,9 @@ class Project extends Model
             'second_review' => $this->second_review,
             'third_review' => $this->third_review,
             'mark' => $this->mark,
+            'document' => $this->document_id,
+            'presentation' => $this->presentation_id,
         ];
 
     }
-
-
-    public $timestamps = true;
 }

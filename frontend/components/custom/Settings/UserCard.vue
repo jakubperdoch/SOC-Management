@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import UserDialog from "~/components/Settings/UserDialog.vue";
+import UserDialog from "~/components/custom/Settings/UserDialog.vue";
 import useAuthStore from "~/store/auth";
 
 const authStore = useAuthStore();

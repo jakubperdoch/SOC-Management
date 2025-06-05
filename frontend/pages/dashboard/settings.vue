@@ -19,8 +19,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-import LinkInput from "~/components/Settings/LinkInput.vue";
-import UserCard from "~/components/Settings/UserCard.vue";
+import LinkInput from "~/components/custom/Settings/LinkInput.vue";
+import UserCard from "~/components/custom/Settings/UserCard.vue";
 
 const links = ref([
   {

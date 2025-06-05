@@ -5,7 +5,7 @@
   >
     <NuxtLink
       class="tw-px-2 md:tw-px-8 tw-py-6 tw-font-bold tw-text-2xl tw-flex tw-items-center tw-gap-3"
-      to="/"
+      to="/frontend/public"
     >
       <img
         alt="Logo"
@@ -14,7 +14,7 @@
       />
     </NuxtLink>
     <nav class="tw-flex tw-w-full tw-flex-col tw-px-4 md:tw-px-6">
-      <SidebarLink
+      <CustomSidebarLink
         v-for="(link, index) in links"
         :key="index"
         :icon="link.icon"
@@ -24,10 +24,10 @@
           class="tw-hidden tw-font-sans md:tw-block tw-transition-all tw-duration-150 tw-ease-in-out"
           >{{ link.name }}</span
         >
-      </SidebarLink>
+      </CustomSidebarLink>
     </nav>
     <div class="tw-mt-auto tw-px-4 md:tw-p-3">
-      <SidebarUser />
+      <CustomSidebarUser />
     </div>
     <Toast />
     <ConfirmDialog />
@@ -35,8 +35,6 @@
 </template>
 
 <script lang="ts" setup>
-import { SidebarLink } from "#components";
-
 interface SidebarLinkItem {
   icon: string;
   name: string;
