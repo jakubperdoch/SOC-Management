@@ -3,7 +3,7 @@
     v-model:visible="isModalVisible"
     :baseZIndex="10000"
     :style="{ width: '30rem' }"
-    header="Úprava používateľa"
+    header="Úprava profilu"
     modal
     @hide="onHide"
   >
