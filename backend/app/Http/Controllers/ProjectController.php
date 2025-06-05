@@ -88,7 +88,7 @@ class ProjectController extends Controller
             ],
             'teacher_id' => [
                 'required',
-                Rule::exists('accounts', 'id')
+                Rule::exists('users', 'id')
                     ->where('role', 'teacher'),
             ],
             'odbor' => 'required|string|max:255',
