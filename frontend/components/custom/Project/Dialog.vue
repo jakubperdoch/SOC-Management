@@ -129,7 +129,6 @@
 <script lang="ts" setup>
 import { ref, watch } from "vue";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { Form } from "@primevue/forms";
 
 import useAuthStore from "~/store/auth";
 
@@ -231,7 +230,7 @@ const { mutate: createProject, isPending } = useMutation({
   onSuccess() {
     toast.add({
       severity: "success",
-      summary: "Používateľ bol úspešne vytvorený.",
+      summary: "Projekt bol úspešne vytvorený.",
       life: 5000,
     });
     closeDialog();

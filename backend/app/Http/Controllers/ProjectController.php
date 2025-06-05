@@ -85,7 +85,10 @@ class ProjectController extends Controller
             'teacher_id' => [
                 'required',
                 Rule::exists('users', 'id')
-                    ->where('role', 'teacher'),
+                    ->where(function ($query) {
+                        $query->where('role', 'teacher')
+                            ->orWhere('role', 'admin');
+                    }),
             ],
             'odbor' => 'required|string|max:255',
             'student_id' => [
@@ -109,7 +112,7 @@ class ProjectController extends Controller
         }
 
 
-        $project = new Project(
+        $project = Project::create(
             [
                 'title' => $request->title,
                 'description' => $request->description,
@@ -119,8 +122,6 @@ class ProjectController extends Controller
                 'odbor' => $request->odbor,
             ]
         );
-
-        $project->save();
 
         return response()->json([
             'message' => 'Projekt bol úspešne vytvorený',
