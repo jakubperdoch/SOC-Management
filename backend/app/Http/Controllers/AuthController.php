@@ -77,48 +77,67 @@ class AuthController extends Controller
         }
     }
 
-    public function updateLogin(Request $request, $id)
+    public function logout(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $user = $request->user();
+        if ($user) {
+            $user->tokens()->delete();
+            return response()->json(['message' => 'Successfully logged out.'], 200);
+        } else {
+            return response()->json(['message' => 'User not authenticated.'], 401);
+        }
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        $user = $request->user();
+        if ($user) {
+            $user->tokens()->delete();
+            $user->delete();
+            return response()->json(['message' => 'Account deleted successfully.'], 200);
+        } else {
+            return response()->json(['message' => 'User not authenticated.'], 401);
+        }
+    }
+
+    public function updateCredentials(Request $request)
+    {
+        $validator = Validator::make(request()->all(), [
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . auth()->id(),
             'password' => 'required|string|min:8',
-            'role' => 'required|string|in:student,teacher,admin',
+        ], [
+            'email.unique' => 'Email už je zaregistrovaný',
+            'password.min' => 'Heslo musí mať aspoň 8 znakov',
+            'name.required' => 'Meno je povinné',
+            'surname.required' => 'Priezvisko je povinné',
+            'email.required' => 'Email je povinný',
+            'password.required' => 'Heslo je povinné',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        $user = User::where('id', $id)->first();
+        $user = $request->user();
         if (!$user) {
-            return response()->json(['message' => 'User neexistuje'], 404);
+            return response()->json(['message' => 'User not authenticated.'], 401);
         }
 
         $user->update([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'email' => $request->email,
-            'password' => $request->password,
-            'role' => $request->role,
+            'name' => request('name'),
+            'surname' => request('surname'),
+            'email' => request('email'),
+            'password' => Hash::make(request('password')),
         ]);
-
 
         return response()->json([
             'message' => 'Úspešne ste aktualizovali svoje prihlasovacie údaje',
             'user' => $user,
         ], 200);
+
     }
 
-    public function delete(Request $request)
-    {
-        $user = User::where('id', $request->id)->first();
-        $user->delete();
-
-        return response()->json([
-            'message' => 'Úspešne ste odstránili svoj účet',
-        ], 200);
-    }
 
 }

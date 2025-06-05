@@ -3,6 +3,7 @@ interface IUser {
   name: string;
   surname: string;
   email: string;
+  password?: string;
   role: string;
 }
 
@@ -108,11 +109,33 @@ const useAuthStore = defineStore("auth", () => {
    */
   async function logout(): Promise<void> {
     try {
-      await apiFetch("/user/logout", { method: "POST" });
+      await apiFetch("/auth/logout", { method: "POST" });
     } catch (_) {
     } finally {
       tokenCookie.value = null;
       user.value = null;
+    }
+  }
+
+  /**
+   * Update user data
+   * @param {Object} data
+   * @returns {Promise<Object>}
+   */
+  async function updateUser(data: Partial<IUser>): Promise<IUser | void> {
+    if (!user.value) return;
+
+    try {
+      const updatedUser = await apiFetch("/auth/profile/update", {
+        method: "PUT",
+        body: data,
+      });
+      user.value = { ...updatedUser?.user };
+
+      return updatedUser;
+    } catch (error) {
+      console.error("Failed to update user:", error);
+      return;
     }
   }
 
@@ -153,6 +176,7 @@ const useAuthStore = defineStore("auth", () => {
     logout,
     refresh,
     fetchUser,
+    updateUser,
     validateURLToken,
     user,
     token,

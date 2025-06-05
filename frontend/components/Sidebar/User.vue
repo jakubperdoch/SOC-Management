@@ -12,8 +12,8 @@
     <Skeleton
       borderRadius="6px"
       class="tw-bg-[url(/images/card-pattern.svg)]"
-      height="1.2rem"
-      width="5rem"
+      height="1rem"
+      width="6rem"
     />
   </div>
 

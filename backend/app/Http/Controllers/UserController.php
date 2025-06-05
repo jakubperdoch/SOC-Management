@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -49,6 +50,51 @@ class UserController extends Controller
             ->paginate(16);
 
         return response()->json($users, 200);
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8',
+            'role' => 'required|string|in:student,teacher,admin',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $user = User::where('id', $id)->first();
+        if (!$user) {
+            return response()->json(['message' => 'User neexistuje'], 404);
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'password' => $request->password,
+            'role' => $request->role,
+        ]);
+
+
+        return response()->json([
+            'message' => 'Úspešne ste aktualizovali svoje prihlasovacie údaje',
+            'user' => $user,
+        ], 200);
+    }
+
+
+    public function deleteUser(Request $request)
+    {
+        $user = User::where('id', $request->id)->first();
+        $user->delete();
+
+        return response()->json([
+            'message' => 'Úspešne ste odstránili svoj účet',
+        ], 200);
     }
 
 

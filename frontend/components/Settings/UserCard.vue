@@ -18,6 +18,7 @@
           icon="pi pi-pencil"
           rounded
           variant="text"
+          @click="isModalVisible = !isModalVisible"
         />
       </div>
       <div class="tw-flex tw-flex-col tw-items-center tw-gap-1">
@@ -38,12 +39,18 @@
       </div>
     </section>
   </div>
+  <UserDialog
+    :visible="isModalVisible"
+    @update:visible="(value) => (isModalVisible = value)"
+  />
 </template>
 
 <script lang="ts" setup>
+import UserDialog from "~/components/Settings/UserDialog.vue";
 import useAuthStore from "~/store/auth";
 
 const authStore = useAuthStore();
+const isModalVisible = ref(false);
 
 const defineRole = (role: string) => {
   switch (role) {
