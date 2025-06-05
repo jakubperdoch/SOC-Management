@@ -38,7 +38,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'surname' => $request->surname,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
 
@@ -53,16 +53,18 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         // Validate the request inputs
-        $credentials = $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
-        ]);
+        ],
+            [
+                'email.required' => 'Email je povinný',
+                'password.required' => 'Heslo je povinné',
+            ]);
 
-        // Check if the user with the given email exists
-        $user = User::where('email', $credentials['email'])->first();
+        $user = User::where('email', $request->email)->first();
 
-        // If the user exists, verify the password without hashing
-        if ($user && $credentials['password'] === $user->password) {
+        if ($user && Hash::check($request->password, $user->password)) {
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
@@ -71,7 +73,6 @@ class AuthController extends Controller
                 'user' => $user,
             ], 200);
         } else {
-            // If the credentials are incorrect, return an error message
             return response()->json(['message' => 'Nesprávne prihlasovacie údaje!'], 401);
         }
     }
