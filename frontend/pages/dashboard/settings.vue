@@ -4,17 +4,8 @@
       <h1 class="tw-text-2xl tw-font-semibold tw-font-sans">Nastavenia</h1>
     </div>
 
-    <div class="tw-grid tw-grid-cols-2 tw-gap-4">
-      <div class="tw-grid tw-grid-rows-2 tw-gap-4">
-        <LinkInput
-          v-for="(link, index) in links"
-          :key="index"
-          :description="link.description"
-          :role="link.role"
-          :title="link.title"
-        />
-      </div>
-
+    <div class="tw-grid tw-grid-cols-2 tw-gap-8">
+      <UserCard />
       <div class="tw-grid tw-grid-rows-2 tw-gap-4">
         <LinkInput
           v-for="(link, index) in links"
@@ -29,6 +20,7 @@
 </template>
 <script lang="ts" setup>
 import LinkInput from "~/components/Settings/LinkInput.vue";
+import UserCard from "~/components/Settings/UserCard.vue";
 
 const links = ref([
   {
