@@ -8,16 +8,19 @@ use App\Models\User;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
 {
 
-    public function getSingleProject(Request $request)
+    public function getSingleProject(Request $request, $id)
     {
         // Fetch the project from the database
-        $project = Project::where('id', $request->id)->first();
+        $project = Project::where('id', $id)->first();
 
         // Check if the project exists
+
         if (!$project) {
             return response()->json([
                 'message' => 'Project neexistuje', // Project does not exist
@@ -33,8 +36,6 @@ class ProjectController extends Controller
         $teacherName = $teacher ? $teacher->name . ' ' . $teacher->surname : null;
 
 
-
-
         return response()->json([
             'message' => 'Project existuje',
             'project' => [
@@ -42,9 +43,13 @@ class ProjectController extends Controller
                 'title' => $project->title,
                 'description' => $project->description,
                 'status' => $project->status,
-                'student' => $project->student_id,
-                'teacher' => $project->teacher_id,
+                'student_id' => $project->student_id,
+                'teacher_id' => $project->teacher_id,
                 'odbor' => $project->odbor,
+                'first_review' => $project->first_review,
+                'second_review' => $project->second_review,
+                'third_review' => $project->third_review,
+                'mark' => $project->mark,
             ],
             'student' => $studentName,
             'teacher' => $teacherName
@@ -53,8 +58,9 @@ class ProjectController extends Controller
 
     public function getProject(Request $request, TeacherController $TeacherController, StudentController $StudentController, AdminController $AdminController)
     {
-        //connection to database from table projects 
-        $role = $request->role;
+
+        $role = $request->user()->role;
+
         if ($role == 'teacher') {
             return $TeacherController->getProjectInfo($request);
         }
@@ -64,37 +70,64 @@ class ProjectController extends Controller
         if ($role == 'admin') {
             return $AdminController->getProjectInfo($request);
         }
+
+        return response()->json([
+            'message' => 'Role neexistuje',
+        ], 404);
     }
 
     public function createProject(Request $request)
     {
-        //connection to database from table projects 
-        $project = new Project();
-        $project->title = $request->title;
-        $project->description = $request->description;
-        $project->status = $request->status;
-        $project->student_id = $request->student_id;
-        $project->teacher_id = $request->teacher_id;
-        $project->odbor = $request->odbor;
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'status' => [
+                'required',
+                Rule::in(['taken', 'free', 'waiting']),
+            ],
+            'teacher_id' => [
+                'required',
+                Rule::exists('users', 'id')
+                    ->where('role', 'teacher'),
+            ],
+            'odbor' => 'required|string|max:255',
+        ], [
+            'title.required' => 'Názov projektu je povinný.',
+            'description.required' => 'Popis projektu je povinný.',
+            'status.required' => 'Status projektu je povinný.',
+            'teacher_id.required' => 'ID učiteľa je povinné.',
+            'odbor.required' => 'Odbor je povinný.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+
+        $project = new Project(
+            [
+                'title' => $request->title,
+                'description' => $request->description,
+                'status' => $request->status,
+                'student_id' => $request->student_id ?? null,
+                'teacher_id' => $request->teacher_id,
+                'odbor' => $request->odbor,
+            ]
+        );
+
         $project->save();
 
         return response()->json([
             'message' => 'Project created',
-            'project' => [
-                'id' => $project->id,
-                'name' => $project->title,
-                'description' => $project->description,
-                'status' => $project->status,
-                'student' => $project->student_id,
-                'teacher' => $project->teacher_id,
-                'odbor' => $project->odbor,
-            ],
+            'project' => $project,
         ], 201);
     }
 
+
     public function updateProject(Request $request)
     {
-        //connection to database from table projects 
+        //connection to database from table projects
         $project = Project::where('id', $request->id)->first();
         if (!$project) {
             return response()->json([
@@ -126,7 +159,7 @@ class ProjectController extends Controller
 
     public function deleteProject(Request $request)
     {
-        //connection to database from table projects 
+        //connection to database from table projects
         $project = Project::where('id', $request->id)->first();
         if (!$project) {
             return response()->json([

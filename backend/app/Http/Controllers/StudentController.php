@@ -10,7 +10,8 @@ class StudentController extends Controller
 {
     public function getStudent(Request $request)
     {
-        $user = User::where('id', $request->id)->first();
+        $user = $request->user();
+
         if (!$user) {
             return response()->json([
                 'message' => 'Student neexistuje',
@@ -20,6 +21,7 @@ class StudentController extends Controller
         return response()->json([
             'message' => 'Student existuje',
             'user' => [
+                'id' => $user->id,
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'email' => $user->email,
@@ -31,7 +33,8 @@ class StudentController extends Controller
     public function getProjectInfo(Request $request)
     {
 
-        $studentProject = Project::where('student_id', $request->id)->first();
+        $user = $request->user();
+        $studentProject = Project::where('student_id', $user->id)->first();
 
         $student = User::where('id', $request->id)->first();
 

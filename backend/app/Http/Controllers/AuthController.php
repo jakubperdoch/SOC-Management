@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -15,10 +16,18 @@ class AuthController extends Controller
         // Validate the request inputs
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255', // Added validation for surname
-            'email' => 'required|string|email|max:255|unique:accounts',
+            'surname' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'required|string|in:student,teacher,admin',
+        ], [
+            'email.unique' => 'Email už je zaregistrovaný',
+            'role.in' => 'Role musí byť student, teacher alebo admin',
+            'password.min' => 'Heslo musí mať aspoň 8 znakov',
+            'name.required' => 'Meno je povinné',
+            'surname.required' => 'Priezvisko je povinné',
+            'email.required' => 'Email je povinný',
+            'password.required' => 'Heslo je povinné',
         ]);
 
         if ($validator->fails()) {
@@ -54,15 +63,12 @@ class AuthController extends Controller
 
         // If the user exists, verify the password without hashing
         if ($user && $credentials['password'] === $user->password) {
-            // If the credentials are correct, return user data and a success message
+            $token = $user->createToken('auth_token')->plainTextToken;
+
             return response()->json([
-                'message' => 'Úspešne ste boli prihlásený!',
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'surname' => $user->surname,
-                    'email' => $user->email,
-                ],
+                'message' => 'Successfully logged in.',
+                'access_token' => $token,
+                'user' => $user,
             ], 200);
         } else {
             // If the credentials are incorrect, return an error message
@@ -70,51 +76,33 @@ class AuthController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function updateLogin(Request $request, $id)
     {
-        // Validate the request inputs
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255', // Added validation for surname
+            'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
+            'role' => 'required|string|in:student,teacher,admin',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        // Update the user in the accounts table
-        $user = User::where('email', $request->email)->first();
-        $user->name = $request->name;
-        $user->surname = $request->surname; // Ensure this is included in the update
-        $user->email = $request->email;
-        $user->password = $request->password; // Plain text password (since you chose not to hash)
-        $user->save();
-
-        return response()->json([
-            'message' => 'Úspešne ste aktualizovali svoje prihlasovacie údaje',
-            'user' => $user,
-        ], 200);
-    }
-
-    public function updateLogin(Request $request)
-    {
-        // Validate the request inputs
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+        $user = User::where('id', $id)->first();
+        if (!$user) {
+            return response()->json(['message' => 'User neexistuje'], 404);
         }
 
-        // Update the user in the accounts table
-        $user = User::where('id', $request->id)->first();
-        $user->email = $request->email;
-        $user->password = $request->password; // Plain text password (since you chose not to hash)
-        $user->save();
+        $user->update([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'password' => $request->password,
+            'role' => $request->role,
+        ]);
+
 
         return response()->json([
             'message' => 'Úspešne ste aktualizovali svoje prihlasovacie údaje',
@@ -124,7 +112,6 @@ class AuthController extends Controller
 
     public function delete(Request $request)
     {
-        // Delete the user from the accounts table
         $user = User::where('id', $request->id)->first();
         $user->delete();
 

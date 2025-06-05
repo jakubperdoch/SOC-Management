@@ -1,104 +1,52 @@
 <template>
-	<section v-if="ProjectData">
-		<section
-			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8 tw-h-fit"
-			v-if="user?.role == 'teacher'">
-			<Stats :data="statsData" />
-			<ProjectTable @refresh="getProjects" :cells="ProjectData.projects" />
-		</section>
+  <div class="tw-px-8 tw-py-9 tw-flex tw-flex-col tw-gap-4">
+    <div class="tw-flex tw-items-start tw-justify-between">
+      <h1 class="tw-text-2xl tw-font-semibold tw-font-sans">Hlavný panel</h1>
+    </div>
 
-		<section
-			v-if="
-				user?.role == 'student' &&
-				ProjectData.message !== 'Student already has a project.'
-			"
-			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
-			<Card :cards="ProjectData.projects" />
-		</section>
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4">
+      <StatusGraph
+        :data="stats?.projectsStats ?? []"
+        :status="statsLoading || statsPending"
+      />
 
-		<section
-			v-if="
-				user?.role == 'student' &&
-				ProjectData.message === 'Student already has a project.'
-			">
-			<Details :project-id="ProjectData.project_details?.id" />
-		</section>
-
-		<section
-			v-if="user?.role == 'admin'"
-			class="tw-p-9 tw-flex tw-flex-col lg:tw-grid lg:tw-grid-cols-4 tw-gap-8">
-			<Stats :data="statsData" />
-			<ProjectTable :cells="ProjectData.projects" />
-			<UserTable />
-		</section>
-	</section>
-
-	<section v-else>
-		<Loader />
-	</section>
+      <InterestGraph
+        :status="statsLoading || statsPending"
+        :statsDataset="stats?.projectsCount ?? []"
+      />
+    </div>
+  </div>
 </template>
 <script setup lang="ts">
-	import ProjectTable from '~/components/table.vue';
-	import Stats from '~/components/stats.vue';
-	import Card from '~/components/card.vue';
-	import auth from '~/middleware/auth';
-	import useAuth from '~/composable/useAuth';
-	import { useMutation } from '@tanstack/vue-query';
+import { useQuery } from "@tanstack/vue-query";
+import StatusGraph from "~/components/Dashboard/StatusGraph.vue";
+import InterestGraph from "~/components/Dashboard/InterestGraph.vue";
 
-	const { getUser, user, getUserIdFromToken } = useAuth();
+const selectedCategory = ref("teacher");
 
-	onMounted(async () => {
-		try {
-			await getUser();
-			getProjects();
-		} catch (err) {
-			console.log(err);
-		}
-	});
+const {
+  data: users,
+  isPending,
+  isLoading,
+} = useQuery({
+  queryKey: ["users"],
+  queryFn: () =>
+    apiFetch(`/users/${selectedCategory.value}`, {
+      role: selectedCategory.value,
+    }),
+});
 
-	const ProjectData = ref();
+const {
+  data: stats,
+  isPending: statsPending,
+  isLoading: statsLoading,
+} = useQuery({
+  queryKey: ["stats"],
+  queryFn: () => apiFetch(`/stats`),
+});
 
-	const {
-		mutate: getProjects,
-		status: projectsStatus,
-		error,
-	} = useMutation({
-		mutationFn: () =>
-			apiFetch('/project/info', {
-				method: 'POST',
-				body: {
-					id: getUserIdFromToken(),
-					role: user.value?.role,
-				},
-			}),
-		onSuccess: (data) => {
-			ProjectData.value = data || {};
-		},
-		onError: (error) => {
-			console.log(error);
-		},
-	});
-
-	const statsData = computed(() => {
-		const projects = ProjectData.value?.projects || [];
-		return {
-			title: 'Vaše Projekty',
-			overallNumber: projects.length,
-			openStatus: projects.filter(
-				(project: any) => project.project_details?.status === 'free'
-			).length,
-			waitingStatus: projects.filter(
-				(project: any) => project.project_details?.status === 'waiting'
-			).length,
-			takenStatus: projects.filter(
-				(project: any) => project.project_details?.status === 'taken'
-			).length,
-		};
-	});
-
-	definePageMeta({
-		layout: 'default',
-		middleware: [auth],
-		roles: ['student', 'teacher', 'admin'],
-	});
+definePageMeta({
+  layout: "dashboard",
+  title: "Dashboard",
+});
 </script>

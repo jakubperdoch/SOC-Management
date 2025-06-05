@@ -96,8 +96,11 @@ class TeacherController extends Controller
 
     public function getProjectInfo(Request $request)
     {
-        // Find the teacher by their ID
-        $teacher = User::where('id', $request->id)->first();
+        $user = $request->user();
+        $query = $request->query();
+        $search = $query['search'] ?? '';
+
+        $teacher = User::where('id', $user->id)->first();
 
         if (!$teacher) {
             return response()->json([
@@ -105,11 +108,12 @@ class TeacherController extends Controller
             ], 404);
         }
 
-        // Combine teacher name
         $teacherName = $teacher->name . ' ' . $teacher->surname;
 
-        // Find all projects assigned to the teacher
-        $projects = Project::where('teacher_id', $request->id)->get();
+        $projects = !empty($search)
+            ? Project::where('teacher_id', $user->id)->search($search)->get()
+            : Project::where('teacher_id', $user->id)->get();
+
 
         if ($projects->isEmpty()) {
             return response()->json([
@@ -121,16 +125,25 @@ class TeacherController extends Controller
         // Prepare projects with student details
         $projectsWithDetails = $projects->map(function ($project) {
             $student = User::where('id', $project->student_id)->first();
+
             return [
-                'project_details' => $project,
-                'student' => $student ? $student->name . ' ' . $student->surname : null
+                'id' => $project->id,
+                'title' => $project->title,
+                'description' => $project->description,
+                'status' => $project->status,
+                'student' => $student ? $student->name . ' ' . $student->surname : null,
+                'odbor' => $project->odbor,
             ];
+        });
+
+        $projects->each(function ($project) use (&$projectsCount) {
+            $projectsCount[$project->status] = isset($projectsCount[$project->status]) ? $projectsCount[$project->status] + 1 : 1;
         });
 
         return response()->json([
             'message' => 'Teacher has assigned projects.',
             'teacher' => $teacherName,
-            'projects' => $projectsWithDetails
+            'projects' => $projectsWithDetails,
         ], 200);
     }
 }

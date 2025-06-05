@@ -12,6 +12,8 @@ class AdminController extends Controller
     {
 
         $projects = Project::all();
+        $query = $request->query();
+        $search = $query['search'] ?? '';
 
         $projectsWithDetails = $projects->map(function ($project) {
             // Fetch the student and teacher for each project
@@ -24,6 +26,13 @@ class AdminController extends Controller
                 'teacher' => $teacher ? $teacher->name . ' ' . $teacher->surname : null,
             ];
         });
+
+        // Filter projects based on the search query
+        if (!empty($search)) {
+            $projectsWithDetails = $projectsWithDetails->filter(function ($project) use ($search) {
+                return str_contains($project['project_details']->title, $search);
+            });
+        }
 
         return response()->json([
             'message' => 'All projects with their details.',

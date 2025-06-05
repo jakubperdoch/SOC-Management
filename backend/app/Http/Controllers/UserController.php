@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
 {
-    public function getUser(Request $request)
+    public function getUser(Request $request, $id)
     {
-        $user = User::where('id', $request->id)->first();
+        $user = User::where('id', $id)->first();
         if (!$user) {
             return response()->json([
                 'message' => 'User neexistuje',
             ], 404);
         }
+
 
         return response()->json([
             'message' => 'User existuje',
@@ -23,14 +25,31 @@ class UserController extends Controller
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'email' => $user->email,
+                'password' => $user->password,
                 'role' => $user->role,
             ],
         ], 200);
     }
 
-    public function getUsers(Request $request)
+    public function getUsers(Request $request, $role)
     {
-        $users = User::where('role', $request->role)->get();
+        $search = $request->query('search', '');
+
+        $users = User::query()
+            ->when($role !== 'all', function ($q) use ($role) {
+                $q->where('role', $role);
+            })
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('surname', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%");
+                });
+            })
+            ->paginate(16);
+
         return response()->json($users, 200);
     }
+
+
 }

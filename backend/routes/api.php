@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\StatsController;
+use App\Http\Controllers\InviteController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,10 +21,6 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::get('/test-db', function () {
     try {
         DB::connection()->getPdo();
@@ -31,37 +30,50 @@ Route::get('/test-db', function () {
     }
 });
 
-Route::post('/users', [UserController::class, 'getUsers']); //done
 
-Route::post('/login', [AuthController::class, 'login']); //done
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::post('/register', [AuthController::class, 'register']); //done
-
-Route::put('/login/update', [AuthController::class, 'updateLogin']);
-
-Route::delete('/login/delete', [AuthController::class, 'deleteLogin']);
+    Route::post('/invite/validate', [InviteController::class, 'validateToken']);
 
 
-route::post('/project', [ProjectController::class, 'getSingleProject']); //admin-done teacher-done  student-done  
-
-route::post('/project/info', [ProjectController::class, 'getProject']); //admin-done teacher-done  student-done  
-
-route::post('/project/create', [ProjectController::class, 'createProject']); //done
-
-route::put('/project/update', [ProjectController::class, 'updateProject']);
-
-route::delete('/project/delete', [ProjectController::class, 'deleteProject']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::put('/change-password', [AuthController::class, 'changePassword'])->name('changePassword');
+    });
+});
 
 
-route::post('/student/info', [StudentController::class, 'getStudent']);
+Route::middleware('auth:sanctum')->group(function () {
+    route::get('/user/info', [StudentController::class, 'getStudent'])->name('user.info');
+    Route::delete('/user/delete', [AuthController::class, 'deleteLogin'])->name('user.delete');
+    Route::put('/user/{id}/update', [AuthController::class, 'updateLogin'])->name('user.update');
+    Route::get('/users/{role}', [UserController::class, 'getUsers'])->name('user.getUsers');
+    route::get('/user/{id}', [UserController::class, 'getUser'])->name('user.getUser');
+});
 
+Route::middleware('auth:sanctum')->group(function () {
+    route::get('/project/{id}', [ProjectController::class, 'getSingleProject'])->name('project.getSingleProject');
+    route::get('/projects', [ProjectController::class, 'getProject'])->name('project.getProject');
+    route::post('/project/create', [ProjectController::class, 'createProject'])->name('project.createProject');
+    route::put('/project/update', [ProjectController::class, 'updateProject'])->name('project.updateProject');
+    route::delete('/project/delete', [ProjectController::class, 'deleteProject'])->name('project.deleteProject');
+});
 
-route::post('/teacher', [TeacherController::class, 'getTeacher']);
+Route::middleware('auth:sanctum')->group(function () {
+    route::post('/teacher', [TeacherController::class, 'getTeacher'])->name('teacher.getTeacher');
+    route::post('/teacher/create', [TeacherController::class, 'createTeacher'])->name('teacher.createTeacher');
+    route::put('/teacher/update', [TeacherController::class, 'updateTeacher'])->name('teacher.updateTeacher');
+    route::delete('/teacher/delete', [TeacherController::class, 'deleteTeacher'])->name('teacher.deleteTeacher');
+});
 
-route::post('/teacher/create', [TeacherController::class, 'createTeacher']);
+//TODO: Add middleware for admin and teacher roles
+Route::middleware(['auth:sanctum', 'role:admin,teacher'])
+    ->post('/invite/send', [InviteController::class, 'sendInvite']);
 
-route::put('/teacher/update', [TeacherController::class, 'updateTeacher']);
-
-route::delete('/teacher/delete', [TeacherController::class, 'deleteTeacher']);
+Route::middleware('auth:sanctum')->group(function () {
+    route::get('/stats', [StatsController::class, 'getStats'])->name('stats.getStats');
+});
 
 
