@@ -106,21 +106,23 @@ import { ref } from "vue";
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { useToast } from "primevue/usetoast";
 import { z } from "zod";
-import { useMutation } from "@tanstack/vue-query";
+import { useMutation, useQuery } from "@tanstack/vue-query";
 import useAuthStore from "~/store/auth";
 
 definePageMeta({
-  title: "Prihlásenie",
+  title: "Registrácia",
   layout: "auth",
 });
 
 const toast = useToast();
 const authStore = useAuthStore();
+const route = useRoute();
 
 const initialValues = ref({
   name: "",
   surname: "",
   email: "",
+  role: "",
   password: "",
   confirmPassword: "",
 });
@@ -152,14 +154,14 @@ const { mutate, error, isPending } = useMutation({
     password: string;
     name: string;
     surname: string;
+    role: string;
   }) =>
     authStore.register({
       email: data.email,
       password: data.password,
       name: data.name,
       surname: data.surname,
-      role: "student",
-      //   TODO: add role
+      role: data?.role,
     }),
 
   onSuccess: () => {
@@ -184,9 +186,38 @@ const { mutate, error, isPending } = useMutation({
   },
 });
 
-const onFormSubmit = (e: any) => {
+async function onFormSubmit(e: any) {
   if (e.valid) {
-    mutate(e.values);
+    try {
+      const response = await authStore.validateURLToken(
+        route.query.token as string,
+      );
+
+      if (response && response?.valid) {
+        mutate({
+          email: e.values.email,
+          password: e.values.password,
+          name: e.values.name,
+          surname: e.values.surname,
+          role: response?.role || "student",
+        });
+      } else {
+        toast.add({
+          severity: "error",
+          summary: "Neplatný token.",
+          detail: "Token pre registráciu nie je platný.",
+          life: 3000,
+        });
+      }
+    } catch (error) {
+      toast.add({
+        severity: "error",
+        summary: "Chyba pri overovaní tokenu.",
+        detail: apiErrorMessageHandler(error),
+        life: 3000,
+      });
+      return;
+    }
   } else {
     toast.add({
       severity: "error",
@@ -194,5 +225,5 @@ const onFormSubmit = (e: any) => {
       life: 3000,
     });
   }
-};
+}
 </script>

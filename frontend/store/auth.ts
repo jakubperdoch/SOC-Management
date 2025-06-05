@@ -24,6 +24,12 @@ export interface RegisterCredentials {
   role: string;
 }
 
+export interface TokenValidationResponse {
+  valid: boolean;
+  role: string;
+  remaining: number;
+}
+
 import { defineStore } from "pinia";
 
 const useAuthStore = defineStore("auth", () => {
@@ -67,6 +73,22 @@ const useAuthStore = defineStore("auth", () => {
    */
   async function register(creds: RegisterCredentials): Promise<IUser> {
     return doAuth("/auth/register", creds);
+  }
+
+  async function validateURLToken(
+    token: string,
+  ): Promise<TokenValidationResponse | void> {
+    if (!token) return;
+    try {
+      return await apiFetch("/auth/invite/validate", {
+        method: "POST",
+        body: {
+          token: token,
+        },
+      });
+    } catch (error) {
+      console.error("Token validation failed:", error);
+    }
   }
 
   /**
@@ -131,6 +153,7 @@ const useAuthStore = defineStore("auth", () => {
     logout,
     refresh,
     fetchUser,
+    validateURLToken,
     user,
     token,
     status,

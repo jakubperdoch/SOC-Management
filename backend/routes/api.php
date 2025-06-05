@@ -35,7 +35,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-    Route::get('/invite/validate', [InviteController::class, 'validateToken']);
+    Route::post('/invite/validate', [InviteController::class, 'validateToken']);
 
 
     Route::middleware('auth:sanctum')->group(function () {
@@ -68,6 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
     route::delete('/teacher/delete', [TeacherController::class, 'deleteTeacher'])->name('teacher.deleteTeacher');
 });
 
+//TODO: Add middleware for admin and teacher roles
 Route::middleware(['auth:sanctum', 'role:admin,teacher'])
     ->post('/invite/send', [InviteController::class, 'sendInvite']);
 

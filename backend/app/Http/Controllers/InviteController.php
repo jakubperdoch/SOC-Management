@@ -95,6 +95,13 @@ class InviteController extends Controller
             ], 404);
         }
 
+        if ($inv->expires_at < now()) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Link vypršal',
+            ], 410);
+        }
+
         return response()->json([
             'valid' => true,
             'email' => $inv->email,
