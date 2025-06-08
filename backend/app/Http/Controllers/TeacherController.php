@@ -117,7 +117,7 @@ class TeacherController extends Controller
 
         if ($projects->isEmpty()) {
             return response()->json([
-                'message' => 'Teacher has no assigned projects.',
+                'message' => 'Učitel nemá pridelené projekty.',
                 'teacher' => $teacherName
             ], 200);
         }

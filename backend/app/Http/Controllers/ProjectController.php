@@ -46,9 +46,9 @@ class ProjectController extends Controller
                 'mark' => $project->mark,
                 'document' => $project->document ? url('storage/' . $project->document) : null,
                 'presentation' => $project->presentation ? url('storage/' . $project->presentation) : null,
+                'student' => $studentName,
+                'teacher' => $teacherName
             ],
-            'student' => $studentName,
-            'teacher' => $teacherName
         ], 200);
     }
 
