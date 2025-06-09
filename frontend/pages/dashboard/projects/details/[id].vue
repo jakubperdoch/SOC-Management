@@ -164,6 +164,11 @@
 
         <Editor
           v-model="projectForm.description"
+          :class="
+            !isEditMode
+              ? 'tw-border-gray-300 tw-opacity-50'
+              : 'tw-border-gray-100'
+          "
           :modules="{
             toolbar: toolbarOptions,
           }"
@@ -173,8 +178,8 @@
             },
           }"
           :readonly="!isEditMode"
-          class="tw-text-[13px]"
-          editorStyle="height: 320px; opacity: 0.6;"
+          class="tw-text-[13px] !tw-border !tw-border-gray-100 !tw-rounded-xl !tw-bg-gray-50"
+          editorStyle="height: 320px;"
           placeholder="Zadajte popis projektu"
           rows="4"
         >
@@ -284,7 +289,7 @@ const { data: students } = useQuery({
 
 const { data: teachers } = useQuery({
   queryKey: ["teachers"],
-  queryFn: () => apiFetch("/users/teacher"),
+  queryFn: () => apiFetch("/users/teacher?additionalRoles=admin"),
   enabled: !!params.id,
 });
 

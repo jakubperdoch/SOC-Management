@@ -35,9 +35,15 @@ class UserController extends Controller
     public function getUsers(Request $request, $role)
     {
         $search = $request->query('search', '');
+        $additionalRoles = $request->query('additionalRoles', '');
 
         $users = User::query()
-            ->when($role !== 'all', function ($q) use ($role) {
+            ->when($additionalRoles, function ($q) use ($additionalRoles, $role) {
+                $roles = explode(',', $additionalRoles);
+                $roles = array_merge([$role], $roles);
+                $q->whereIn('role', $roles);
+            })
+            ->when(!$additionalRoles && $role !== 'all', function ($q) use ($role) {
                 $q->where('role', $role);
             })
             ->when($search, function ($q) use ($search) {
