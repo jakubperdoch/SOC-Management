@@ -2,13 +2,13 @@
   <div class="tw-px-8 tw-py-9 tw-flex tw-flex-col tw-font-sans tw-gap-6">
     <!-- Header -->
     <div class="tw-flex tw-items-center tw-justify-between">
-      <Skeleton v-if="isPending || isLoading" height="2rem" width="12rem" />
+      <Skeleton v-if="isBusy.value" height="2rem" width="12rem" />
       <h1 v-else class="tw-text-2xl tw-font-semibold tw-font-sans">
         {{ projectForm?.title || "Nový projekt" }}
       </h1>
       <div class="tw-flex tw-gap-3">
         <Button
-          :disabled="isPending || isLoading"
+          :disabled="isBusy.value"
           :outlined="!isEditMode"
           :severity="isEditMode ? 'success' : 'primary'"
           class="tw-font-sans"
@@ -28,7 +28,7 @@
           Zrušiť
         </Button>
         <Button
-          :disabled="isPending || isLoading"
+          :disabled="isBusy.value"
           class="tw-font-sans tw-flex tw-items-center"
           outlined
           severity="danger"
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div v-if="isPending || isLoading" class="tw-space-y-4">
+    <div v-if="isBusy.value" class="tw-space-y-4">
       <Skeleton height="2rem" />
       <Skeleton height="8rem" />
       <Skeleton height="2rem" />
@@ -300,7 +300,7 @@ const projectForm = ref({
 const statusOptions = [
   { label: "Voľný", value: "free" },
   { label: "Zabraný", value: "taken" },
-  { label: "Čakúci", value: "waiting" },
+  { label: "Čakajúci", value: "waiting" },
 ];
 
 const fieldOptions = [
@@ -325,25 +325,41 @@ const {
   data: project,
   isLoading,
   isPending,
-  isError,
-  error,
-  refetch,
 } = useQuery({
   queryKey: ["project", params.id],
   queryFn: () => apiFetch(`/project/${params.id}`),
   enabled: !!params.id,
 });
 
-const { data: students } = useQuery({
+const {
+  data: students,
+  isLoading: isStudentsLoading,
+  isPending: isStudentsPending,
+} = useQuery({
   queryKey: ["students"],
   queryFn: () => apiFetch("/users/student"),
   enabled: !!params.id,
 });
 
-const { data: teachers } = useQuery({
+const {
+  data: teachers,
+  isLoading: isTeachersLoading,
+  isPending: isTeachersPending,
+} = useQuery({
   queryKey: ["teachers"],
   queryFn: () => apiFetch("/users/teacher?additionalRoles=admin"),
   enabled: !!params.id,
+});
+
+const isBusy = computed(() => {
+  return (
+    isLoading ||
+    isPending ||
+    isStudentsLoading ||
+    isStudentsPending ||
+    isTeachersLoading ||
+    isTeachersPending
+  );
 });
 
 const toggleEdit = () => {
