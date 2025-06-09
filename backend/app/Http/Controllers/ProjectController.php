@@ -218,7 +218,6 @@ class ProjectController extends Controller
 
     public function deleteProject(Request $request)
     {
-        //connection to database from table projects
         $project = Project::where('id', $request->id)->first();
         if (!$project) {
             return response()->json([

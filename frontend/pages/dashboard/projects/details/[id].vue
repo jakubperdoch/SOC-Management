@@ -178,7 +178,7 @@
             },
           }"
           :readonly="!isEditMode"
-          class="tw-text-[13px] !tw-border !tw-border-gray-100 !tw-rounded-xl !tw-bg-gray-50"
+          class="tw-text-[13px] !tw-border !tw-border-gray-300 !tw-rounded-xl !tw-bg-gray-50"
           editorStyle="height: 320px;"
           placeholder="Zadajte popis projektu"
           rows="4"
@@ -217,6 +217,58 @@
           rows="3"
         />
       </div>
+
+      <!--Uploads-->
+
+      <div class="tw-flex tw-flex-col">
+        <label class="tw-mb-1"> Dokumentácia </label>
+        <FileUpload
+          v-model="projectForm.document"
+          :cancel-button-props="{
+            class: 'tw-text-[13px]',
+            severity: 'secondary',
+          }"
+          :choose-button-props="{ class: 'tw-text-[13px]' }"
+          :custom-upload="true"
+          :disabled="!isEditMode"
+          :maxFileSize="4000000"
+          :name="'document'"
+          :pt="{
+            root: {
+              class: '!tw-border-gray-300 !tw-bg-gray-50 !tw-rounded-xl',
+            },
+          }"
+          :show-upload-button="false"
+          accept=".pdf,.doc,.docx"
+          cancelLabel="Zrušiť"
+          chooseLabel="Vyberte súbor"
+        />
+      </div>
+
+      <div class="tw-flex tw-flex-col">
+        <label class="tw-mb-1"> Prezentácia </label>
+        <FileUpload
+          v-model="projectForm.presentation"
+          :cancel-button-props="{
+            class: 'tw-text-[13px]',
+            severity: 'secondary',
+          }"
+          :choose-button-props="{ class: 'tw-text-[13px]' }"
+          :custom-upload="true"
+          :disabled="!isEditMode"
+          :maxFileSize="4000000"
+          :name="'presentation'"
+          :pt="{
+            root: {
+              class: '!tw-border-gray-300 !tw-bg-gray-50 !tw-rounded-xl',
+            },
+          }"
+          :show-upload-button="false"
+          accept=".ppt,.pptx"
+          cancelLabel="Zrušiť"
+          chooseLabel="Vyberte súbor"
+        />
+      </div>
     </form>
   </div>
 </template>
@@ -239,9 +291,10 @@ const projectForm = ref({
   second_review: "",
   third_review: "",
   mark: null,
-
   student_id: 0,
   teacher_id: 0,
+  document: null,
+  presentation: null,
 });
 
 const statusOptions = [
