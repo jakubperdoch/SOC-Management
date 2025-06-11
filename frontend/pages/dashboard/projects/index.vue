@@ -3,7 +3,7 @@
     <div class="tw-flex tw-items-start tw-justify-between">
       <h1 class="tw-text-2xl tw-font-semibold tw-font-sans">Projekty</h1>
       <Button
-        class="tw-font-sans"
+        class="tw-font-sans tw-shadow-sm"
         outlined
         size="small"
         @click="isModalVisible = !isModalVisible"

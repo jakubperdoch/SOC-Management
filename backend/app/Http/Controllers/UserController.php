@@ -64,9 +64,16 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8',
             'role' => 'required|string|in:student,teacher,admin',
-        ]);
+        ], [
+                'name.required' => 'Meno je povinné.',
+                'surname.required' => 'Priezvisko je povinné.',
+                'email.required' => 'Email je povinný.',
+                'email.email' => 'Email musí byť platný email.',
+                'role.required' => 'Rola je povinná.',
+                
+            ]
+        );
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
@@ -81,7 +88,6 @@ class UserController extends Controller
             'name' => $request->name,
             'surname' => $request->surname,
             'email' => $request->email,
-            'password' => $request->password,
             'role' => $request->role,
         ]);
 

@@ -7,33 +7,33 @@
 
       <div class="tw-flex tw-gap-4">
         <Button
-          size="small"
-          class="tw-font-sans"
           :disabled="isPending || isLoading"
-          @click="toggleEdit"
           :outlined="!isEditMode"
           :severity="isEditMode ? 'success' : 'primary'"
+          class="tw-font-sans"
+          size="small"
+          @click="toggleEdit"
         >
           {{ isEditMode ? "Uložiť" : "Upraviť" }}
         </Button>
 
         <Button
-          size="small"
-          class="tw-font-sans tw-transition-all tw-duration-300 tw-ease-in-out"
           :class="{ 'tw-hidden': !isEditMode }"
+          class="tw-font-sans tw-transition-all tw-duration-300 tw-ease-in-out"
           outlined
           severity="warning"
+          size="small"
           @click="cancelEdit"
         >
           Zrušiť
         </Button>
 
         <Button
-          size="small"
+          :disabled="isPending || isLoading"
           class="tw-font-sans tw-flex tw-items-center"
           outlined
           severity="danger"
-          :disabled="isPending || isLoading"
+          size="small"
         >
           <Trash2 class="tw-mr-1" />
           Odstrániť
@@ -46,11 +46,11 @@
         class="tw-flex tw-items-center tw-gap-4 tw-mb-4"
       >
         <Skeleton shape="circle" size="3rem" />
-        <Skeleton width="8rem" height="1.5rem" />
+        <Skeleton height="1.5rem" width="8rem" />
       </div>
 
       <div v-else class="tw-flex tw-items-center tw-gap-4 tw-mb-4">
-        <Avatar size="large" :label="userInitial" shape="circle" />
+        <Avatar :label="userInitial" shape="circle" size="large" />
         <h2 class="tw-text-xl tw-mb-0 tw-font-medium">
           {{ userForm.name }} {{ userForm.surname }}
         </h2>
@@ -62,15 +62,15 @@
       >
         <Skeleton height="2.5rem" />
         <Skeleton height="2.5rem" />
-        <Skeleton height="2.5rem" class="md:tw-col-span-2" />
+        <Skeleton class="md:tw-col-span-2" height="2.5rem" />
         <Skeleton height="2.5rem" />
         <Skeleton height="2.5rem" />
       </div>
 
       <form
         v-else
-        @submit.prevent="() => saveUser(userForm)"
         class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4"
+        @submit.prevent="() => saveUser(userForm)"
       >
         <div class="tw-flex tw-flex-col">
           <label class="tw-mb-1">Meno</label>
@@ -103,36 +103,20 @@
         <div class="tw-flex tw-flex-col">
           <label class="tw-mb-1">Rola</label>
           <Select
-            class="tw-text-base"
             v-model="userForm.role"
+            :disabled="!isEditMode"
             :options="roles"
+            class="tw-text-base"
             optionLabel="name"
             optionValue="code"
-            :disabled="!isEditMode"
             placeholder="Vyberte rolu"
-          />
-        </div>
-
-        <div class="tw-flex tw-flex-col">
-          <label class="tw-mb-1">
-            Heslo
-            <span v-if="isEditMode" class="tw-text-xs tw-text-gray-500">
-              (nepovinné)
-            </span>
-          </label>
-          <Password
-            v-model="userForm.password"
-            :disabled="!isEditMode"
-            placeholder="Zadajte heslo"
-            toggleMask
-            fluid
           />
         </div>
       </form>
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useMutation, useQuery } from "@tanstack/vue-query";
 import { Trash2 } from "lucide-vue-next";
 
@@ -144,7 +128,6 @@ const userForm = ref({
   name: "",
   surname: "",
   email: "",
-  password: "",
   role: "",
 });
 const roles = [
@@ -169,7 +152,6 @@ const { mutate: updateUser, isPending: isUpdatePending } = useMutation({
     name: string;
     surname: string;
     email: string;
-    password: string;
     role: string;
   }) =>
     apiFetch(`/user/${params?.id}/update`, {
@@ -197,7 +179,6 @@ const saveUser = async (data: {
   name: string;
   surname: string;
   email: string;
-  password: string;
   role: string;
 }) => {
   updateUser(data, {
@@ -230,7 +211,6 @@ watchEffect(() => {
     userForm.value.surname = user.value.user.surname;
     userForm.value.email = user.value.user.email;
     userForm.value.role = user.value.user.role;
-    userForm.value.password = user.value.user.password;
   }
 });
 
