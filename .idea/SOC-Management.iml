@@ -122,7 +122,12 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/laravel/scout" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/ifsnop/mysqldump-php" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/spatie/db-dumper" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/spatie/laravel-backup" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/spatie/laravel-package-tools" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/spatie/laravel-signal-aware-command" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/spatie/temporary-directory" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

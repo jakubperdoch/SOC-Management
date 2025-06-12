@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Ifsnop\Mysqldump as IMysqldump;
 
 class AdminController extends Controller
 {
@@ -51,21 +56,27 @@ class AdminController extends Controller
     }
 
 
-    public function exportDatabase(Request $request)
+    public function exportDatabase(Request $request): StreamedResponse
     {
-        $databaseName = env('DB_DATABASE');
-        $userName = env('DB_USERNAME');
-        $password = env('DB_PASSWORD');
-        $mysqldump = exec('which mysqldump');
+        $db = config('database.connections.mysql');
 
+        $fileName = 'backup-' . now()->format('Y-m-d_H-i-s') . '.sql';
 
-        $command = "{$mysqldump} --user={$userName} --password={$password} {$databaseName} > backup.sql";
-        $output = [];
-        $returnVar = 0;
-        exec($command, $output, $returnVar);
-        if ($returnVar !== 0) {
-            return response()->json(['message' => 'Failed to export the database.'], 500);
-        }
-        return response()->download('backup.sql')->deleteFileAfterSend(true);
+        return response()->streamDownload(function () use ($db) {
+            $dump = new IMysqldump\Mysqldump(
+                "mysql:host={$db['host']};dbname={$db['database']};charset={$db['charset']}",
+                $db['username'],
+                $db['password'],
+                [
+                    'add-drop-table' => true,
+                    'single-transaction' => true,
+                    'routines' => true,
+                ]
+            );
+
+            $dump->start('php://output');
+        }, $fileName, [
+            'Content-Type' => 'application/sql',
+        ]);
     }
 }

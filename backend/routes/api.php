@@ -75,7 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware(['auth:sanctum', 'role:admin,teacher'])
     ->group(function () {
         Route::post('/invite/send', [InviteController::class, 'sendInvite']);
-        Route::get('/export/database', [AdminController::class, 'exportDatabase'])->name('export.database');
+        Route::post('/export/database', [AdminController::class, 'exportDatabase'])->name('export.database');
 
     });
 
