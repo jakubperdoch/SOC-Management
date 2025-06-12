@@ -49,4 +49,23 @@ class AdminController extends Controller
             'projects' => $projectsWithDetails,
         ]);
     }
+
+
+    public function exportDatabase(Request $request)
+    {
+        $databaseName = env('DB_DATABASE');
+        $userName = env('DB_USERNAME');
+        $password = env('DB_PASSWORD');
+        $mysqldump = exec('which mysqldump');
+
+
+        $command = "{$mysqldump} --user={$userName} --password={$password} {$databaseName} > backup.sql";
+        $output = [];
+        $returnVar = 0;
+        exec($command, $output, $returnVar);
+        if ($returnVar !== 0) {
+            return response()->json(['message' => 'Failed to export the database.'], 500);
+        }
+        return response()->download('backup.sql')->deleteFileAfterSend(true);
+    }
 }

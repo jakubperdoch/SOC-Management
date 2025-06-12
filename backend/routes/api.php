@@ -9,6 +9,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\InviteController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,7 +73,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 //TODO: Add middleware for admin and teacher roles
 Route::middleware(['auth:sanctum', 'role:admin,teacher'])
-    ->post('/invite/send', [InviteController::class, 'sendInvite']);
+    ->group(function () {
+        Route::post('/invite/send', [InviteController::class, 'sendInvite']);
+        Route::get('/export/database', [AdminController::class, 'exportDatabase'])->name('export.database');
+
+    });
 
 Route::middleware('auth:sanctum')->group(function () {
     route::get('/stats', [StatsController::class, 'getStats'])->name('stats.getStats');
