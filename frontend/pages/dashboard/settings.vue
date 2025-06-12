@@ -4,17 +4,6 @@
       <h1 class="tw-text-2xl tw-font-semibold tw-font-sans">Nastavenia</h1>
     </div>
 
-    <Tabs class="w-[400px]" default-value="account">
-      <TabsList>
-        <TabsTrigger value="account"> Account</TabsTrigger>
-        <TabsTrigger value="password"> Password</TabsTrigger>
-      </TabsList>
-      <TabsContent value="account">
-        Make changes to your account here.
-      </TabsContent>
-      <TabsContent value="password"> Change your password here.</TabsContent>
-    </Tabs>
-
     <div class="tw-grid tw-grid-cols-2 tw-gap-8">
       <UserCard />
       <div class="tw-grid tw-grid-rows-2 tw-gap-4">
@@ -30,8 +19,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 import LinkInput from "~/components/custom/Settings/LinkInput.vue";
 import UserCard from "~/components/custom/Settings/UserCard.vue";
 
