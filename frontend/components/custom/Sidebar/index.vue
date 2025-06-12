@@ -4,7 +4,7 @@
     class="tw-flex tw-fixed tw-items-center tw-flex-col tw-min-h-screen tw-bg-primary tw-transition-all tw-duration-300 tw-ease-in-out tw-overflow-hidden"
   >
     <NuxtLink
-      class="tw-px-2 md:tw-px-8 tw-py-6 tw-font-bold tw-text-2xl tw-flex tw-items-center tw-gap-3"
+      class="tw-w-full tw-px-2 md:tw-px-6 tw-py-6 tw-mb-3 tw-flex tw-items-center tw-justify-center"
       to="/"
     >
       <img
@@ -45,10 +45,19 @@ const { isSidebarCollapsed, links } = defineProps({
   links: {
     type: Array as () => SidebarLinkItem[],
     default: () => [
-      { icon: "home", name: "Dashboard", to: "/dashboard" },
-      { icon: "users", name: "Uživatelia", to: "/dashboard/users" },
-      { icon: "file", name: "Projekty", to: "/dashboard/projects" },
-      { icon: "wrench", name: "Nastavenia", to: "/dashboard/settings" },
+      { icon: "home-simple-twotone", name: "Dashboard", to: "/dashboard" },
+      { icon: "person-twotone", name: "Uživatelia", to: "/dashboard/users" },
+      { icon: "file-twotone", name: "Projekty", to: "/dashboard/projects" },
+      {
+        icon: "alert-square-twotone-loop",
+        name: "Admin nástroje",
+        to: "/dashboard/admin-tools",
+      },
+      {
+        icon: "cog-filled-loop",
+        name: "Nastavenia",
+        to: "/dashboard/settings",
+      },
     ],
   },
   isSidebarCollapsed: {

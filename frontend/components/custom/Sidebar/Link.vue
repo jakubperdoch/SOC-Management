@@ -8,9 +8,7 @@
     }`"
     v-bind="{ to: $attrs.to }"
   >
-    <Icon :name="`prime:${$attrs.icon}`" size="20" />
+    <Icon :name="`line-md:${$attrs.icon}`" size="20" />
     <slot />
   </NuxtLink>
 </template>
-
-<script setup></script>
