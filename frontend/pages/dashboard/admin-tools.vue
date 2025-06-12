@@ -5,14 +5,16 @@
     </div>
 
     <section>
-      <h5>Správa databázy.</h5>
-      <p>
-        Tu môžete spravovať databázu, napríklad pridať alebo odstrániť
-        používateľov.
+      <h5 class="tw-text-lg tw-font-semibold tw-font-sans tw-text-gray-800">
+        Správa databázy.
+      </h5>
+      <p class="tw-text-sm tw-font-sans tw-text-gray-600">
+        Tu mô žete exportovať databázu do žiadaného formátu.
       </p>
       <Button
-        class="tw-bg-secondary tw-border-secondary"
-        label="Exportovať databázu"
+        aria-label="Exportovať databázu do SQL"
+        icon="pi pi-database"
+        label="Exportovať databázu do SQL"
         @click="() => exportDatabase()"
       />
     </section>
