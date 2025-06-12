@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-flex md:tw-p-2 tw-pb-0">
+  <div class="tw-flex">
     <CustomSidebar :isSidebarCollapsed="isSidebarCollapsed" />
 
     <main

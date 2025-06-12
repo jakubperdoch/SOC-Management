@@ -1,7 +1,7 @@
 <template>
   <aside
     :class="isSidebarCollapsed ? 'tw-w-0' : 'tw-w-[80px] md:tw-w-[250px]'"
-    class="tw-flex tw-fixed tw-items-center md:tw-top-2 tw-flex-col tw-min-h-screen tw-bg-primary md:tw-rounded-t-2xl tw-transition-all tw-duration-300 tw-ease-in-out tw-overflow-hidden"
+    class="tw-flex tw-fixed tw-items-center tw-flex-col tw-min-h-screen tw-bg-primary tw-transition-all tw-duration-300 tw-ease-in-out tw-overflow-hidden"
   >
     <NuxtLink
       class="tw-px-2 md:tw-px-8 tw-py-6 tw-font-bold tw-text-2xl tw-flex tw-items-center tw-gap-3"
