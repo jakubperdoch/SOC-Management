@@ -153,7 +153,7 @@
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue";
-import FileCard from "~/components/custom/Landing/FileCard.vue";
+import FileCard from "~/components/sections/landing/FileCard.vue";
 import useAuthStore from "~/store/auth";
 
 const token = useAuthStore().token;
