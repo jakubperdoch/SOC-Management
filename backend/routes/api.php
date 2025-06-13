@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\InviteController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DatabaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,7 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware(['auth:sanctum', 'role:admin,teacher'])
     ->group(function () {
         Route::post('/invite/send', [InviteController::class, 'sendInvite']);
-        Route::post('/export/database', [AdminController::class, 'exportDatabase'])->name('export.database');
+        Route::post('/export/database', [DatabaseController::class, 'exportDatabase'])->name('export.database');
 
     });
 

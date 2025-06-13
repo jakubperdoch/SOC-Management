@@ -4,37 +4,39 @@
       <h1 class="tw-text-2xl tw-font-semibold tw-font-sans">Admin Nástroje</h1>
     </div>
 
-    <section class="tw-mb-8">
-      <h5 class="tw-text-lg tw-font-semibold tw-font-sans tw-text-gray-800">
-        Správa databázy.
-      </h5>
-      <p class="tw-text-sm tw-font-sans tw-text-gray-600 tw-max-w-md">
-        Tu mô žete exportovať databázu do žiadaného formátu.
-      </p>
-      <Button
-        aria-label="Exportovať databázu do SQL"
-        icon="pi pi-database"
-        label="Exportovať databázu do SQL"
-        @click="() => exportDatabase()"
-      />
-    </section>
+    <section class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-8">
+      <section class="tw-mb-8">
+        <h5 class="tw-text-lg tw-font-semibold tw-font-sans tw-text-gray-800">
+          Správa databázy.
+        </h5>
+        <p class="tw-text-sm tw-font-sans tw-text-gray-600 tw-max-w-md">
+          Tu môžete exportovať databázu do žiadaného formátu.
+        </p>
+        <Button
+          aria-label="Exportovať databázu do SQL"
+          icon="pi pi-database"
+          label="Exportovať databázu do SQL"
+          @click="() => exportDatabase()"
+        />
+      </section>
 
-    <section class="tw-mb-8">
-      <h5 class="tw-text-lg tw-font-semibold tw-font-sans tw-text-gray-800">
-        Správa dokumentov.
-      </h5>
-      <p class="tw-text-sm tw-font-sans tw-text-gray-600 tw-max-w-md">
-        Tu môžete spravovať dokumenty, ktoré sa používajú v systéme.
-      </p>
-    </section>
+      <section class="tw-mb-8">
+        <h5 class="tw-text-lg tw-font-semibold tw-font-sans tw-text-gray-800">
+          Správa dokumentov.
+        </h5>
+        <p class="tw-text-sm tw-font-sans tw-text-gray-600 tw-max-w-md">
+          Tu môžete spravovať dokumenty, ktoré sa používajú v systéme.
+        </p>
+      </section>
 
-    <section class="tw-mb-8">
-      <h5 class="tw-text-lg tw-font-semibold tw-font-sans tw-text-gray-800">
-        Študijné odbory
-      </h5>
-      <p class="tw-text-sm tw-font-sans tw-text-gray-600 tw-max-w-md">
-        Tu môžete spravovať študijné odbory, ktoré sú dostupné v systéme.
-      </p>
+      <section class="tw-mb-8">
+        <h5 class="tw-text-lg tw-font-semibold tw-font-sans tw-text-gray-800">
+          Študijné odbory
+        </h5>
+        <p class="tw-text-sm tw-font-sans tw-text-gray-600 tw-max-w-md">
+          Tu môžete spravovať študijné odbory, ktoré sú dostupné v systéme.
+        </p>
+      </section>
     </section>
   </div>
 </template>
