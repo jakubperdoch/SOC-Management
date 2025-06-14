@@ -8,10 +8,10 @@
       vyčistenie databázy.
     </p>
     <Button
-      aria-label="Exportovať databázu do SQL"
+      aria-label="Exportovať databázu"
       class="tw-w-fit"
       icon="pi pi-database"
-      label="Exportovať databázu do SQL"
+      label="Exportovať databázu"
       @click="() => exportDatabase()"
     />
 
