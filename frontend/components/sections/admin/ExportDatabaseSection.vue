@@ -4,7 +4,8 @@
       Správa databázy.
     </h5>
     <p class="tw-text-sm tw-font-sans tw-text-gray-600 tw-max-w-md">
-      Tu môžete exportovať databázu do žiadaného formátu.
+      Tu môžete spravovať databázu systému. Export databázy do SQL súboru,
+      vyčistenie databázy.
     </p>
     <Button
       aria-label="Exportovať databázu do SQL"
@@ -12,6 +13,14 @@
       icon="pi pi-database"
       label="Exportovať databázu do SQL"
       @click="() => exportDatabase()"
+    />
+
+    <Button
+      aria-label="Vyčistiť databázu"
+      class="tw-w-fit tw-mt-2"
+      icon="pi pi-trash"
+      label="Vyčistiť databázu"
+      severity="danger"
     />
   </section>
 </template>

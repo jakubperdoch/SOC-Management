@@ -8,11 +8,13 @@
     </p>
 
     <div class="tw-flex tw-flex-wrap tw-gap-4 tw-mt-4">
-      <CustomAdminCard v-for="file in files" :file />
+      <DocumentCard v-for="file in files" :file />
     </div>
   </section>
 </template>
 <script lang="ts" setup>
+import DocumentCard from "~/components/custom/Admin/DocumentCard.vue";
+
 const files = ref([
   { name: "Prezentácia", url: "url1" },
   { name: "Dokumentácia", url: "url2" },
