@@ -4,7 +4,9 @@
       <h1 class="tw-text-2xl tw-font-semibold tw-font-sans">Hlavný panel</h1>
     </div>
 
-    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4">
+    <div
+      class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-grid-rows-2 tw-gap-4"
+    >
       <StatusGraph
         :data="stats?.projectsStats ?? []"
         :status="statsLoading || statsPending"
@@ -14,6 +16,8 @@
         :statsDataset="stats?.projectsCount ?? []"
         :status="statsLoading || statsPending"
       />
+
+      <NotificationPanel />
     </div>
   </div>
 </template>
@@ -21,6 +25,7 @@
 import { useQuery } from "@tanstack/vue-query";
 import StatusGraph from "~/components/custom/Dashboard/StatusGraph.vue";
 import InterestGraph from "~/components/custom/Dashboard/InterestGraph.vue";
+import NotificationPanel from "~/components/custom/Dashboard/NotificationPanel.vue";
 
 const {
   data: stats,

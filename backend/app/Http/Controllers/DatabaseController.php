@@ -33,6 +33,4 @@ class DatabaseController extends Controller
             'Content-Type' => 'application/sql',
         ]);
     }
-
- 
 }
