@@ -7,14 +7,14 @@
     </Button>
 
     <div class="tw-flex tw-items-center tw-gap-4">
-      <OverlayBadge size="small" value="4" severity="danger">
+      <OverlayBadge severity="danger" size="small" value="4">
         <i class="pi pi-bell tw-text-primary tw-text-lg tw-cursor-pointer" />
       </OverlayBadge>
     </div>
   </nav>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 const emits = defineEmits(["toggleSidebar"]);
 
 const handleToggleSidebar = () => {

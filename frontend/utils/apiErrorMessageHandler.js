@@ -5,7 +5,12 @@ const apiErrorMessageHandler = (error) => {
 
   const errorMap = errorValues.flatMap((error) => error);
 
-  console.log(errorMap);
+  if (errorMap.length === 0) {
+    return (
+      response?._data?.message || "Nastala chyba pri komunikácii so serverom."
+    );
+  }
+
   return errorMap.join("\n");
 };
 

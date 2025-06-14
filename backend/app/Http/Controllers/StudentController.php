@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Project;
+use Illuminate\Support\Facades\Hash;
+
 
 class StudentController extends Controller
 {
@@ -47,9 +49,21 @@ class StudentController extends Controller
             // If the student has a project, return it as a JSON response
             return response()->json([
                 'message' => 'Student already has a project.',
-                'project_details' => $studentProject,
-                'student' => $studentName,
-                'teacher' => $teacherName
+                'project' => [
+                    'id' => $studentProject->id,
+                    'title' => $studentProject->title,
+                    'description' => $studentProject->description,
+                    'status' => $studentProject->status,
+                    'odbor' => $studentProject->odbor,
+                    'first_review' => $studentProject->first_review,
+                    'second_review' => $studentProject->second_review,
+                    'third_review' => $studentProject->third_review,
+                    'mark' => $studentProject->mark,
+                    'document' => $studentProject->document ? url('storage/' . $studentProject->document) : null,
+                    'presentation' => $studentProject->presentation ? url('storage/' . $studentProject->presentation) : null,
+                    'student' => $studentName,
+                    'teacher' => $teacherName
+                ],
             ]);
         } else {
 

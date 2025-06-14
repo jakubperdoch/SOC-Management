@@ -1,10 +1,10 @@
 <template>
   <aside
     :class="isSidebarCollapsed ? 'tw-w-0' : 'tw-w-[80px] md:tw-w-[250px]'"
-    class="tw-flex tw-fixed tw-items-center md:tw-top-2 tw-flex-col tw-min-h-screen tw-bg-primary md:tw-rounded-t-2xl tw-transition-all tw-duration-300 tw-ease-in-out tw-overflow-hidden"
+    class="tw-flex tw-fixed tw-items-center tw-flex-col tw-min-h-screen tw-bg-primary tw-transition-all tw-duration-300 tw-ease-in-out tw-overflow-hidden"
   >
     <NuxtLink
-      class="tw-px-2 md:tw-px-8 tw-py-6 tw-font-bold tw-text-2xl tw-flex tw-items-center tw-gap-3"
+      class="tw-w-full tw-px-2 md:tw-px-6 tw-py-6 tw-mb-3 tw-flex tw-items-center tw-justify-center"
       to="/"
     >
       <img
@@ -14,7 +14,7 @@
       />
     </NuxtLink>
     <nav class="tw-flex tw-w-full tw-flex-col tw-px-4 md:tw-px-6">
-      <SidebarLink
+      <CustomSidebarLink
         v-for="(link, index) in links"
         :key="index"
         :icon="link.icon"
@@ -24,10 +24,10 @@
           class="tw-hidden tw-font-sans md:tw-block tw-transition-all tw-duration-150 tw-ease-in-out"
           >{{ link.name }}</span
         >
-      </SidebarLink>
+      </CustomSidebarLink>
     </nav>
     <div class="tw-mt-auto tw-px-4 md:tw-p-3">
-      <SidebarUser />
+      <CustomSidebarUser />
     </div>
     <Toast />
     <ConfirmDialog />
@@ -35,8 +35,6 @@
 </template>
 
 <script lang="ts" setup>
-import { SidebarLink } from "#components";
-
 interface SidebarLinkItem {
   icon: string;
   name: string;
@@ -47,10 +45,19 @@ const { isSidebarCollapsed, links } = defineProps({
   links: {
     type: Array as () => SidebarLinkItem[],
     default: () => [
-      { icon: "home", name: "Dashboard", to: "/dashboard" },
-      { icon: "users", name: "Uživatelia", to: "/dashboard/users" },
-      { icon: "file", name: "Projekty", to: "/dashboard/projects" },
-      { icon: "wrench", name: "Nastavenia", to: "/dashboard/settings" },
+      { icon: "home-simple-twotone", name: "Dashboard", to: "/dashboard" },
+      { icon: "person-twotone", name: "Uživatelia", to: "/dashboard/users" },
+      { icon: "file-twotone", name: "Projekty", to: "/dashboard/projects" },
+      {
+        icon: "alert-square-twotone-loop",
+        name: "Admin nástroje",
+        to: "/dashboard/admin-tools",
+      },
+      {
+        icon: "cog-filled-loop",
+        name: "Nastavenia",
+        to: "/dashboard/settings",
+      },
     ],
   },
   isSidebarCollapsed: {

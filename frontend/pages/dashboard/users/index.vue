@@ -4,7 +4,7 @@
       <h1 class="tw-text-2xl tw-font-semibold tw-font-sans">Uživatelia</h1>
 
       <div class="tw-flex tw-gap-4">
-        <IconField class="tw-flex">
+        <IconField class="tw-flex tw-shadow-sm">
           <InputText
             v-model="search"
             class="tw-w-64 tw-font-sans"
@@ -21,13 +21,13 @@
         <SelectButton
           v-model="selectedCategory"
           :options="options"
-          class="tw-font-sans"
+          class="tw-font-sans tw-shadow-sm"
           option-label="label"
           option-value="value"
           size="small"
         />
         <Button
-          class="tw-font-sans"
+          class="tw-font-sans tw-shadow-sm"
           outlined
           size="small"
           @click="isModalVisible = !isModalVisible"
@@ -60,12 +60,12 @@
         </div>
       </h3>
 
-      <UserCard
+      <CustomUserCard
         v-for="user in users?.data"
         v-else
         :key="user.id"
         :user="user"
-      ></UserCard>
+      ></CustomUserCard>
     </div>
     <Paginator
       v-show="!isPending && !isLoading && users?.data.length > 0"
@@ -76,9 +76,9 @@
     ></Paginator>
   </div>
 
-  <UserDialog
+  <CustomUserDialog
     :visible="isModalVisible"
-    @update:visible="(value) => (isModalVisible = value)"
+    @update:visible="(value: boolean) => (isModalVisible = value)"
   />
 </template>
 <script lang="ts" setup>

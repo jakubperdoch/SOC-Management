@@ -9,6 +9,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\InviteController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DatabaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +42,8 @@ Route::prefix('auth')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::put('/profile/update', [AuthController::class, 'updateCredentials'])->name('updateCredentials');
+        Route::delete('/profile/delete', [AuthController::class, 'deleteAccount'])->name('deleteAccount');
         Route::put('/change-password', [AuthController::class, 'changePassword'])->name('changePassword');
     });
 });
@@ -47,8 +51,8 @@ Route::prefix('auth')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     route::get('/user/info', [StudentController::class, 'getStudent'])->name('user.info');
-    Route::delete('/user/delete', [AuthController::class, 'deleteLogin'])->name('user.delete');
-    Route::put('/user/{id}/update', [AuthController::class, 'updateLogin'])->name('user.update');
+    Route::delete('/user/delete', [UserController::class, 'deleteUser'])->name('user.delete');
+    Route::put('/user/{id}/update', [UserController::class, 'updateUser'])->name('user.update');
     Route::get('/users/{role}', [UserController::class, 'getUsers'])->name('user.getUsers');
     route::get('/user/{id}', [UserController::class, 'getUser'])->name('user.getUser');
 });
@@ -70,7 +74,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 //TODO: Add middleware for admin and teacher roles
 Route::middleware(['auth:sanctum', 'role:admin,teacher'])
-    ->post('/invite/send', [InviteController::class, 'sendInvite']);
+    ->group(function () {
+        Route::post('/invite/send', [InviteController::class, 'sendInvite']);
+        Route::post('/export/database', [DatabaseController::class, 'exportDatabase'])->name('export.database');
+
+    });
 
 Route::middleware('auth:sanctum')->group(function () {
     route::get('/stats', [StatsController::class, 'getStats'])->name('stats.getStats');

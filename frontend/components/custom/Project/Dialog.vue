@@ -30,12 +30,21 @@
           id="description"
           v-model="projectForm.description"
           :disabled="isPending"
+          :modules="{
+            toolbar: toolbarOptions,
+          }"
+          :pt="{
+            toolbar: {
+              class: '!tw-hidden',
+            },
+          }"
           class="tw-text-[13px]"
           editorStyle="height: 320px"
           fluid
           placeholder="Zadajte popis projektu"
           required
-        />
+        >
+        </Editor>
       </div>
 
       <div class="tw-flex tw-flex-col tw-gap-2">
@@ -120,7 +129,6 @@
 <script lang="ts" setup>
 import { ref, watch } from "vue";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
-import { Form } from "@primevue/forms";
 
 import useAuthStore from "~/store/auth";
 
@@ -156,6 +164,16 @@ const divisions = [
   { name: "Elektrotechnika", code: "Elektrotechnika" },
   { name: "Učebné pomôcky", code: "Učebné pomôcky" },
   { name: "Logistika", code: "Logistika" },
+];
+
+const toolbarOptions = [
+  { size: ["small", false, "large", "huge"] },
+  "bold",
+  "italic",
+  "link",
+  "underline",
+  "strike",
+  "clean",
 ];
 
 watch(
@@ -212,7 +230,7 @@ const { mutate: createProject, isPending } = useMutation({
   onSuccess() {
     toast.add({
       severity: "success",
-      summary: "Používateľ bol úspešne vytvorený.",
+      summary: "Projekt bol úspešne vytvorený.",
       life: 5000,
     });
     closeDialog();

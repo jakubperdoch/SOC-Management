@@ -1,14 +1,14 @@
 <template>
-  <Skeleton v-if="status" height="30rem" borderRadius="16px" />
+  <Skeleton v-if="status" borderRadius="16px" height="30rem" />
   <div
     v-else
-    class="card custom-card tw-col-span-1 tw-p-4 !tw-font-sans !tw-mb-0 !tw-h-fit"
+    class="tw-bg-white tw-rounded-lg tw-row-span-2 tw-col-span-1 tw-p-4 !tw-font-sans !tw-mb-0 !tw-h-fit"
   >
     <Radar :data="data" :options="options" />
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, watch } from "vue";
 import { Radar } from "vue-chartjs";
 import {

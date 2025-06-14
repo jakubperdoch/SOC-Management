@@ -3,27 +3,28 @@
     <div class="tw-flex tw-items-start tw-justify-between">
       <h1 class="tw-text-2xl tw-font-semibold tw-font-sans">Projekty</h1>
       <Button
-        class="tw-font-sans"
+        class="tw-font-sans tw-shadow-sm"
         outlined
         size="small"
         @click="isModalVisible = !isModalVisible"
-        >Pridať projekt</Button
-      >
+        >Pridať projekt
+      </Button>
     </div>
 
-    <ProjectTable
+    <CustomProjectTable
       :cells="projects?.projects ?? []"
       :is-loading="isProjectsLoading || isProjectsPending"
     />
   </div>
 
-  <ProjectDialog
+  <CustomProjectDialog
     :visible="isModalVisible"
     @update:visible="(value) => (isModalVisible = value)"
   />
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useQuery } from "@tanstack/vue-query";
+
 const isModalVisible = ref(false);
 
 const {

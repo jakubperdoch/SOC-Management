@@ -21,7 +21,17 @@ class AdminController extends Controller
             $teacher = User::where('id', $project->teacher_id)->first();
 
             return [
-                'project_details' => $project,
+                'id' => $project->id,
+                'title' => $project->title,
+                'description' => $project->description,
+                'status' => $project->status,
+                'odbor' => $project->odbor,
+                'first_review' => $project->first_review,
+                'second_review' => $project->second_review,
+                'third_review' => $project->third_review,
+                'mark' => $project->mark,
+                'document' => $project->document ? url('storage/' . $project->document) : null,
+                'presentation' => $project->presentation ? url('storage/' . $project->presentation) : null,
                 'student' => $student ? $student->name . ' ' . $student->surname : null,
                 'teacher' => $teacher ? $teacher->name . ' ' . $teacher->surname : null,
             ];
@@ -39,4 +49,6 @@ class AdminController extends Controller
             'projects' => $projectsWithDetails,
         ]);
     }
+
+
 }

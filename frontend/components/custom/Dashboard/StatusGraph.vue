@@ -1,58 +1,63 @@
 <template>
-  <Skeleton v-if="status" height="20rem" borderRadius="16px" />
+  <Skeleton v-if="status" borderRadius="16px" height="20rem" />
 
   <div
     v-else
-    class="card custom-card tw-col-span-1 !tw-font-sans !tw-mb-0 !tw-h-fit"
+    class="tw-bg-white tw-p-4 tw-rounded-lg tw-col-span-1 !tw-font-sans !tw-mb-0 !tw-h-fit"
   >
-    <div class="card-header justify-content-between">
-      <div class="card-title">Vaše projekty</div>
+    <div class="tw-flex tw-items-center tw-justify-between">
+      <h2 class="tw-text-lg tw-font-semibold tw-font-sans tw-mb-0">
+        Vaše projekty
+      </h2>
       <Button
-        size="small"
         severity="primary"
+        size="small"
         @click="router.push('/projects/create')"
       >
         Nový projekt
         <i class="pi pi-plus"></i>
       </Button>
     </div>
-    <div class="card-body !tw-h-fit">
-      <div class="d-flex align-items-center mb-3">
-        <h4 class="fw-bold mb-0">{{ data.overall }}</h4>
-        <div class="ms-2">
+    
+    <Divider />
+
+    <div class="!tw-h-fit">
+      <div class="tw-mb-3 tw-flex tw-items-center">
+        <h4 class="fw-bold tw-mb-0">{{ data.overall }}</h4>
+        <div class="tw-ms-2">
           <span class="text-muted ms-1"> Celkový počet projektov </span>
         </div>
       </div>
       <div class="progress-stacked progress-animate progress-xs mb-4">
         <div
-          class="progress-bar bg-success"
-          role="progressbar"
           :style="{
             width: `${percentageCalc(data.openStatus, data.overall)}%`,
           }"
-          aria-valuenow="21"
-          aria-valuemin="0"
           aria-valuemax="100"
+          aria-valuemin="0"
+          aria-valuenow="21"
+          class="progress-bar bg-success"
+          role="progressbar"
         ></div>
         <div
-          class="progress-bar bg-info"
-          role="progressbar"
           :style="{
             width: `${percentageCalc(data.waitingStatus, data.overall)}%`,
           }"
-          aria-valuenow="26"
-          aria-valuemin="0"
           aria-valuemax="100"
+          aria-valuemin="0"
+          aria-valuenow="26"
+          class="progress-bar bg-info"
+          role="progressbar"
         ></div>
         <div
-          class="progress-bar bg-warning"
-          role="progressbar"
           :style="{
             width: `${percentageCalc(data.takenStatus, data.overall)}%`,
           }"
-          aria-valuenow="18"
-          aria-valuemin="0"
           aria-valuemax="100"
+          aria-valuemin="0"
+          aria-valuenow="18"
+          class="progress-bar bg-warning"
+          role="progressbar"
         ></div>
       </div>
       <ul class="list-unstyled mb-0 pt-2 crm-deals-status">
@@ -79,7 +84,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useRouter } from "#app";
 
 interface Stat {

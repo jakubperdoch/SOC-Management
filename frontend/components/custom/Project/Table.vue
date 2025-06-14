@@ -1,12 +1,12 @@
 <template>
   <div class="!tw-rounded-2xl card tw-p-3 !tw-h-fit !tw-font-sans">
     <DataTable
-      :value="cells"
       :loading="isLoading"
+      :rows="7"
+      :value="cells"
+      dataKey="id"
       paginator
       removableSort
-      :rows="7"
-      dataKey="id"
       scrollable
       selectionMode="single"
     >
@@ -41,14 +41,14 @@
       </template>
 
       <template #paginatorstart>
-        <Button type="button" icon="pi pi-refresh" text />
+        <Button icon="pi pi-refresh" text type="button" />
       </template>
 
       <template #paginatorend>
-        <Button type="button" icon="pi pi-download" text />
+        <Button icon="pi pi-download" text type="button" />
       </template>
 
-      <Column field="title" header="Názov" sortable filter>
+      <Column field="title" filter header="Názov" sortable>
         <template #body="{ data }">
           {{ data.title }}
         </template>
@@ -67,56 +67,56 @@
       </Column>
 
       <Column
+        v-if="user?.role == 'admin'"
         field="teacher"
         header="Učiteľ"
         sortable
         style="min-width: 14rem"
-        v-if="user?.role == 'admin'"
       >
         <template #body="{ data }">
           <span>{{ data.teacher }}</span>
         </template>
       </Column>
 
-      <Column header="Status" field="status" sortable>
+      <Column field="status" header="Status" sortable>
         <template #body="{ data }">
           <Tag
-            class="!tw-capitalize"
-            :value="getSeverity(data.status)?.label"
             :severity="getSeverity(data.status)?.value"
+            :value="getSeverity(data.status)?.label"
+            class="!tw-capitalize"
           />
         </template>
       </Column>
 
       <Column
+        bodyStyle="text-align: center; overflow: visible"
         header="Akcie"
         headerStyle="width: 5rem; text-align: center"
-        bodyStyle="text-align: center; overflow: visible"
       >
         <template #body="{ data }">
           <div class="tw-flex tw-gap-2">
             <Button
-              @click="getDetails(data.id)"
-              type="button"
-              severity="info"
               icon="pi pi-search"
-              size="small"
               rounded
+              severity="info"
+              size="small"
+              type="button"
+              @click="getDetails(data.id)"
             />
             <Button
-              @click="getEdit(data.id)"
-              type="button"
               icon="pi pi-pencil"
-              size="small"
               rounded
+              size="small"
+              type="button"
+              @click="getEdit(data.id)"
             />
             <Button
-              @click="deleteProjectHandler(data.id)"
-              type="button"
-              severity="danger"
               icon="pi pi-trash"
-              size="small"
               rounded
+              severity="danger"
+              size="small"
+              type="button"
+              @click="deleteProjectHandler(data.id)"
             />
           </div>
         </template>
@@ -126,7 +126,7 @@
   <Toast />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useMutation } from "@tanstack/vue-query";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
@@ -239,21 +239,3 @@ const deleteProjectHandler = (id: number) => {
   });
 };
 </script>
-
-<style scoped>
-::v-deep .p-datatable-table > thead > tr:first-of-type > th:first-of-type {
-  border-radius: 0.5rem 0 0 0 !important;
-}
-
-::v-deep .p-datatable-table > thead > tr:first-of-type > th:last-of-type {
-  border-radius: 0 0.5rem 0 0 !important;
-}
-
-::v-deep .p-datatable-table > tbody > tr:last-of-type > td:first-of-type {
-  border-radius: 0 0 0 0.5rem !important;
-}
-
-::v-deep .p-datatable-table > tbody > tr:last-of-type > td:last-of-type {
-  border-radius: 0 0 0.5rem 0 !important;
-}
-</style>

@@ -148,12 +148,12 @@
     </div>
   </section>
 
-  <LandingFooter />
+  <CustomLandingFooter />
 </template>
 
 <script lang="ts" setup>
 import { Icon } from "@iconify/vue";
-import FileCard from "~/components/Landing/FileCard.vue";
+import FileCard from "~/components/sections/landing/FileCard.vue";
 import useAuthStore from "~/store/auth";
 
 const token = useAuthStore().token;

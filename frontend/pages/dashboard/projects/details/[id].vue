@@ -2,13 +2,13 @@
   <div class="tw-px-8 tw-py-9 tw-flex tw-flex-col tw-font-sans tw-gap-6">
     <!-- Header -->
     <div class="tw-flex tw-items-center tw-justify-between">
-      <Skeleton v-if="isPending || isLoading" height="2rem" width="12rem" />
+      <Skeleton v-if="isBusy.value" height="2rem" width="12rem" />
       <h1 v-else class="tw-text-2xl tw-font-semibold tw-font-sans">
         {{ projectForm?.title || "Nový projekt" }}
       </h1>
       <div class="tw-flex tw-gap-3">
         <Button
-          :disabled="isPending || isLoading"
+          :disabled="isBusy.value"
           :outlined="!isEditMode"
           :severity="isEditMode ? 'success' : 'primary'"
           class="tw-font-sans"
@@ -28,7 +28,7 @@
           Zrušiť
         </Button>
         <Button
-          :disabled="isPending || isLoading"
+          :disabled="isBusy.value"
           class="tw-font-sans tw-flex tw-items-center"
           outlined
           severity="danger"
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div v-if="isPending || isLoading" class="tw-space-y-4">
+    <div v-if="isBusy.value" class="tw-space-y-4">
       <Skeleton height="2rem" />
       <Skeleton height="8rem" />
       <Skeleton height="2rem" />
@@ -164,9 +164,22 @@
 
         <Editor
           v-model="projectForm.description"
+          :class="
+            !isEditMode
+              ? 'tw-border-gray-300 tw-opacity-50'
+              : 'tw-border-gray-100'
+          "
+          :modules="{
+            toolbar: toolbarOptions,
+          }"
+          :pt="{
+            toolbar: {
+              class: '!tw-hidden',
+            },
+          }"
           :readonly="!isEditMode"
-          class="tw-text-[13px]"
-          editorStyle="height: 320px; opacity: 0.6;"
+          class="tw-text-[13px] !tw-border !tw-border-gray-300 !tw-rounded-xl !tw-bg-gray-50"
+          editorStyle="height: 320px;"
           placeholder="Zadajte popis projektu"
           rows="4"
         >
@@ -204,6 +217,58 @@
           rows="3"
         />
       </div>
+
+      <!--Uploads-->
+
+      <div class="tw-flex tw-flex-col">
+        <label class="tw-mb-1"> Dokumentácia </label>
+        <FileUpload
+          v-model="projectForm.document"
+          :cancel-button-props="{
+            class: 'tw-text-[13px]',
+            severity: 'secondary',
+          }"
+          :choose-button-props="{ class: 'tw-text-[13px]' }"
+          :custom-upload="true"
+          :disabled="!isEditMode"
+          :maxFileSize="4000000"
+          :name="'document'"
+          :pt="{
+            root: {
+              class: '!tw-border-gray-300 !tw-bg-gray-50 !tw-rounded-xl',
+            },
+          }"
+          :show-upload-button="false"
+          accept=".pdf,.doc,.docx"
+          cancelLabel="Zrušiť"
+          chooseLabel="Vyberte súbor"
+        />
+      </div>
+
+      <div class="tw-flex tw-flex-col">
+        <label class="tw-mb-1"> Prezentácia </label>
+        <FileUpload
+          v-model="projectForm.presentation"
+          :cancel-button-props="{
+            class: 'tw-text-[13px]',
+            severity: 'secondary',
+          }"
+          :choose-button-props="{ class: 'tw-text-[13px]' }"
+          :custom-upload="true"
+          :disabled="!isEditMode"
+          :maxFileSize="4000000"
+          :name="'presentation'"
+          :pt="{
+            root: {
+              class: '!tw-border-gray-300 !tw-bg-gray-50 !tw-rounded-xl',
+            },
+          }"
+          :show-upload-button="false"
+          accept=".ppt,.pptx"
+          cancelLabel="Zrušiť"
+          chooseLabel="Vyberte súbor"
+        />
+      </div>
     </form>
   </div>
 </template>
@@ -226,15 +291,16 @@ const projectForm = ref({
   second_review: "",
   third_review: "",
   mark: null,
-
   student_id: 0,
   teacher_id: 0,
+  document: null,
+  presentation: null,
 });
 
 const statusOptions = [
   { label: "Voľný", value: "free" },
   { label: "Zabraný", value: "taken" },
-  { label: "Čakúci", value: "waiting" },
+  { label: "Čakajúci", value: "waiting" },
 ];
 
 const fieldOptions = [
@@ -245,29 +311,55 @@ const fieldOptions = [
   { label: "Učebné pomôcky", value: "Učebné pomôcky" },
 ];
 
+const toolbarOptions = [
+  { size: ["small", false, "large", "huge"] },
+  "bold",
+  "italic",
+  "link",
+  "underline",
+  "strike",
+  "clean",
+];
+
 const {
   data: project,
   isLoading,
   isPending,
-  isError,
-  error,
-  refetch,
 } = useQuery({
   queryKey: ["project", params.id],
   queryFn: () => apiFetch(`/project/${params.id}`),
   enabled: !!params.id,
 });
 
-const { data: students } = useQuery({
+const {
+  data: students,
+  isLoading: isStudentsLoading,
+  isPending: isStudentsPending,
+} = useQuery({
   queryKey: ["students"],
   queryFn: () => apiFetch("/users/student"),
   enabled: !!params.id,
 });
 
-const { data: teachers } = useQuery({
+const {
+  data: teachers,
+  isLoading: isTeachersLoading,
+  isPending: isTeachersPending,
+} = useQuery({
   queryKey: ["teachers"],
-  queryFn: () => apiFetch("/users/teacher"),
+  queryFn: () => apiFetch("/users/teacher?additionalRoles=admin"),
   enabled: !!params.id,
+});
+
+const isBusy = computed(() => {
+  return (
+    isLoading ||
+    isPending ||
+    isStudentsLoading ||
+    isStudentsPending ||
+    isTeachersLoading ||
+    isTeachersPending
+  );
 });
 
 const toggleEdit = () => {
